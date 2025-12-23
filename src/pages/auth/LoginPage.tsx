@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { Eye, EyeOff, ArrowRight } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Eye, EyeOff, ArrowRight, AlertCircle } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 import logo from "@/assets/logo.jpg";
 
 const LoginPage = () => {
@@ -12,15 +14,33 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
   const navigate = useNavigate();
+  const { signIn, user, profile, isLoading: authLoading } = useAuth();
+
+  useEffect(() => {
+    if (!authLoading && user) {
+      if (profile?.onboarding_completed) {
+        navigate("/home");
+      } else {
+        navigate("/onboarding");
+      }
+    }
+  }, [user, profile, authLoading, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError("");
     setIsLoading(true);
-    // Simulate login
-    setTimeout(() => {
-      navigate("/home");
-    }, 1000);
+    
+    const { error } = await signIn(email, password);
+    
+    if (error) {
+      setError(error.message === "Invalid login credentials" 
+        ? "Invalid email or password" 
+        : error.message);
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -44,6 +64,13 @@ const LoginPage = () => {
         </CardHeader>
         
         <CardContent>
+          {error && (
+            <Alert variant="destructive" className="mb-4">
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
+
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
