@@ -7,6 +7,8 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import LoginPage from "./pages/auth/LoginPage";
 import SignupPage from "./pages/auth/SignupPage";
+import OnboardingPage from "./pages/onboarding/OnboardingPage";
+import SubscribePage from "./pages/home/SubscribePage";
 import HomePage from "./pages/home/HomePage";
 import CyclePage from "./pages/home/CyclePage";
 import WorkoutPage from "./pages/home/WorkoutPage";
@@ -29,8 +31,12 @@ const App = () => (
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           
+          {/* Onboarding */}
+          <Route path="/onboarding" element={<OnboardingPage />} />
+          
           {/* User App */}
           <Route path="/home" element={<HomePage />} />
+          <Route path="/home/subscribe" element={<SubscribePage />} />
           <Route path="/home/cycle" element={<CyclePage />} />
           <Route path="/home/workout" element={<WorkoutPage />} />
           <Route path="/home/meal" element={<MealPage />} />
