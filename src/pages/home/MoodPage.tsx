@@ -2,9 +2,9 @@ import AppLayout from "@/components/app/AppLayout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
-import { Sparkles, Sun, Cloud, CloudRain, Frown, Meh, Smile, Heart, Moon, Battery } from "lucide-react";
+import { Sparkles, Frown, Meh, Smile, Heart, Moon, Battery, History } from "lucide-react";
 import { useState } from "react";
-
+import { Link } from "react-router-dom";
 const moodEmojis = [
   { icon: Frown, label: "Low", value: 1, color: "coral" },
   { icon: Meh, label: "Okay", value: 2, color: "coral" },
@@ -34,13 +34,21 @@ const MoodPage = () => {
     <AppLayout>
       <div className="space-y-6">
         {/* Header */}
-        <div className="animate-fade-in">
-          <h1 className="font-serif text-2xl sm:text-3xl font-semibold mb-1">
-            Mood Check-in
-          </h1>
-          <p className="text-muted-foreground">
-            How are you feeling today?
-          </p>
+        <div className="animate-fade-in flex items-start justify-between">
+          <div>
+            <h1 className="font-serif text-2xl sm:text-3xl font-semibold mb-1">
+              Mood Check-in
+            </h1>
+            <p className="text-muted-foreground">
+              How are you feeling today?
+            </p>
+          </div>
+          <Link to="/home/mood/history">
+            <Button variant="outline" size="sm" className="gap-2">
+              <History className="w-4 h-4" />
+              History
+            </Button>
+          </Link>
         </div>
 
         {/* Mood Selection */}
