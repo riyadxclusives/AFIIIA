@@ -4,19 +4,25 @@ import { Button } from "@/components/ui/button";
 
 const ScrollToTop = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const [lastScrollY, setLastScrollY] = useState(0);
 
   useEffect(() => {
-    const toggleVisibility = () => {
-      if (window.scrollY > 400) {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      
+      // Show button when scrolling up and not at the very top
+      if (currentScrollY < lastScrollY && currentScrollY > 100) {
         setIsVisible(true);
-      } else {
+      } else if (currentScrollY > lastScrollY || currentScrollY <= 100) {
         setIsVisible(false);
       }
+      
+      setLastScrollY(currentScrollY);
     };
 
-    window.addEventListener("scroll", toggleVisibility);
-    return () => window.removeEventListener("scroll", toggleVisibility);
-  }, []);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [lastScrollY]);
 
   const scrollToTop = () => {
     window.scrollTo({
