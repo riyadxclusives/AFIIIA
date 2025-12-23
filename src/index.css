@@ -199,12 +199,52 @@
 
   /* Feature card with hover */
   .feature-card {
-    @apply glass-card p-6 transition-all duration-500;
+    @apply glass-card p-6 transition-all duration-300 ease-out;
   }
 
   .feature-card:hover {
-    @apply -translate-y-1;
+    @apply -translate-y-1.5;
     box-shadow: var(--shadow-elevated);
+  }
+
+  .feature-card:active {
+    @apply translate-y-0 scale-[0.99];
+  }
+
+  /* Interactive card */
+  .interactive-card {
+    @apply transition-all duration-300 ease-out cursor-pointer;
+  }
+
+  .interactive-card:hover {
+    @apply -translate-y-1 shadow-elevated;
+  }
+
+  .interactive-card:active {
+    @apply translate-y-0 scale-[0.99];
+  }
+
+  /* Icon hover effects */
+  .icon-hover {
+    @apply transition-all duration-300 ease-out;
+  }
+
+  .icon-hover:hover {
+    @apply scale-110;
+  }
+
+  /* Link hover underline animation */
+  .link-underline {
+    @apply relative;
+  }
+
+  .link-underline::after {
+    content: '';
+    @apply absolute bottom-0 left-0 w-full h-0.5 bg-primary scale-x-0 origin-right transition-transform duration-300 ease-out;
+  }
+
+  .link-underline:hover::after {
+    @apply scale-x-100 origin-left;
   }
 
   /* Floating animation helper */
@@ -222,6 +262,36 @@
     @apply absolute inset-0 rounded-full;
     animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
     background: hsl(var(--primary) / 0.3);
+  }
+
+  /* Shimmer effect for loading states */
+  .shimmer {
+    @apply relative overflow-hidden;
+  }
+
+  .shimmer::after {
+    content: '';
+    @apply absolute inset-0;
+    background: linear-gradient(90deg, transparent, hsl(var(--primary) / 0.1), transparent);
+    animation: shimmer 2s infinite;
+  }
+
+  /* Bounce on click */
+  .bounce-click {
+    @apply transition-transform duration-150 ease-out;
+  }
+
+  .bounce-click:active {
+    @apply scale-95;
+  }
+
+  /* Glow on hover */
+  .glow-hover {
+    @apply transition-shadow duration-300;
+  }
+
+  .glow-hover:hover {
+    box-shadow: var(--shadow-glow-lavender);
   }
 }
 
@@ -381,5 +451,38 @@
   }
   to {
     transform: translateX(0);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes wiggle {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-3deg);
+  }
+  75% {
+    transform: rotate(3deg);
+  }
+}
+
+@keyframes pop {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
   }
 }
