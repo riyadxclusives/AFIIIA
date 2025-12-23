@@ -34,6 +34,7 @@ import RefundPage from "./pages/legal/RefundPage";
 import CookiesPage from "./pages/legal/CookiesPage";
 import ContactPage from "./pages/legal/ContactPage";
 import CookieConsent from "./components/CookieConsent";
+import SplashScreen from "./components/SplashScreen";
 
 const queryClient = new QueryClient();
 
@@ -89,6 +90,7 @@ const App = () => (
           <Route path="*" element={<NotFound />} />
         </Routes>
         <CookieConsent />
+        <SplashScreen />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
