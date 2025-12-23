@@ -157,12 +157,40 @@
     animation: blob-morph 8s ease-in-out infinite;
   }
 
-  /* Bottom navigation */
+  /* Bottom navigation - mobile optimized */
   .bottom-nav {
     @apply fixed bottom-0 left-0 right-0 z-50;
     background: var(--gradient-glass);
     backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     @apply border-t border-border/50;
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+
+  /* Safe area utilities */
+  .safe-top {
+    padding-top: env(safe-area-inset-top, 0);
+  }
+
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+
+  /* Touch-friendly targets */
+  .touch-target {
+    @apply min-h-[44px] min-w-[44px];
+  }
+
+  /* Native-like scrolling */
+  .native-scroll {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
+  }
+
+  /* Mobile optimized container */
+  .mobile-container {
+    @apply px-4 sm:px-6 lg:px-8;
+    max-width: 100%;
   }
 
   /* Feature card with hover */
