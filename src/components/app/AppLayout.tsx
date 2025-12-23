@@ -1,9 +1,11 @@
 import { ReactNode, useState, useCallback } from "react";
 import { NavLink, useLocation } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 import { Home, Calendar, Dumbbell, Utensils, User, Settings, Trophy } from "lucide-react";
 import logo from "@/assets/logo.jpg";
 import PullToRefresh from "@/components/PullToRefresh";
 import { useHapticFeedback } from "@/hooks/useHapticFeedback";
+import { useSwipeNavigation } from "@/hooks/useSwipeNavigation";
 
 interface AppLayoutProps {
   children: ReactNode;
@@ -18,16 +20,23 @@ const navItems = [
   { icon: Trophy, label: "Challenges", path: "/home/challenges" },
 ];
 
+const navRoutes = navItems.map(item => item.path);
+
 const AppLayout = ({ children, onRefresh }: AppLayoutProps) => {
   const location = useLocation();
   const haptic = useHapticFeedback();
   const [refreshKey, setRefreshKey] = useState(0);
+  
+  const { handlers: swipeHandlers, currentIndex } = useSwipeNavigation({
+    routes: navRoutes,
+    threshold: 50,
+    velocityThreshold: 0.3,
+  });
 
   const handleRefresh = useCallback(async () => {
     if (onRefresh) {
       await onRefresh();
     } else {
-      // Default refresh behavior - simulate data reload
       await new Promise(resolve => setTimeout(resolve, 1000));
       setRefreshKey(prev => prev + 1);
     }
@@ -75,12 +84,25 @@ const AppLayout = ({ children, onRefresh }: AppLayoutProps) => {
         </div>
       </header>
 
-      {/* Main content with pull-to-refresh */}
-      <PullToRefresh onRefresh={handleRefresh} className="mobile-container py-4 min-h-[calc(100vh-8rem)]">
-        <div key={refreshKey}>
-          {children}
-        </div>
-      </PullToRefresh>
+      {/* Main content with pull-to-refresh and swipe navigation */}
+      <div 
+        {...swipeHandlers}
+        className="touch-pan-y"
+      >
+        <PullToRefresh onRefresh={handleRefresh} className="mobile-container py-4 min-h-[calc(100vh-8rem)]">
+          <AnimatePresence mode="wait">
+            <motion.div 
+              key={location.pathname + refreshKey}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
+            >
+              {children}
+            </motion.div>
+          </AnimatePresence>
+        </PullToRefresh>
+      </div>
 
       {/* Bottom navigation - mobile optimized */}
       <nav className="bottom-nav">
