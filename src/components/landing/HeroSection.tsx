@@ -4,6 +4,15 @@ import { ArrowRight, Sparkles } from "lucide-react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 
+// Import user images
+import user1 from "@/assets/users/user-1.jpg";
+import user2 from "@/assets/users/user-2.jpg";
+import user3 from "@/assets/users/user-3.jpg";
+import user4 from "@/assets/users/user-4.jpg";
+import user5 from "@/assets/users/user-5.jpg";
+
+const userImages = [user1, user2, user3, user4, user5];
+
 const HeroSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
@@ -107,7 +116,7 @@ const HeroSection = () => {
             </a>
           </motion.div>
 
-          {/* Social Proof */}
+          {/* Social Proof with User Photos */}
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -118,15 +127,21 @@ const HeroSection = () => {
               Trusted by women worldwide
             </p>
             <div className="flex items-center justify-center gap-4 sm:gap-6">
-              <div className="flex -space-x-2 sm:-space-x-3">
-                {[1, 2, 3, 4, 5].map((i) => (
+              <div className="flex -space-x-3 sm:-space-x-4">
+                {userImages.map((image, i) => (
                   <motion.div 
                     key={i}
                     initial={{ opacity: 0, scale: 0 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.3, delay: 0.6 + i * 0.1 }}
-                    className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-background bg-gradient-lavender"
-                  />
+                    className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-3 border-background overflow-hidden shadow-soft"
+                  >
+                    <img 
+                      src={image} 
+                      alt={`User ${i + 1}`}
+                      className="w-full h-full object-cover"
+                    />
+                  </motion.div>
                 ))}
               </div>
               <div className="text-left">
