@@ -14,6 +14,7 @@ import CyclePage from "./pages/home/CyclePage";
 import WorkoutPage from "./pages/home/WorkoutPage";
 import MealPage from "./pages/home/MealPage";
 import MoodPage from "./pages/home/MoodPage";
+import MoodHistoryPage from "./pages/home/MoodHistoryPage";
 import ProfilePage from "./pages/home/ProfilePage";
 import SettingsPage from "./pages/home/SettingsPage";
 import BuddyChallengesPage from "./pages/home/BuddyChallengesPage";
@@ -71,6 +72,7 @@ const App = () => (
           <Route path="/home/workout" element={<WorkoutPage />} />
           <Route path="/home/meal" element={<MealPage />} />
           <Route path="/home/mood" element={<MoodPage />} />
+          <Route path="/home/mood/history" element={<MoodHistoryPage />} />
           <Route path="/home/profile" element={<ProfilePage />} />
           <Route path="/home/settings" element={<SettingsPage />} />
           <Route path="/home/challenges" element={<BuddyChallengesPage />} />
