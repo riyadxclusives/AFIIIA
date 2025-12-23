@@ -28,6 +28,11 @@ import AdminAnalyticsPage from "./pages/admin/AdminAnalyticsPage";
 import AdminBillingPage from "./pages/admin/AdminBillingPage";
 import AdminContentPage from "./pages/admin/AdminContentPage";
 import AdminSettingsPage from "./pages/admin/AdminSettingsPage";
+import TermsPage from "./pages/legal/TermsPage";
+import PrivacyPage from "./pages/legal/PrivacyPage";
+import RefundPage from "./pages/legal/RefundPage";
+import CookiesPage from "./pages/legal/CookiesPage";
+import ContactPage from "./pages/legal/ContactPage";
 
 const queryClient = new QueryClient();
 
@@ -40,6 +45,13 @@ const App = () => (
         <Routes>
           {/* Marketing */}
           <Route path="/" element={<Index />} />
+          
+          {/* Legal Pages */}
+          <Route path="/terms" element={<TermsPage />} />
+          <Route path="/privacy" element={<PrivacyPage />} />
+          <Route path="/refund" element={<RefundPage />} />
+          <Route path="/cookies" element={<CookiesPage />} />
+          <Route path="/contact" element={<ContactPage />} />
           
           {/* Auth */}
           <Route path="/login" element={<LoginPage />} />
