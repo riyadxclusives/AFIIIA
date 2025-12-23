@@ -170,7 +170,7 @@ const SubscribePage = () => {
           </Button>
           
           <p className="text-xs text-muted-foreground mt-4">
-            No credit card required now. You'll be reminded before trial ends.
+            Cancel anytime during your trial. You'll be reminded before it ends.
           </p>
         </div>
 
