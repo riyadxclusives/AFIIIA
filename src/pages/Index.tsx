@@ -8,7 +8,6 @@ import PricingSection from "@/components/landing/PricingSection";
 import FAQSection from "@/components/landing/FAQSection";
 import CTASection from "@/components/landing/CTASection";
 import Footer from "@/components/landing/Footer";
-import ScrollToTop from "@/components/landing/ScrollToTop";
 import LandingPageSkeleton from "@/components/landing/LandingPageSkeleton";
 
 const Index = () => {
@@ -40,7 +39,6 @@ const Index = () => {
         <CTASection />
       </main>
       <Footer />
-      <ScrollToTop />
     </div>
   );
 };
