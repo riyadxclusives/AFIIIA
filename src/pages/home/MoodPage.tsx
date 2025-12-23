@@ -2,14 +2,17 @@ import AppLayout from "@/components/app/AppLayout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
-import { Sparkles, Frown, Meh, Smile, Heart, Moon, Battery, History } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
+import { Sparkles, Frown, Meh, Smile, Heart, Moon, Battery, History, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useCreateMoodEntry, useMoodEntries } from "@/hooks/useSupabase";
+
 const moodEmojis = [
-  { icon: Frown, label: "Low", value: 1, color: "coral" },
-  { icon: Meh, label: "Okay", value: 2, color: "coral" },
-  { icon: Smile, label: "Good", value: 3, color: "teal" },
-  { icon: Heart, label: "Great", value: 4, color: "lavender" },
+  { icon: Frown, label: "Low", value: "1", color: "coral" },
+  { icon: Meh, label: "Okay", value: "2", color: "coral" },
+  { icon: Smile, label: "Good", value: "3", color: "teal" },
+  { icon: Heart, label: "Great", value: "4", color: "lavender" },
 ];
 
 const symptoms = [
@@ -17,10 +20,14 @@ const symptoms = [
 ];
 
 const MoodPage = () => {
-  const [selectedMood, setSelectedMood] = useState<number | null>(null);
+  const [selectedMood, setSelectedMood] = useState<string | null>(null);
   const [sleepQuality, setSleepQuality] = useState([3]);
   const [energyLevel, setEnergyLevel] = useState([3]);
   const [selectedSymptoms, setSelectedSymptoms] = useState<string[]>([]);
+  const [notes, setNotes] = useState("");
+  
+  const { data: recentMoods } = useMoodEntries();
+  const createMood = useCreateMoodEntry();
 
   const toggleSymptom = (symptom: string) => {
     setSelectedSymptoms(prev => 
@@ -28,6 +35,39 @@ const MoodPage = () => {
         ? prev.filter(s => s !== symptom)
         : [...prev, symptom]
     );
+  };
+
+  const handleSave = async () => {
+    if (!selectedMood) return;
+    
+    await createMood.mutateAsync({
+      mood: selectedMood,
+      energy_level: energyLevel[0],
+      symptoms: selectedSymptoms.length > 0 ? selectedSymptoms : null,
+      notes: notes || null,
+    });
+
+    // Reset form
+    setSelectedMood(null);
+    setEnergyLevel([3]);
+    setSleepQuality([3]);
+    setSelectedSymptoms([]);
+    setNotes("");
+  };
+
+  const getInsight = () => {
+    if (!recentMoods || recentMoods.length < 3) {
+      return "Log a few more mood check-ins to unlock personalized insights about your patterns.";
+    }
+    
+    const avgEnergy = recentMoods.slice(0, 7).reduce((sum, m) => sum + m.energy_level, 0) / Math.min(recentMoods.length, 7);
+    
+    if (avgEnergy < 2.5) {
+      return "Your energy has been lower recently. Consider adding more iron-rich foods and getting extra rest.";
+    } else if (avgEnergy > 3.5) {
+      return "Great energy levels! Keep up your current routine - it's clearly working for you.";
+    }
+    return "Based on your recent logs, your mood tends to dip slightly during your luteal phase. Consider adding more magnesium-rich foods and gentle yoga sessions during this time.";
   };
 
   return (
@@ -163,6 +203,19 @@ const MoodPage = () => {
           </CardContent>
         </Card>
 
+        {/* Notes */}
+        <Card className="glass-card animate-fade-in" style={{ animationDelay: "0.28s" }}>
+          <CardContent className="p-6">
+            <h3 className="font-semibold mb-4">Additional Notes</h3>
+            <Textarea
+              placeholder="How are you feeling? Any thoughts you'd like to capture..."
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              className="min-h-[100px]"
+            />
+          </CardContent>
+        </Card>
+
         {/* AI Insight Preview */}
         <Card 
           className="bg-gradient-lavender text-primary-foreground border-none animate-fade-in"
@@ -174,16 +227,26 @@ const MoodPage = () => {
               <span className="text-sm font-medium">AI Mood Insight</span>
             </div>
             <p className="text-sm text-primary-foreground/90 leading-relaxed">
-              Based on your recent logs, your mood tends to dip slightly during your luteal phase. 
-              Consider adding more magnesium-rich foods and gentle yoga sessions during this time.
+              {getInsight()}
             </p>
           </CardContent>
         </Card>
 
         {/* Submit Button */}
-        <Button variant="hero" size="lg" className="w-full animate-fade-in" style={{ animationDelay: "0.35s" }}>
-          <Heart className="w-5 h-5 mr-2" />
-          Save Check-in
+        <Button 
+          variant="hero" 
+          size="lg" 
+          className="w-full animate-fade-in" 
+          style={{ animationDelay: "0.35s" }}
+          onClick={handleSave}
+          disabled={!selectedMood || createMood.isPending}
+        >
+          {createMood.isPending ? (
+            <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+          ) : (
+            <Heart className="w-5 h-5 mr-2" />
+          )}
+          {createMood.isPending ? "Saving..." : "Save Check-in"}
         </Button>
       </div>
     </AppLayout>
