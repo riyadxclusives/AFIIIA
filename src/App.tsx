@@ -36,6 +36,7 @@ import PrivacyPage from "./pages/legal/PrivacyPage";
 import RefundPage from "./pages/legal/RefundPage";
 import CookiesPage from "./pages/legal/CookiesPage";
 import ContactPage from "./pages/legal/ContactPage";
+import HelpCenterPage from "./pages/legal/HelpCenterPage";
 import InstallPage from "./pages/InstallPage";
 import CookieConsent from "./components/CookieConsent";
 import SplashScreen from "./components/SplashScreen";
@@ -52,12 +53,13 @@ const AnimatedRoutes = () => {
         {/* Marketing */}
         <Route path="/" element={<PageTransition><Index /></PageTransition>} />
         
-        {/* Legal Pages */}
+        {/* Legal & Support Pages */}
         <Route path="/terms" element={<PageTransition><TermsPage /></PageTransition>} />
         <Route path="/privacy" element={<PageTransition><PrivacyPage /></PageTransition>} />
         <Route path="/refund" element={<PageTransition><RefundPage /></PageTransition>} />
         <Route path="/cookies" element={<PageTransition><CookiesPage /></PageTransition>} />
         <Route path="/contact" element={<PageTransition><ContactPage /></PageTransition>} />
+        <Route path="/help" element={<PageTransition><HelpCenterPage /></PageTransition>} />
         
         {/* Auth */}
         <Route path="/login" element={<PageTransition><LoginPage /></PageTransition>} />
