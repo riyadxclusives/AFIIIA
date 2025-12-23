@@ -1,7 +1,7 @@
 import { ReactNode, useState, useCallback } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Home, Calendar, Dumbbell, Utensils, User, Settings, Trophy } from "lucide-react";
+import { Home, Calendar, Dumbbell, Utensils, User, Settings, Trophy, Smile } from "lucide-react";
 import logo from "@/assets/logo.jpg";
 import PullToRefresh from "@/components/PullToRefresh";
 import { useHapticFeedback } from "@/hooks/useHapticFeedback";
@@ -17,7 +17,7 @@ const navItems = [
   { icon: Calendar, label: "Cycle", path: "/home/cycle" },
   { icon: Dumbbell, label: "Workout", path: "/home/workout" },
   { icon: Utensils, label: "Meal", path: "/home/meal" },
-  { icon: Trophy, label: "Challenges", path: "/home/challenges" },
+  { icon: Smile, label: "Mood", path: "/home/mood" },
 ];
 
 const navRoutes = navItems.map(item => item.path);
@@ -62,6 +62,15 @@ const AppLayout = ({ children, onRefresh }: AppLayoutProps) => {
           </div>
           
           <div className="flex items-center gap-1">
+            <NavLink 
+              to="/home/challenges"
+              className={({ isActive }) => `
+                touch-target rounded-full flex items-center justify-center transition-all
+                ${isActive ? "bg-secondary text-foreground" : "text-muted-foreground hover:text-foreground active:bg-secondary/50"}
+              `}
+            >
+              <Trophy className="w-5 h-5" />
+            </NavLink>
             <NavLink 
               to="/home/profile"
               className={({ isActive }) => `
