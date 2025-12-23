@@ -1,0 +1,162 @@
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Eye, EyeOff, ArrowRight, Check } from "lucide-react";
+import logo from "@/assets/logo.jpg";
+
+const SignupPage = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (password !== confirmPassword) return;
+    setIsLoading(true);
+    // Simulate signup
+    setTimeout(() => {
+      navigate("/onboarding");
+    }, 1000);
+  };
+
+  const passwordRequirements = [
+    { met: password.length >= 8, text: "At least 8 characters" },
+    { met: /[A-Z]/.test(password), text: "One uppercase letter" },
+    { met: /[0-9]/.test(password), text: "One number" },
+  ];
+
+  return (
+    <div className="min-h-screen bg-gradient-hero flex items-center justify-center p-4">
+      {/* Background blobs */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-teal-soft/30 blob float" />
+        <div className="absolute top-1/3 -left-32 w-80 h-80 bg-coral-soft/30 blob float" style={{ animationDelay: "2s" }} />
+        <div className="absolute bottom-20 right-1/4 w-72 h-72 bg-lavender-soft/30 blob float" style={{ animationDelay: "4s" }} />
+      </div>
+
+      <Card className="w-full max-w-md glass-card relative z-10 animate-scale-in">
+        <CardHeader className="text-center pb-4">
+          <div className="flex justify-center mb-4">
+            <img src={logo} alt="AFIIIA" className="h-16 w-16 rounded-2xl object-cover" />
+          </div>
+          <CardTitle className="font-serif text-3xl">Create Account</CardTitle>
+          <CardDescription>
+            Start your personalized wellness journey
+          </CardDescription>
+        </CardHeader>
+        
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="you@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="h-12"
+                required
+              />
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="password">Password</Label>
+              <div className="relative">
+                <Input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="h-12 pr-12"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                >
+                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                </button>
+              </div>
+              
+              {/* Password requirements */}
+              <div className="space-y-1 mt-2">
+                {passwordRequirements.map((req, i) => (
+                  <div key={i} className="flex items-center gap-2 text-xs">
+                    <div className={`w-4 h-4 rounded-full flex items-center justify-center ${req.met ? "bg-teal text-primary-foreground" : "bg-muted"}`}>
+                      {req.met && <Check className="w-3 h-3" />}
+                    </div>
+                    <span className={req.met ? "text-foreground" : "text-muted-foreground"}>
+                      {req.text}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="confirmPassword">Confirm Password</Label>
+              <Input
+                id="confirmPassword"
+                type="password"
+                placeholder="••••••••"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className="h-12"
+                required
+              />
+              {confirmPassword && password !== confirmPassword && (
+                <p className="text-xs text-destructive">Passwords don't match</p>
+              )}
+            </div>
+
+            <Button 
+              type="submit" 
+              variant="hero" 
+              size="lg" 
+              className="w-full group"
+              disabled={isLoading || password !== confirmPassword}
+            >
+              {isLoading ? "Creating account..." : "Create Account"}
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </Button>
+          </form>
+
+          <p className="mt-4 text-xs text-center text-muted-foreground">
+            By signing up, you agree to our{" "}
+            <Link to="/terms" className="text-primary hover:underline">Terms</Link>
+            {" "}and{" "}
+            <Link to="/privacy" className="text-primary hover:underline">Privacy Policy</Link>
+          </p>
+
+          <div className="mt-6 text-center">
+            <p className="text-sm text-muted-foreground">
+              Already have an account?{" "}
+              <Link to="/login" className="text-primary font-medium hover:underline">
+                Sign in
+              </Link>
+            </p>
+          </div>
+
+          <div className="mt-6">
+            <Link to="/">
+              <Button variant="ghost" size="sm" className="w-full">
+                ← Back to home
+              </Button>
+            </Link>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
+
+export default SignupPage;

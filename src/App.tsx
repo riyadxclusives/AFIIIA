@@ -5,6 +5,13 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
+import LoginPage from "./pages/auth/LoginPage";
+import SignupPage from "./pages/auth/SignupPage";
+import HomePage from "./pages/home/HomePage";
+import CyclePage from "./pages/home/CyclePage";
+import WorkoutPage from "./pages/home/WorkoutPage";
+import MealPage from "./pages/home/MealPage";
+import MoodPage from "./pages/home/MoodPage";
 
 const queryClient = new QueryClient();
 
@@ -15,8 +22,21 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
+          {/* Marketing */}
           <Route path="/" element={<Index />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+          
+          {/* Auth */}
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
+          
+          {/* User App */}
+          <Route path="/home" element={<HomePage />} />
+          <Route path="/home/cycle" element={<CyclePage />} />
+          <Route path="/home/workout" element={<WorkoutPage />} />
+          <Route path="/home/meal" element={<MealPage />} />
+          <Route path="/home/mood" element={<MoodPage />} />
+          
+          {/* Catch-all */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
