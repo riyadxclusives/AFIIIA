@@ -18,6 +18,10 @@ import ProfilePage from "./pages/home/ProfilePage";
 import SettingsPage from "./pages/home/SettingsPage";
 import BuddyChallengesPage from "./pages/home/BuddyChallengesPage";
 import ChallengeDetailPage from "./pages/home/ChallengeDetailPage";
+import AdminLoginPage from "./pages/admin/AdminLoginPage";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminUsersPage from "./pages/admin/AdminUsersPage";
+import AdminFeaturesPage from "./pages/admin/AdminFeaturesPage";
 
 const queryClient = new QueryClient();
 
@@ -49,6 +53,12 @@ const App = () => (
           <Route path="/home/settings" element={<SettingsPage />} />
           <Route path="/home/challenges" element={<BuddyChallengesPage />} />
           <Route path="/home/challenges/:id" element={<ChallengeDetailPage />} />
+          
+          {/* Admin */}
+          <Route path="/admin/login" element={<AdminLoginPage />} />
+          <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/admin/users" element={<AdminUsersPage />} />
+          <Route path="/admin/features" element={<AdminFeaturesPage />} />
           
           {/* Catch-all */}
           <Route path="*" element={<NotFound />} />
