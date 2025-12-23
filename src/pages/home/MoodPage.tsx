@@ -2,9 +2,29 @@ import AppLayout from "@/components/app/AppLayout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
-import { Sparkles, Frown, Meh, Smile, Heart, Moon, Battery, History } from "lucide-react";
+import { 
+  Sparkles, 
+  Frown, 
+  Meh, 
+  Smile, 
+  Heart, 
+  Moon, 
+  Battery, 
+  History,
+  Flame,
+  Brain,
+  Droplets,
+  Wind,
+  AlertCircle,
+  Pill,
+  Cookie,
+  ThermometerSun,
+  HeartPulse
+} from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { Badge } from "@/components/ui/badge";
+
 const moodEmojis = [
   { icon: Frown, label: "Low", value: 1, color: "coral" },
   { icon: Meh, label: "Okay", value: 2, color: "coral" },
@@ -12,23 +32,71 @@ const moodEmojis = [
   { icon: Heart, label: "Great", value: 4, color: "lavender" },
 ];
 
-const symptoms = [
-  "Cramps", "Headache", "Bloating", "Fatigue", "Anxiety", "Back Pain"
+interface SymptomData {
+  id: string;
+  name: string;
+  icon: React.ElementType;
+  category: "physical" | "emotional" | "digestive";
+}
+
+const symptomsList: SymptomData[] = [
+  { id: "cramps", name: "Cramps", icon: Flame, category: "physical" },
+  { id: "headache", name: "Headache", icon: Brain, category: "physical" },
+  { id: "bloating", name: "Bloating", icon: Wind, category: "digestive" },
+  { id: "fatigue", name: "Fatigue", icon: Battery, category: "physical" },
+  { id: "anxiety", name: "Anxiety", icon: AlertCircle, category: "emotional" },
+  { id: "backpain", name: "Back Pain", icon: HeartPulse, category: "physical" },
+  { id: "nausea", name: "Nausea", icon: Pill, category: "digestive" },
+  { id: "cravings", name: "Cravings", icon: Cookie, category: "digestive" },
+  { id: "breasttenderness", name: "Breast Tenderness", icon: Heart, category: "physical" },
+  { id: "hotflashes", name: "Hot Flashes", icon: ThermometerSun, category: "physical" },
+  { id: "moodswings", name: "Mood Swings", icon: Droplets, category: "emotional" },
+  { id: "irritability", name: "Irritability", icon: AlertCircle, category: "emotional" },
 ];
+
+interface SelectedSymptom {
+  id: string;
+  severity: 1 | 2 | 3; // 1=mild, 2=moderate, 3=severe
+}
+
+const severityLabels = {
+  1: { label: "Mild", color: "bg-teal text-white" },
+  2: { label: "Moderate", color: "bg-coral-soft text-coral" },
+  3: { label: "Severe", color: "bg-coral text-white" },
+};
 
 const MoodPage = () => {
   const [selectedMood, setSelectedMood] = useState<number | null>(null);
   const [sleepQuality, setSleepQuality] = useState([3]);
   const [energyLevel, setEnergyLevel] = useState([3]);
-  const [selectedSymptoms, setSelectedSymptoms] = useState<string[]>([]);
+  const [selectedSymptoms, setSelectedSymptoms] = useState<SelectedSymptom[]>([]);
+  const [activeCategory, setActiveCategory] = useState<"all" | "physical" | "emotional" | "digestive">("all");
 
-  const toggleSymptom = (symptom: string) => {
-    setSelectedSymptoms(prev => 
-      prev.includes(symptom) 
-        ? prev.filter(s => s !== symptom)
-        : [...prev, symptom]
-    );
+  const toggleSymptom = (symptomId: string) => {
+    setSelectedSymptoms(prev => {
+      const existing = prev.find(s => s.id === symptomId);
+      if (existing) {
+        // Cycle through severity levels, then remove
+        if (existing.severity < 3) {
+          return prev.map(s => 
+            s.id === symptomId ? { ...s, severity: (s.severity + 1) as 1 | 2 | 3 } : s
+          );
+        } else {
+          return prev.filter(s => s.id !== symptomId);
+        }
+      } else {
+        return [...prev, { id: symptomId, severity: 1 }];
+      }
+    });
   };
+
+  const getSymptomSeverity = (symptomId: string): SelectedSymptom | undefined => {
+    return selectedSymptoms.find(s => s.id === symptomId);
+  };
+
+  const filteredSymptoms = activeCategory === "all" 
+    ? symptomsList 
+    : symptomsList.filter(s => s.category === activeCategory);
 
   return (
     <AppLayout>
@@ -138,28 +206,94 @@ const MoodPage = () => {
           </CardContent>
         </Card>
 
-        {/* Symptoms */}
+        {/* Symptoms - Enhanced */}
         <Card className="glass-card animate-fade-in" style={{ animationDelay: "0.25s" }}>
           <CardContent className="p-6">
-            <h3 className="font-semibold mb-4">Any Symptoms?</h3>
-            <div className="flex flex-wrap gap-2">
-              {symptoms.map((symptom) => {
-                const isSelected = selectedSymptoms.includes(symptom);
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="font-semibold">Track Symptoms</h3>
+              <span className="text-xs text-muted-foreground">Tap to cycle severity</span>
+            </div>
+            
+            {/* Category Filter */}
+            <div className="flex gap-2 mb-4 overflow-x-auto pb-2">
+              {[
+                { id: "all", label: "All" },
+                { id: "physical", label: "Physical" },
+                { id: "emotional", label: "Emotional" },
+                { id: "digestive", label: "Digestive" },
+              ].map((cat) => (
+                <button
+                  key={cat.id}
+                  onClick={() => setActiveCategory(cat.id as typeof activeCategory)}
+                  className={`px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-all ${
+                    activeCategory === cat.id
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+                  }`}
+                >
+                  {cat.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Symptoms Grid */}
+            <div className="grid grid-cols-3 gap-2">
+              {filteredSymptoms.map((symptom) => {
+                const selected = getSymptomSeverity(symptom.id);
+                const Icon = symptom.icon;
+                
                 return (
                   <button
-                    key={symptom}
-                    onClick={() => toggleSymptom(symptom)}
-                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-                      isSelected 
-                        ? "bg-coral text-primary-foreground" 
+                    key={symptom.id}
+                    onClick={() => toggleSymptom(symptom.id)}
+                    className={`p-3 rounded-xl flex flex-col items-center gap-1.5 transition-all duration-300 relative ${
+                      selected 
+                        ? severityLabels[selected.severity].color
                         : "bg-secondary hover:bg-secondary/80 text-secondary-foreground"
                     }`}
                   >
-                    {symptom}
+                    <Icon className="w-5 h-5" />
+                    <span className="text-xs font-medium text-center leading-tight">{symptom.name}</span>
+                    {selected && (
+                      <Badge 
+                        variant="outline" 
+                        className={`absolute -top-1 -right-1 text-[10px] px-1.5 py-0 ${
+                          selected.severity === 3 ? "bg-coral border-coral text-white" :
+                          selected.severity === 2 ? "bg-coral-soft border-coral text-coral" :
+                          "bg-teal-soft border-teal text-teal"
+                        }`}
+                      >
+                        {severityLabels[selected.severity].label}
+                      </Badge>
+                    )}
                   </button>
                 );
               })}
             </div>
+
+            {/* Selected Symptoms Summary */}
+            {selectedSymptoms.length > 0 && (
+              <div className="mt-4 p-3 rounded-xl bg-coral-soft/20 border border-coral/20">
+                <p className="text-sm font-medium mb-2">Logged Symptoms:</p>
+                <div className="flex flex-wrap gap-1.5">
+                  {selectedSymptoms.map((sym) => {
+                    const symptomData = symptomsList.find(s => s.id === sym.id);
+                    return (
+                      <span 
+                        key={sym.id}
+                        className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs ${
+                          sym.severity === 3 ? "bg-coral text-white" :
+                          sym.severity === 2 ? "bg-coral-soft text-coral" :
+                          "bg-teal-soft text-teal"
+                        }`}
+                      >
+                        {symptomData?.name} ({severityLabels[sym.severity].label})
+                      </span>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
           </CardContent>
         </Card>
 
