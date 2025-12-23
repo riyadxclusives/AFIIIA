@@ -1,10 +1,13 @@
-import { ReactNode } from "react";
+import { ReactNode, useState, useCallback } from "react";
 import { NavLink, useLocation } from "react-router-dom";
-import { Home, Calendar, Dumbbell, Utensils, Heart, User, Settings, Trophy } from "lucide-react";
+import { Home, Calendar, Dumbbell, Utensils, User, Settings, Trophy } from "lucide-react";
 import logo from "@/assets/logo.jpg";
+import PullToRefresh from "@/components/PullToRefresh";
+import { useHapticFeedback } from "@/hooks/useHapticFeedback";
 
 interface AppLayoutProps {
   children: ReactNode;
+  onRefresh?: () => Promise<void>;
 }
 
 const navItems = [
@@ -15,9 +18,24 @@ const navItems = [
   { icon: Trophy, label: "Challenges", path: "/home/challenges" },
 ];
 
-const AppLayout = ({ children }: AppLayoutProps) => {
+const AppLayout = ({ children, onRefresh }: AppLayoutProps) => {
   const location = useLocation();
+  const haptic = useHapticFeedback();
+  const [refreshKey, setRefreshKey] = useState(0);
 
+  const handleRefresh = useCallback(async () => {
+    if (onRefresh) {
+      await onRefresh();
+    } else {
+      // Default refresh behavior - simulate data reload
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      setRefreshKey(prev => prev + 1);
+    }
+  }, [onRefresh]);
+
+  const handleNavClick = () => {
+    haptic.light();
+  };
   return (
     <div className="min-h-screen bg-gradient-hero pb-[calc(5rem+env(safe-area-inset-bottom,0px))]">
       {/* Top header */}
@@ -57,10 +75,12 @@ const AppLayout = ({ children }: AppLayoutProps) => {
         </div>
       </header>
 
-      {/* Main content */}
-      <main className="mobile-container py-4 native-scroll">
-        {children}
-      </main>
+      {/* Main content with pull-to-refresh */}
+      <PullToRefresh onRefresh={handleRefresh} className="mobile-container py-4 min-h-[calc(100vh-8rem)]">
+        <div key={refreshKey}>
+          {children}
+        </div>
+      </PullToRefresh>
 
       {/* Bottom navigation - mobile optimized */}
       <nav className="bottom-nav">
@@ -74,6 +94,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
                 <NavLink
                   key={item.path}
                   to={item.path}
+                  onClick={handleNavClick}
                   className="flex flex-col items-center justify-center touch-target transition-all active:scale-95"
                 >
                   <div className={`
