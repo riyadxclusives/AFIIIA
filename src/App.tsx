@@ -14,6 +14,8 @@ import CyclePage from "./pages/home/CyclePage";
 import WorkoutPage from "./pages/home/WorkoutPage";
 import MealPage from "./pages/home/MealPage";
 import MoodPage from "./pages/home/MoodPage";
+import ProfilePage from "./pages/home/ProfilePage";
+import SettingsPage from "./pages/home/SettingsPage";
 
 const queryClient = new QueryClient();
 
@@ -41,6 +43,8 @@ const App = () => (
           <Route path="/home/workout" element={<WorkoutPage />} />
           <Route path="/home/meal" element={<MealPage />} />
           <Route path="/home/mood" element={<MoodPage />} />
+          <Route path="/home/profile" element={<ProfilePage />} />
+          <Route path="/home/settings" element={<SettingsPage />} />
           
           {/* Catch-all */}
           <Route path="*" element={<NotFound />} />
