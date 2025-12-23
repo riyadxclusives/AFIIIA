@@ -11,6 +11,7 @@ import OnboardingPage from "./pages/onboarding/OnboardingPage";
 import SubscribePage from "./pages/home/SubscribePage";
 import HomePage from "./pages/home/HomePage";
 import CyclePage from "./pages/home/CyclePage";
+import PeriodCalendarPage from "./pages/home/PeriodCalendarPage";
 import WorkoutPage from "./pages/home/WorkoutPage";
 import MealPage from "./pages/home/MealPage";
 import MoodPage from "./pages/home/MoodPage";
@@ -69,6 +70,7 @@ const App = () => (
           <Route path="/home" element={<HomePage />} />
           <Route path="/home/subscribe" element={<SubscribePage />} />
           <Route path="/home/cycle" element={<CyclePage />} />
+          <Route path="/home/period-calendar" element={<PeriodCalendarPage />} />
           <Route path="/home/workout" element={<WorkoutPage />} />
           <Route path="/home/meal" element={<MealPage />} />
           <Route path="/home/mood" element={<MoodPage />} />

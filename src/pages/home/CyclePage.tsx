@@ -1,7 +1,8 @@
+import { Link } from "react-router-dom";
 import AppLayout from "@/components/app/AppLayout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight, Droplet, Sun, Moon, Zap, Heart } from "lucide-react";
+import { ChevronLeft, ChevronRight, Droplet, Sun, Moon, Zap, Heart, Calendar } from "lucide-react";
 
 const phases = [
   { name: "Menstrual", days: "1-5", color: "coral", description: "Rest & restore" },
@@ -63,7 +64,12 @@ const CyclePage = () => {
               <Button variant="ghost" size="icon">
                 <ChevronLeft className="w-5 h-5" />
               </Button>
-              <h3 className="font-semibold">December 2024</h3>
+              <Link to="/home/period-calendar">
+                <Button variant="ghost" className="gap-2">
+                  <h3 className="font-semibold">December 2024</h3>
+                  <Calendar className="w-4 h-4" />
+                </Button>
+              </Link>
               <Button variant="ghost" size="icon">
                 <ChevronRight className="w-5 h-5" />
               </Button>
