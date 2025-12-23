@@ -125,7 +125,7 @@ const ChallengeCard = ({ challenge, onCheckIn, onViewDetails, onJoin }: Challeng
             {challenge.status === "active" && !challenge.checkedInToday && onCheckIn && (
               <Button 
                 onClick={onCheckIn}
-                className="flex-1 bg-gradient-primary hover:opacity-90"
+                className="flex-1 bg-gradient-primary hover:opacity-90 touch-target"
               >
                 <Check className="w-4 h-4 mr-2" />
                 Check In
@@ -135,16 +135,16 @@ const ChallengeCard = ({ challenge, onCheckIn, onViewDetails, onJoin }: Challeng
               <Button 
                 disabled
                 variant="secondary"
-                className="flex-1"
+                className="flex-1 touch-target"
               >
                 <Check className="w-4 h-4 mr-2" />
-                Checked In Today
+                <span className="hidden xs:inline">Checked In </span>Today
               </Button>
             )}
             {challenge.status === "upcoming" && onJoin && (
               <Button 
                 onClick={onJoin}
-                className="flex-1 bg-gradient-primary hover:opacity-90"
+                className="flex-1 bg-gradient-primary hover:opacity-90 touch-target"
               >
                 Join Challenge
               </Button>
@@ -152,7 +152,7 @@ const ChallengeCard = ({ challenge, onCheckIn, onViewDetails, onJoin }: Challeng
             <Button 
               variant="outline" 
               onClick={onViewDetails}
-              className="flex items-center gap-1"
+              className="flex items-center gap-1 touch-target"
             >
               <Trophy className="w-4 h-4" />
               <ChevronRight className="w-4 h-4" />

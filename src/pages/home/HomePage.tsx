@@ -51,13 +51,13 @@ const dashboardCards = [
 const HomePage = () => {
   return (
     <AppLayout>
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-6">
         {/* Greeting */}
         <div className="animate-fade-in">
-          <h1 className="font-serif text-2xl sm:text-3xl font-semibold mb-1">
+          <h1 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold mb-0.5">
             Good morning, Sarah ✨
           </h1>
-          <p className="text-muted-foreground">
+          <p className="text-muted-foreground text-sm">
             Here's your wellness snapshot for today
           </p>
         </div>
@@ -67,17 +67,16 @@ const HomePage = () => {
           className="bg-gradient-primary text-primary-foreground border-none overflow-hidden animate-fade-in"
           style={{ animationDelay: "0.1s" }}
         >
-          <CardContent className="p-5 relative">
-            <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-2xl bg-primary-foreground/20 flex items-center justify-center shrink-0">
-                <Sparkles className="w-6 h-6" />
+          <CardContent className="p-4 sm:p-5 relative">
+            <div className="flex items-start gap-3 sm:gap-4">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-primary-foreground/20 flex items-center justify-center shrink-0">
+                <Sparkles className="w-5 h-5 sm:w-6 sm:h-6" />
               </div>
-              <div className="flex-1">
-                <h3 className="font-semibold mb-1">Your Daily Insight</h3>
-                <p className="text-sm text-primary-foreground/90 leading-relaxed">
+              <div className="flex-1 min-w-0">
+                <h3 className="font-semibold text-sm sm:text-base mb-0.5 sm:mb-1">Your Daily Insight</h3>
+                <p className="text-xs sm:text-sm text-primary-foreground/90 leading-relaxed">
                   You're in your ovulation phase — energy is at its peak! Perfect time for 
-                  that HIIT workout you've been planning. Your mood tracking shows positive 
-                  trends this week. Keep it up! 💪
+                  that HIIT workout you've been planning. 💪
                 </p>
               </div>
             </div>
@@ -85,26 +84,26 @@ const HomePage = () => {
         </Card>
 
         {/* Quick Stats Row */}
-        <div className="grid grid-cols-3 gap-3 animate-fade-in" style={{ animationDelay: "0.15s" }}>
+        <div className="grid grid-cols-3 gap-2 sm:gap-3 animate-fade-in" style={{ animationDelay: "0.15s" }}>
           {/* Hydration */}
-          <Card className="glass-card p-4 text-center">
-            <Droplets className="w-6 h-6 mx-auto mb-2 text-teal" />
-            <div className="text-2xl font-serif font-bold">4/8</div>
-            <div className="text-xs text-muted-foreground">Glasses</div>
+          <Card className="glass-card p-3 sm:p-4 text-center">
+            <Droplets className="w-5 h-5 sm:w-6 sm:h-6 mx-auto mb-1.5 sm:mb-2 text-teal" />
+            <div className="text-lg sm:text-2xl font-serif font-bold">4/8</div>
+            <div className="text-[10px] sm:text-xs text-muted-foreground">Glasses</div>
           </Card>
           
           {/* Streak */}
-          <Card className="glass-card p-4 text-center">
-            <Flame className="w-6 h-6 mx-auto mb-2 text-coral" />
-            <div className="text-2xl font-serif font-bold">12</div>
-            <div className="text-xs text-muted-foreground">Day Streak</div>
+          <Card className="glass-card p-3 sm:p-4 text-center">
+            <Flame className="w-5 h-5 sm:w-6 sm:h-6 mx-auto mb-1.5 sm:mb-2 text-coral" />
+            <div className="text-lg sm:text-2xl font-serif font-bold">12</div>
+            <div className="text-[10px] sm:text-xs text-muted-foreground">Day Streak</div>
           </Card>
           
           {/* Mood */}
-          <Card className="glass-card p-4 text-center">
-            <Heart className="w-6 h-6 mx-auto mb-2 text-lavender" />
-            <div className="text-2xl font-serif font-bold">Good</div>
-            <div className="text-xs text-muted-foreground">Mood Today</div>
+          <Card className="glass-card p-3 sm:p-4 text-center">
+            <Heart className="w-5 h-5 sm:w-6 sm:h-6 mx-auto mb-1.5 sm:mb-2 text-lavender" />
+            <div className="text-lg sm:text-2xl font-serif font-bold">Good</div>
+            <div className="text-[10px] sm:text-xs text-muted-foreground">Mood</div>
           </Card>
         </div>
 
@@ -131,22 +130,22 @@ const HomePage = () => {
                 style={{ animationDelay: `${0.2 + index * 0.05}s` }}
               >
                 <Card className={`feature-card ${colorClasses[card.color as keyof typeof colorClasses]} group cursor-pointer`}>
-                  <CardContent className="p-5">
-                    <div className="flex items-start justify-between">
-                      <div className="flex items-start gap-4">
-                        <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${iconColors[card.color as keyof typeof iconColors]}`}>
-                          <Icon className="w-6 h-6" />
+                  <CardContent className="p-4 sm:p-5">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3 sm:gap-4">
+                        <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center shrink-0 ${iconColors[card.color as keyof typeof iconColors]}`}>
+                          <Icon className="w-5 h-5 sm:w-6 sm:h-6" />
                         </div>
-                        <div>
-                          <h3 className="font-serif text-lg font-semibold mb-1">
+                        <div className="min-w-0">
+                          <h3 className="font-serif text-base sm:text-lg font-semibold mb-0.5 truncate">
                             {card.title}
                           </h3>
-                          <p className="text-sm text-muted-foreground">
+                          <p className="text-xs sm:text-sm text-muted-foreground truncate">
                             {card.description}
                           </p>
                         </div>
                       </div>
-                      <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:translate-x-1 transition-transform" />
+                      <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:translate-x-1 transition-transform shrink-0" />
                     </div>
                   </CardContent>
                 </Card>
@@ -160,24 +159,24 @@ const HomePage = () => {
           className="glass-card overflow-hidden animate-fade-in"
           style={{ animationDelay: "0.4s" }}
         >
-          <CardContent className="p-5">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-teal-soft/50 flex items-center justify-center">
-                  <Droplets className="w-5 h-5 text-teal" />
+          <CardContent className="p-4 sm:p-5">
+            <div className="flex items-center justify-between mb-3 sm:mb-4 gap-3">
+              <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-teal-soft/50 flex items-center justify-center shrink-0">
+                  <Droplets className="w-4 h-4 sm:w-5 sm:h-5 text-teal" />
                 </div>
-                <div>
-                  <h3 className="font-semibold">Hydration</h3>
-                  <p className="text-sm text-muted-foreground">4 of 8 glasses today</p>
+                <div className="min-w-0">
+                  <h3 className="font-semibold text-sm sm:text-base">Hydration</h3>
+                  <p className="text-xs sm:text-sm text-muted-foreground truncate">4 of 8 glasses today</p>
                 </div>
               </div>
-              <Button variant="teal" size="sm">
-                + Log Water
+              <Button variant="teal" size="sm" className="touch-target shrink-0 text-xs sm:text-sm">
+                + Log
               </Button>
             </div>
             
             {/* Progress bar */}
-            <div className="h-3 bg-muted rounded-full overflow-hidden">
+            <div className="h-2 sm:h-3 bg-muted rounded-full overflow-hidden">
               <div 
                 className="h-full bg-gradient-teal rounded-full transition-all duration-500"
                 style={{ width: "50%" }}

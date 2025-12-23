@@ -99,18 +99,18 @@ const BuddyChallengesPage = () => {
         className="space-y-6"
       >
         {/* Header */}
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div>
-            <h1 className="text-2xl font-serif font-bold text-gradient">
+            <h1 className="text-xl sm:text-2xl font-serif font-bold text-gradient">
               Buddy Challenges
             </h1>
-            <p className="text-muted-foreground text-sm mt-1">
+            <p className="text-muted-foreground text-sm mt-0.5">
               Stay motivated together with friends
             </p>
           </div>
           <Button 
             onClick={() => setCreateDialogOpen(true)}
-            className="bg-gradient-primary hover:opacity-90"
+            className="bg-gradient-primary hover:opacity-90 w-full sm:w-auto touch-target"
           >
             <Plus className="w-4 h-4 mr-2" />
             New Challenge
@@ -122,28 +122,28 @@ const BuddyChallengesPage = () => {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.1 }}
-          className="grid grid-cols-3 gap-4"
+          className="grid grid-cols-3 gap-2 sm:gap-4"
         >
-          <div className="bg-card/80 backdrop-blur-sm rounded-2xl p-4 border border-border/50 text-center">
-            <div className="w-10 h-10 mx-auto mb-2 rounded-xl bg-coral/20 flex items-center justify-center">
-              <Target className="w-5 h-5 text-coral" />
+          <div className="bg-card/80 backdrop-blur-sm rounded-xl sm:rounded-2xl p-3 sm:p-4 border border-border/50 text-center">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 mx-auto mb-1.5 sm:mb-2 rounded-lg sm:rounded-xl bg-coral/20 flex items-center justify-center">
+              <Target className="w-4 h-4 sm:w-5 sm:h-5 text-coral" />
             </div>
-            <p className="text-2xl font-bold text-foreground">12</p>
-            <p className="text-xs text-muted-foreground">Challenges</p>
+            <p className="text-lg sm:text-2xl font-bold text-foreground">12</p>
+            <p className="text-[10px] sm:text-xs text-muted-foreground">Challenges</p>
           </div>
-          <div className="bg-card/80 backdrop-blur-sm rounded-2xl p-4 border border-border/50 text-center">
-            <div className="w-10 h-10 mx-auto mb-2 rounded-xl bg-lavender/20 flex items-center justify-center">
-              <Trophy className="w-5 h-5 text-lavender" />
+          <div className="bg-card/80 backdrop-blur-sm rounded-xl sm:rounded-2xl p-3 sm:p-4 border border-border/50 text-center">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 mx-auto mb-1.5 sm:mb-2 rounded-lg sm:rounded-xl bg-lavender/20 flex items-center justify-center">
+              <Trophy className="w-4 h-4 sm:w-5 sm:h-5 text-lavender" />
             </div>
-            <p className="text-2xl font-bold text-foreground">8</p>
-            <p className="text-xs text-muted-foreground">Victories</p>
+            <p className="text-lg sm:text-2xl font-bold text-foreground">8</p>
+            <p className="text-[10px] sm:text-xs text-muted-foreground">Victories</p>
           </div>
-          <div className="bg-card/80 backdrop-blur-sm rounded-2xl p-4 border border-border/50 text-center">
-            <div className="w-10 h-10 mx-auto mb-2 rounded-xl bg-teal-500/20 flex items-center justify-center">
-              <Users className="w-5 h-5 text-teal-600" />
+          <div className="bg-card/80 backdrop-blur-sm rounded-xl sm:rounded-2xl p-3 sm:p-4 border border-border/50 text-center">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 mx-auto mb-1.5 sm:mb-2 rounded-lg sm:rounded-xl bg-teal-500/20 flex items-center justify-center">
+              <Users className="w-4 h-4 sm:w-5 sm:h-5 text-teal-600" />
             </div>
-            <p className="text-2xl font-bold text-foreground">5</p>
-            <p className="text-xs text-muted-foreground">Buddies</p>
+            <p className="text-lg sm:text-2xl font-bold text-foreground">5</p>
+            <p className="text-[10px] sm:text-xs text-muted-foreground">Buddies</p>
           </div>
         </motion.div>
 
