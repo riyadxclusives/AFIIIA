@@ -22,6 +22,12 @@ import AdminLoginPage from "./pages/admin/AdminLoginPage";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminUsersPage from "./pages/admin/AdminUsersPage";
 import AdminFeaturesPage from "./pages/admin/AdminFeaturesPage";
+import AdminNotificationsPage from "./pages/admin/AdminNotificationsPage";
+import AdminDatabasePage from "./pages/admin/AdminDatabasePage";
+import AdminAnalyticsPage from "./pages/admin/AdminAnalyticsPage";
+import AdminBillingPage from "./pages/admin/AdminBillingPage";
+import AdminContentPage from "./pages/admin/AdminContentPage";
+import AdminSettingsPage from "./pages/admin/AdminSettingsPage";
 
 const queryClient = new QueryClient();
 
@@ -59,6 +65,12 @@ const App = () => (
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/admin/users" element={<AdminUsersPage />} />
           <Route path="/admin/features" element={<AdminFeaturesPage />} />
+          <Route path="/admin/notifications" element={<AdminNotificationsPage />} />
+          <Route path="/admin/database" element={<AdminDatabasePage />} />
+          <Route path="/admin/analytics" element={<AdminAnalyticsPage />} />
+          <Route path="/admin/billing" element={<AdminBillingPage />} />
+          <Route path="/admin/content" element={<AdminContentPage />} />
+          <Route path="/admin/settings" element={<AdminSettingsPage />} />
           
           {/* Catch-all */}
           <Route path="*" element={<NotFound />} />
