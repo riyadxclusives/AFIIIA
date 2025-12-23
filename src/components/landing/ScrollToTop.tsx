@@ -5,19 +5,29 @@ import { Button } from "@/components/ui/button";
 const ScrollToTop = () => {
   const [isVisible, setIsVisible] = useState(false);
   const lastScrollY = useRef(0);
+  const ticking = useRef(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      
-      // Show button when scrolling up and not at the very top
-      if (currentScrollY < lastScrollY.current && currentScrollY > 100) {
-        setIsVisible(true);
-      } else if (currentScrollY > lastScrollY.current || currentScrollY <= 100) {
-        setIsVisible(false);
+      if (!ticking.current) {
+        window.requestAnimationFrame(() => {
+          const currentScrollY = window.scrollY;
+          const scrollingUp = currentScrollY < lastScrollY.current;
+          const notAtTop = currentScrollY > 100;
+          
+          console.log('Scroll:', { currentScrollY, lastScrollY: lastScrollY.current, scrollingUp, notAtTop });
+          
+          if (scrollingUp && notAtTop) {
+            setIsVisible(true);
+          } else if (!scrollingUp || !notAtTop) {
+            setIsVisible(false);
+          }
+          
+          lastScrollY.current = currentScrollY;
+          ticking.current = false;
+        });
+        ticking.current = true;
       }
-      
-      lastScrollY.current = currentScrollY;
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -31,16 +41,14 @@ const ScrollToTop = () => {
     });
   };
 
+  if (!isVisible) return null;
+
   return (
     <Button
       variant="hero"
       size="icon"
       onClick={scrollToTop}
-      className={`fixed bottom-6 right-6 z-50 h-11 w-11 sm:h-12 sm:w-12 rounded-full shadow-elevated transition-all duration-300 ${
-        isVisible 
-          ? "opacity-100 translate-y-0" 
-          : "opacity-0 translate-y-4 pointer-events-none"
-      }`}
+      className="fixed bottom-6 right-6 z-50 h-11 w-11 sm:h-12 sm:w-12 rounded-full shadow-elevated animate-fade-in"
       aria-label="Scroll to top"
     >
       <ArrowUp className="w-5 h-5" />
