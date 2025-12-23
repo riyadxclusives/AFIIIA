@@ -33,6 +33,7 @@ import PrivacyPage from "./pages/legal/PrivacyPage";
 import RefundPage from "./pages/legal/RefundPage";
 import CookiesPage from "./pages/legal/CookiesPage";
 import ContactPage from "./pages/legal/ContactPage";
+import InstallPage from "./pages/InstallPage";
 import CookieConsent from "./components/CookieConsent";
 import SplashScreen from "./components/SplashScreen";
 
@@ -61,6 +62,7 @@ const App = () => (
           
           {/* Onboarding */}
           <Route path="/onboarding" element={<OnboardingPage />} />
+          <Route path="/install" element={<InstallPage />} />
           
           {/* User App */}
           <Route path="/home" element={<HomePage />} />
