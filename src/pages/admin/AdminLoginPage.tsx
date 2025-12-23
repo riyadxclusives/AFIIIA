@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Shield, Eye, EyeOff, Lock, Mail, AlertCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { useAuth } from "@/contexts/AuthContext";
+import logo from "@/assets/logo.jpg";
 
 const AdminLoginPage = () => {
   const navigate = useNavigate();
@@ -16,31 +16,26 @@ const AdminLoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const { signIn, user, isAdmin, isLoading: authLoading } = useAuth();
-
-  useEffect(() => {
-    if (!authLoading && user) {
-      if (isAdmin) {
-        navigate("/admin");
-      } else {
-        setError("You do not have admin access");
-      }
-    }
-  }, [user, isAdmin, authLoading, navigate]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setIsLoading(true);
 
-    const { error } = await signIn(email, password);
-    
-    if (error) {
-      setError(error.message === "Invalid login credentials" 
-        ? "Invalid email or password" 
-        : error.message);
-      setIsLoading(false);
+    // Simulate admin authentication check
+    // In production, this would verify against a secure admin auth system
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
+    // For demo purposes - in production, use proper server-side validation
+    if (email && password) {
+      // Store admin session indicator (temporary for UI demo)
+      sessionStorage.setItem("admin_demo_session", "true");
+      navigate("/admin");
+    } else {
+      setError("Incorrect email or password");
     }
+    
+    setIsLoading(false);
   };
 
   return (
@@ -67,7 +62,7 @@ const AdminLoginPage = () => {
                 </div>
               </div>
             </div>
-            <CardTitle className="text-2xl font-serif text-slate-100">
+            <CardTitle className="text-2xl font-serif text-white">
               Admin Portal
             </CardTitle>
             <CardDescription className="text-slate-400">
@@ -96,7 +91,7 @@ const AdminLoginPage = () => {
                     placeholder="admin@afiiia.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="pl-10 bg-slate-700/50 border-slate-600 text-slate-100 placeholder:text-slate-500 focus:border-primary"
+                    className="pl-10 bg-slate-700/50 border-slate-600 text-white placeholder:text-slate-500 focus:border-primary"
                     required
                   />
                 </div>
@@ -114,7 +109,7 @@ const AdminLoginPage = () => {
                     placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="pl-10 pr-10 bg-slate-700/50 border-slate-600 text-slate-100 placeholder:text-slate-500 focus:border-primary"
+                    className="pl-10 pr-10 bg-slate-700/50 border-slate-600 text-white placeholder:text-slate-500 focus:border-primary"
                     required
                   />
                   <button
@@ -140,7 +135,7 @@ const AdminLoginPage = () => {
                   <motion.div
                     animate={{ rotate: 360 }}
                     transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                    className="w-5 h-5 border-2 border-slate-100/30 border-t-slate-100 rounded-full"
+                    className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full"
                   />
                 ) : (
                   <>

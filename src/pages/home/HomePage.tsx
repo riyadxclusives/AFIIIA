@@ -9,94 +9,53 @@ import {
   Droplets, 
   Sparkles,
   ChevronRight,
-  Flame,
-  Loader2
+  Flame
 } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useAuth } from "@/contexts/AuthContext";
-import { useMoodEntries, useCycleData } from "@/hooks/useSupabase";
+
+const dashboardCards = [
+  {
+    title: "Today's Meal",
+    description: "Get personalized recipes",
+    icon: Utensils,
+    link: "/home/meal",
+    color: "teal",
+    gradient: "from-teal-soft to-teal",
+  },
+  {
+    title: "Workout",
+    description: "Phase-optimized training",
+    icon: Dumbbell,
+    link: "/home/workout",
+    color: "coral",
+    gradient: "from-coral-soft to-coral",
+  },
+  {
+    title: "Cycle Status",
+    description: "Day 14 • Ovulation Phase",
+    icon: Calendar,
+    link: "/home/cycle",
+    color: "lavender",
+    gradient: "from-lavender-soft to-lavender",
+  },
+  {
+    title: "Mood Check-in",
+    description: "How are you feeling?",
+    icon: Heart,
+    link: "/home/mood",
+    color: "coral",
+    gradient: "from-coral-soft to-coral",
+  },
+];
 
 const HomePage = () => {
-  const { profile } = useAuth();
-  const { data: moodEntries, isLoading: moodLoading } = useMoodEntries();
-  const { data: cycleData } = useCycleData();
-
-  const latestMood = moodEntries?.[0];
-  const latestCycle = cycleData?.[0];
-
-  // Calculate cycle day
-  const getCycleInfo = () => {
-    if (!latestCycle?.period_start) return { day: '-', phase: 'Not tracked' };
-    const start = new Date(latestCycle.period_start);
-    const today = new Date();
-    const daysDiff = Math.floor((today.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
-    const cycleLength = latestCycle.cycle_length || 28;
-    const cycleDay = (daysDiff % cycleLength) + 1;
-    
-    let phase = 'Menstrual';
-    if (cycleDay > 5 && cycleDay <= 13) phase = 'Follicular';
-    else if (cycleDay > 13 && cycleDay <= 16) phase = 'Ovulation';
-    else if (cycleDay > 16) phase = 'Luteal';
-    
-    return { day: cycleDay, phase };
-  };
-
-  const cycleInfo = getCycleInfo();
-
-  const getMoodLabel = () => {
-    if (!latestMood) return 'Not logged';
-    const moodMap: Record<string, string> = {
-      '1': 'Low', '2': 'Okay', '3': 'Good', '4': 'Great',
-      'low': 'Low', 'okay': 'Okay', 'good': 'Good', 'great': 'Great'
-    };
-    return moodMap[latestMood.mood] || latestMood.mood;
-  };
-
-  const dashboardCards = [
-    {
-      title: "Today's Meal",
-      description: "Get personalized recipes",
-      icon: Utensils,
-      link: "/home/meal",
-      color: "teal",
-    },
-    {
-      title: "Workout",
-      description: "Phase-optimized training",
-      icon: Dumbbell,
-      link: "/home/workout",
-      color: "coral",
-    },
-    {
-      title: "Cycle Status",
-      description: `Day ${cycleInfo.day} • ${cycleInfo.phase} Phase`,
-      icon: Calendar,
-      link: "/home/cycle",
-      color: "lavender",
-    },
-    {
-      title: "Mood Check-in",
-      description: "How are you feeling?",
-      icon: Heart,
-      link: "/home/mood",
-      color: "coral",
-    },
-  ];
-
-  const greeting = () => {
-    const hour = new Date().getHours();
-    if (hour < 12) return 'Good morning';
-    if (hour < 17) return 'Good afternoon';
-    return 'Good evening';
-  };
-
   return (
     <AppLayout>
       <div className="space-y-4 sm:space-y-6">
         {/* Greeting */}
         <div className="animate-fade-in">
           <h1 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold mb-0.5">
-            {greeting()}, {profile?.first_name || 'there'} ✨
+            Good morning, Sarah ✨
           </h1>
           <p className="text-muted-foreground text-sm">
             Here's your wellness snapshot for today
@@ -116,14 +75,8 @@ const HomePage = () => {
               <div className="flex-1 min-w-0">
                 <h3 className="font-semibold text-sm sm:text-base mb-0.5 sm:mb-1">Your Daily Insight</h3>
                 <p className="text-xs sm:text-sm text-primary-foreground/90 leading-relaxed">
-                  {cycleInfo.phase === 'Ovulation' 
-                    ? "You're in your ovulation phase — energy is at its peak! Perfect time for that HIIT workout. 💪"
-                    : cycleInfo.phase === 'Luteal'
-                    ? "You're in your luteal phase — focus on gentle movement and nourishing foods. 🧘‍♀️"
-                    : cycleInfo.phase === 'Menstrual'
-                    ? "Rest and recovery are key during your menstrual phase. Listen to your body. 💜"
-                    : "Your follicular phase is a great time to try new workouts and build strength! 🌱"
-                  }
+                  You're in your ovulation phase — energy is at its peak! Perfect time for 
+                  that HIIT workout you've been planning. 💪
                 </p>
               </div>
             </div>
@@ -132,21 +85,24 @@ const HomePage = () => {
 
         {/* Quick Stats Row */}
         <div className="grid grid-cols-3 gap-2 sm:gap-3 animate-fade-in" style={{ animationDelay: "0.15s" }}>
+          {/* Hydration */}
           <Card className="glass-card p-3 sm:p-4 text-center">
             <Droplets className="w-5 h-5 sm:w-6 sm:h-6 mx-auto mb-1.5 sm:mb-2 text-teal" />
             <div className="text-lg sm:text-2xl font-serif font-bold">4/8</div>
             <div className="text-[10px] sm:text-xs text-muted-foreground">Glasses</div>
           </Card>
           
+          {/* Streak */}
           <Card className="glass-card p-3 sm:p-4 text-center">
             <Flame className="w-5 h-5 sm:w-6 sm:h-6 mx-auto mb-1.5 sm:mb-2 text-coral" />
-            <div className="text-lg sm:text-2xl font-serif font-bold">{moodEntries?.length || 0}</div>
-            <div className="text-[10px] sm:text-xs text-muted-foreground">Check-ins</div>
+            <div className="text-lg sm:text-2xl font-serif font-bold">12</div>
+            <div className="text-[10px] sm:text-xs text-muted-foreground">Day Streak</div>
           </Card>
           
+          {/* Mood */}
           <Card className="glass-card p-3 sm:p-4 text-center">
             <Heart className="w-5 h-5 sm:w-6 sm:h-6 mx-auto mb-1.5 sm:mb-2 text-lavender" />
-            <div className="text-lg sm:text-2xl font-serif font-bold">{getMoodLabel()}</div>
+            <div className="text-lg sm:text-2xl font-serif font-bold">Good</div>
             <div className="text-[10px] sm:text-xs text-muted-foreground">Mood</div>
           </Card>
         </div>
@@ -219,6 +175,7 @@ const HomePage = () => {
               </Button>
             </div>
             
+            {/* Progress bar */}
             <div className="h-2 sm:h-3 bg-muted rounded-full overflow-hidden">
               <div 
                 className="h-full bg-gradient-teal rounded-full transition-all duration-500"

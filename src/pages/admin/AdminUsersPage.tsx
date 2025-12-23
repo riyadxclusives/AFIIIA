@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import {
   Search,
+  Filter,
   MoreHorizontal,
   Mail,
   Ban,
@@ -11,11 +12,9 @@ import {
   ChevronLeft,
   ChevronRight,
   UserPlus,
-  Shield,
-  Loader2,
 } from "lucide-react";
 import AdminLayout from "@/components/admin/AdminLayout";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -43,56 +42,66 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import { useAdminUsers, useAdminDeleteUser, useAdminUpdateUser, useAdminUpdateRole } from "@/hooks/useAdminData";
 
-const getModeBadge = (mode: string | null) => {
+// Mock data
+const mockUsers = [
+  { id: "1", name: "Sarah Johnson", email: "sarah@email.com", plan: "Radiance", status: "active", mode: "cycle", joined: "Jan 15, 2024", lastActive: "2 min ago" },
+  { id: "2", name: "Emily Chen", email: "emily@email.com", plan: "Bloom", status: "active", mode: "fertility", joined: "Jan 14, 2024", lastActive: "1 hour ago" },
+  { id: "3", name: "Maria Garcia", email: "maria@email.com", plan: "Radiance", status: "active", mode: "pregnant", joined: "Jan 12, 2024", lastActive: "3 hours ago" },
+  { id: "4", name: "Anna Smith", email: "anna@email.com", plan: "Bloom", status: "trial", mode: "cycle", joined: "Jan 10, 2024", lastActive: "1 day ago" },
+  { id: "5", name: "Lisa Brown", email: "lisa@email.com", plan: "Radiance", status: "active", mode: "cycle", joined: "Jan 8, 2024", lastActive: "2 days ago" },
+  { id: "6", name: "Jennifer Lee", email: "jennifer@email.com", plan: "Bloom", status: "churned", mode: "fertility", joined: "Dec 20, 2023", lastActive: "2 weeks ago" },
+  { id: "7", name: "Amanda White", email: "amanda@email.com", plan: "Radiance", status: "active", mode: "pregnant", joined: "Dec 15, 2023", lastActive: "5 min ago" },
+  { id: "8", name: "Rachel Green", email: "rachel@email.com", plan: "Bloom", status: "suspended", mode: "cycle", joined: "Dec 10, 2023", lastActive: "1 month ago" },
+];
+
+const getStatusBadge = (status: string) => {
+  switch (status) {
+    case "active":
+      return <Badge className="bg-green-500/20 text-green-400 border-green-500/30">Active</Badge>;
+    case "trial":
+      return <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30">Trial</Badge>;
+    case "churned":
+      return <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30">Churned</Badge>;
+    case "suspended":
+      return <Badge className="bg-red-500/20 text-red-400 border-red-500/30">Suspended</Badge>;
+    default:
+      return <Badge variant="secondary">{status}</Badge>;
+  }
+};
+
+const getModeBadge = (mode: string) => {
   switch (mode) {
-    case "normal_cycle":
+    case "cycle":
       return <Badge variant="outline" className="border-coral/50 text-coral">Cycle</Badge>;
     case "fertility":
       return <Badge variant="outline" className="border-lavender/50 text-lavender">Fertility</Badge>;
     case "pregnant":
       return <Badge variant="outline" className="border-teal-500/50 text-teal-400">Pregnant</Badge>;
     default:
-      return <Badge variant="outline" className="border-slate-500/50 text-slate-400">Not set</Badge>;
+      return <Badge variant="outline">{mode}</Badge>;
   }
 };
 
 const AdminUsersPage = () => {
-  const { data: users, isLoading } = useAdminUsers();
-  const deleteUser = useAdminDeleteUser();
-  const updateUser = useAdminUpdateUser();
-  const updateRole = useAdminUpdateRole();
-  
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
+  const [statusFilter, setStatusFilter] = useState("all");
   const [planFilter, setPlanFilter] = useState("all");
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [userToDelete, setUserToDelete] = useState<string | null>(null);
 
-  const filteredUsers = (users || []).filter((user: any) => {
-    const matchesSearch = 
-      (user.first_name?.toLowerCase() || '').includes(searchQuery.toLowerCase()) ||
-      user.email.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesPlan = planFilter === "all" || user.subscription_plan === planFilter;
-    return matchesSearch && matchesPlan;
+  const filteredUsers = mockUsers.filter(user => {
+    const matchesSearch = user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         user.email.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesStatus = statusFilter === "all" || user.status === statusFilter;
+    const matchesPlan = planFilter === "all" || user.plan.toLowerCase() === planFilter.toLowerCase();
+    return matchesSearch && matchesStatus && matchesPlan;
   });
 
   const toggleSelectAll = () => {
     if (selectedUsers.length === filteredUsers.length) {
       setSelectedUsers([]);
     } else {
-      setSelectedUsers(filteredUsers.map((u: any) => u.id));
+      setSelectedUsers(filteredUsers.map(u => u.id));
     }
   };
 
@@ -104,32 +113,6 @@ const AdminUsersPage = () => {
     );
   };
 
-  const handleDeleteUser = async () => {
-    if (userToDelete) {
-      await deleteUser.mutateAsync(userToDelete);
-      setDeleteDialogOpen(false);
-      setUserToDelete(null);
-    }
-  };
-
-  const handleMakeAdmin = async (userId: string) => {
-    await updateRole.mutateAsync({ userId, role: 'admin', action: 'add' });
-  };
-
-  const handleRemoveAdmin = async (userId: string) => {
-    await updateRole.mutateAsync({ userId, role: 'admin', action: 'remove' });
-  };
-
-  if (isLoading) {
-    return (
-      <AdminLayout>
-        <div className="flex items-center justify-center h-64">
-          <Loader2 className="w-8 h-8 animate-spin text-primary" />
-        </div>
-      </AdminLayout>
-    );
-  }
-
   return (
     <AdminLayout>
       <motion.div
@@ -140,15 +123,19 @@ const AdminUsersPage = () => {
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-slate-100">User Management</h1>
+            <h1 className="text-2xl font-bold text-white">User Management</h1>
             <p className="text-slate-400 text-sm mt-1">
-              Manage {(users?.length || 0).toLocaleString()} registered users
+              Manage {mockUsers.length.toLocaleString()} registered users
             </p>
           </div>
           <div className="flex items-center gap-2">
             <Button variant="outline" className="bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700">
               <Download className="w-4 h-4 mr-2" />
               Export
+            </Button>
+            <Button className="bg-primary hover:bg-primary/90">
+              <UserPlus className="w-4 h-4 mr-2" />
+              Add User
             </Button>
           </div>
         </div>
@@ -163,16 +150,27 @@ const AdminUsersPage = () => {
                   placeholder="Search by name or email..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 bg-slate-700/50 border-slate-600 text-slate-100 placeholder:text-slate-500"
+                  className="pl-10 bg-slate-700/50 border-slate-600 text-white placeholder:text-slate-500"
                 />
               </div>
+              <Select value={statusFilter} onValueChange={setStatusFilter}>
+                <SelectTrigger className="w-full sm:w-[150px] bg-slate-700/50 border-slate-600 text-white">
+                  <SelectValue placeholder="Status" />
+                </SelectTrigger>
+                <SelectContent className="bg-slate-800 border-slate-700">
+                  <SelectItem value="all">All Status</SelectItem>
+                  <SelectItem value="active">Active</SelectItem>
+                  <SelectItem value="trial">Trial</SelectItem>
+                  <SelectItem value="churned">Churned</SelectItem>
+                  <SelectItem value="suspended">Suspended</SelectItem>
+                </SelectContent>
+              </Select>
               <Select value={planFilter} onValueChange={setPlanFilter}>
-                <SelectTrigger className="w-full sm:w-[150px] bg-slate-700/50 border-slate-600 text-slate-100">
+                <SelectTrigger className="w-full sm:w-[150px] bg-slate-700/50 border-slate-600 text-white">
                   <SelectValue placeholder="Plan" />
                 </SelectTrigger>
                 <SelectContent className="bg-slate-800 border-slate-700">
                   <SelectItem value="all">All Plans</SelectItem>
-                  <SelectItem value="free">Free</SelectItem>
                   <SelectItem value="bloom">Bloom</SelectItem>
                   <SelectItem value="radiance">Radiance</SelectItem>
                 </SelectContent>
@@ -196,131 +194,84 @@ const AdminUsersPage = () => {
                   </TableHead>
                   <TableHead className="text-slate-400">User</TableHead>
                   <TableHead className="text-slate-400">Plan</TableHead>
+                  <TableHead className="text-slate-400">Status</TableHead>
                   <TableHead className="text-slate-400">Mode</TableHead>
-                  <TableHead className="text-slate-400">Role</TableHead>
                   <TableHead className="text-slate-400">Joined</TableHead>
+                  <TableHead className="text-slate-400">Last Active</TableHead>
                   <TableHead className="text-slate-400 w-12"></TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredUsers.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={7} className="text-center text-slate-400 py-8">
-                      No users found
+                {filteredUsers.map((user, index) => (
+                  <motion.tr
+                    key={user.id}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: index * 0.03 }}
+                    className="border-slate-700/50 hover:bg-slate-700/30"
+                  >
+                    <TableCell>
+                      <Checkbox 
+                        checked={selectedUsers.includes(user.id)}
+                        onCheckedChange={() => toggleSelectUser(user.id)}
+                        className="border-slate-600"
+                      />
                     </TableCell>
-                  </TableRow>
-                ) : (
-                  filteredUsers.map((user: any, index: number) => {
-                    const isAdmin = user.user_roles?.some((r: any) => r.role === 'admin');
-                    return (
-                      <motion.tr
-                        key={user.id}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: index * 0.03 }}
-                        className="border-slate-700/50 hover:bg-slate-700/30"
+                    <TableCell>
+                      <div className="flex items-center gap-3">
+                        <Avatar className="w-8 h-8">
+                          <AvatarFallback className="bg-primary/20 text-primary text-sm">
+                            {user.name.charAt(0)}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <p className="text-sm font-medium text-white">{user.name}</p>
+                          <p className="text-xs text-slate-400">{user.email}</p>
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <Badge 
+                        variant="secondary"
+                        className={user.plan === "Radiance" ? "bg-lavender/20 text-lavender" : "bg-coral/20 text-coral"}
                       >
-                        <TableCell>
-                          <Checkbox 
-                            checked={selectedUsers.includes(user.id)}
-                            onCheckedChange={() => toggleSelectUser(user.id)}
-                            className="border-slate-600"
-                          />
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex items-center gap-3">
-                            <Avatar className="w-8 h-8">
-                              <AvatarFallback className="bg-primary/20 text-primary text-sm">
-                                {user.first_name?.[0] || user.email?.[0]?.toUpperCase() || 'U'}
-                              </AvatarFallback>
-                            </Avatar>
-                            <div>
-                              <p className="text-sm font-medium text-slate-100">
-                                {user.first_name || 'Unnamed'}
-                              </p>
-                              <p className="text-xs text-slate-400">{user.email}</p>
-                            </div>
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <Badge 
-                            variant="secondary"
-                            className={
-                              user.subscription_plan === "radiance" 
-                                ? "bg-lavender/20 text-lavender" 
-                                : user.subscription_plan === "bloom"
-                                ? "bg-coral/20 text-coral"
-                                : "bg-slate-600 text-slate-300"
-                            }
-                          >
-                            {user.subscription_plan || 'free'}
-                          </Badge>
-                        </TableCell>
-                        <TableCell>{getModeBadge(user.health_mode)}</TableCell>
-                        <TableCell>
-                          {isAdmin ? (
-                            <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30">
-                              <Shield className="w-3 h-3 mr-1" />
-                              Admin
-                            </Badge>
-                          ) : (
-                            <Badge variant="outline" className="border-slate-600 text-slate-400">User</Badge>
-                          )}
-                        </TableCell>
-                        <TableCell className="text-slate-400 text-sm">
-                          {new Date(user.created_at).toLocaleDateString()}
-                        </TableCell>
-                        <TableCell>
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" size="icon" className="text-slate-400 hover:text-slate-100">
-                                <MoreHorizontal className="w-4 h-4" />
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end" className="bg-slate-800 border-slate-700">
-                              <DropdownMenuItem className="text-slate-300 focus:text-slate-100 focus:bg-slate-700">
-                                <Eye className="w-4 h-4 mr-2" />
-                                View Details
-                              </DropdownMenuItem>
-                              <DropdownMenuItem className="text-slate-300 focus:text-slate-100 focus:bg-slate-700">
-                                <Mail className="w-4 h-4 mr-2" />
-                                Send Email
-                              </DropdownMenuItem>
-                              <DropdownMenuSeparator className="bg-slate-700" />
-                              {isAdmin ? (
-                                <DropdownMenuItem 
-                                  className="text-yellow-400 focus:text-yellow-400 focus:bg-slate-700"
-                                  onClick={() => handleRemoveAdmin(user.id)}
-                                >
-                                  <Shield className="w-4 h-4 mr-2" />
-                                  Remove Admin
-                                </DropdownMenuItem>
-                              ) : (
-                                <DropdownMenuItem 
-                                  className="text-yellow-400 focus:text-yellow-400 focus:bg-slate-700"
-                                  onClick={() => handleMakeAdmin(user.id)}
-                                >
-                                  <Shield className="w-4 h-4 mr-2" />
-                                  Make Admin
-                                </DropdownMenuItem>
-                              )}
-                              <DropdownMenuItem 
-                                className="text-red-400 focus:text-red-400 focus:bg-slate-700"
-                                onClick={() => {
-                                  setUserToDelete(user.id);
-                                  setDeleteDialogOpen(true);
-                                }}
-                              >
-                                <Trash2 className="w-4 h-4 mr-2" />
-                                Delete User
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </TableCell>
-                      </motion.tr>
-                    );
-                  })
-                )}
+                        {user.plan}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>{getStatusBadge(user.status)}</TableCell>
+                    <TableCell>{getModeBadge(user.mode)}</TableCell>
+                    <TableCell className="text-slate-400 text-sm">{user.joined}</TableCell>
+                    <TableCell className="text-slate-400 text-sm">{user.lastActive}</TableCell>
+                    <TableCell>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" size="icon" className="text-slate-400 hover:text-white">
+                            <MoreHorizontal className="w-4 h-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="bg-slate-800 border-slate-700">
+                          <DropdownMenuItem className="text-slate-300 focus:text-white focus:bg-slate-700">
+                            <Eye className="w-4 h-4 mr-2" />
+                            View Details
+                          </DropdownMenuItem>
+                          <DropdownMenuItem className="text-slate-300 focus:text-white focus:bg-slate-700">
+                            <Mail className="w-4 h-4 mr-2" />
+                            Send Email
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator className="bg-slate-700" />
+                          <DropdownMenuItem className="text-yellow-400 focus:text-yellow-400 focus:bg-slate-700">
+                            <Ban className="w-4 h-4 mr-2" />
+                            Suspend User
+                          </DropdownMenuItem>
+                          <DropdownMenuItem className="text-red-400 focus:text-red-400 focus:bg-slate-700">
+                            <Trash2 className="w-4 h-4 mr-2" />
+                            Delete User
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </motion.tr>
+                ))}
               </TableBody>
             </Table>
           </div>
@@ -328,38 +279,27 @@ const AdminUsersPage = () => {
           {/* Pagination */}
           <div className="flex items-center justify-between p-4 border-t border-slate-700/50">
             <p className="text-sm text-slate-400">
-              Showing {filteredUsers.length} of {users?.length || 0} users
+              Showing {filteredUsers.length} of {mockUsers.length} users
             </p>
+            <div className="flex items-center gap-2">
+              <Button variant="outline" size="sm" className="bg-slate-700/50 border-slate-600 text-slate-300">
+                <ChevronLeft className="w-4 h-4" />
+              </Button>
+              <Button variant="outline" size="sm" className="bg-primary text-primary-foreground border-primary">
+                1
+              </Button>
+              <Button variant="outline" size="sm" className="bg-slate-700/50 border-slate-600 text-slate-300">
+                2
+              </Button>
+              <Button variant="outline" size="sm" className="bg-slate-700/50 border-slate-600 text-slate-300">
+                3
+              </Button>
+              <Button variant="outline" size="sm" className="bg-slate-700/50 border-slate-600 text-slate-300">
+                <ChevronRight className="w-4 h-4" />
+              </Button>
+            </div>
           </div>
         </Card>
-
-        {/* Delete Confirmation Dialog */}
-        <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-          <AlertDialogContent className="bg-slate-800 border-slate-700">
-            <AlertDialogHeader>
-              <AlertDialogTitle className="text-slate-100">Delete User</AlertDialogTitle>
-              <AlertDialogDescription className="text-slate-400">
-                Are you sure you want to delete this user? This action cannot be undone.
-                All user data will be permanently removed.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel className="bg-slate-700 border-slate-600 text-slate-300 hover:bg-slate-600">
-                Cancel
-              </AlertDialogCancel>
-              <AlertDialogAction 
-                onClick={handleDeleteUser}
-                className="bg-red-600 hover:bg-red-700"
-                disabled={deleteUser.isPending}
-              >
-                {deleteUser.isPending ? (
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                ) : null}
-                Delete
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
       </motion.div>
     </AdminLayout>
   );

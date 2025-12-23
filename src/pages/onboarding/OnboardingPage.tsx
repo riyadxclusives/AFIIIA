@@ -1,9 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { useAuth } from "@/contexts/AuthContext";
-import { useUpdateProfile } from "@/hooks/useSupabase";
-import { supabase } from "@/integrations/supabase";
 import WelcomeStep from "@/components/onboarding/WelcomeStep";
 import BodyMetricsStep from "@/components/onboarding/BodyMetricsStep";
 import GoalsStep from "@/components/onboarding/GoalsStep";
@@ -18,20 +15,28 @@ import logo from "@/assets/logo.jpg";
 export type HealthMode = "normal_cycle" | "fertility" | "pregnant";
 
 export interface OnboardingData {
+  // Basic info
   firstName: string;
+  // Body metrics
   age: number | null;
   height: number | null;
   weight: number | null;
+  // Goals
   goals: string[];
+  // Lifestyle
   dietType: string;
   sleepPattern: string;
   availableTime: string;
   stressLevel: string;
+  // Health mode
   healthMode: HealthMode | null;
+  // Cycle-specific
   averageCycleLength: number | null;
   lastPeriodDate: string;
+  // Fertility-specific
   trackBBT: boolean;
   trackMucus: boolean;
+  // Pregnancy-specific
   lmpDate: string;
   dueDate: string;
   doctorConfirmed: boolean;
@@ -59,10 +64,8 @@ const initialData: OnboardingData = {
 
 const OnboardingPage = () => {
   const navigate = useNavigate();
-  const { user, refreshProfile } = useAuth();
   const [step, setStep] = useState(0);
   const [data, setData] = useState<OnboardingData>(initialData);
-  const [isSaving, setIsSaving] = useState(false);
 
   const updateData = (updates: Partial<OnboardingData>) => {
     setData((prev) => ({ ...prev, ...updates }));
@@ -71,33 +74,12 @@ const OnboardingPage = () => {
   const nextStep = () => setStep((prev) => prev + 1);
   const prevStep = () => setStep((prev) => Math.max(0, prev - 1));
 
-  const goToSubscribe = async () => {
-    if (!user) return;
-    
-    setIsSaving(true);
-    try {
-      // Save onboarding data to profile
-      const { error } = await supabase
-        .from('profiles')
-        .update({
-          first_name: data.firstName,
-          health_mode: data.healthMode,
-          onboarding_completed: true,
-          updated_at: new Date().toISOString(),
-        })
-        .eq('id', user.id);
-      
-      if (error) throw error;
-      
-      await refreshProfile();
-      navigate("/home/subscribe");
-    } catch (error) {
-      console.error('Error saving onboarding data:', error);
-    } finally {
-      setIsSaving(false);
-    }
+  const goToSubscribe = () => {
+    // In real app, save data to database first
+    navigate("/home/subscribe");
   };
 
+  // Determine total steps based on health mode
   const getSteps = () => {
     const baseSteps = ["welcome", "metrics", "goals", "lifestyle", "healthMode"];
     
@@ -145,12 +127,14 @@ const OnboardingPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-hero flex flex-col">
+      {/* Background blobs */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-96 h-96 bg-coral-soft/20 blob float" />
         <div className="absolute top-1/3 -left-32 w-80 h-80 bg-lavender-soft/20 blob float" style={{ animationDelay: "2s" }} />
         <div className="absolute bottom-20 right-1/4 w-72 h-72 bg-teal-soft/20 blob float" style={{ animationDelay: "4s" }} />
       </div>
 
+      {/* Header */}
       <header className="relative z-10 p-4 sm:p-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -162,6 +146,7 @@ const OnboardingPage = () => {
           </div>
         </div>
         
+        {/* Progress bar */}
         <div className="mt-4 h-2 bg-muted rounded-full overflow-hidden">
           <motion.div
             className="h-full bg-gradient-primary rounded-full"
@@ -172,6 +157,7 @@ const OnboardingPage = () => {
         </div>
       </header>
 
+      {/* Content */}
       <main className="flex-1 relative z-10 flex items-center justify-center p-4 sm:p-6">
         <AnimatePresence mode="wait">
           <motion.div

@@ -1,9 +1,5 @@
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "@/contexts/AuthContext";
-import { useUpdateProfile } from "@/hooks/useSupabase";
-import { supabase } from "@/integrations/supabase";
 import { ReactNode, useState } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   LayoutDashboard,
@@ -51,10 +47,9 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const { signOut, profile } = useAuth();
 
-  const handleLogout = async () => {
-    await signOut();
+  const handleLogout = () => {
+    sessionStorage.removeItem("admin_demo_session");
     navigate("/admin/login");
   };
 
@@ -70,7 +65,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
           flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200
           ${isActive 
             ? "bg-primary text-primary-foreground shadow-md" 
-            : "text-slate-400 hover:text-slate-100 hover:bg-slate-700/50"
+            : "text-slate-400 hover:text-white hover:bg-slate-700/50"
           }
           ${isCollapsed ? "justify-center" : ""}
         `}
@@ -88,7 +83,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
           <TooltipTrigger asChild>
             {content}
           </TooltipTrigger>
-          <TooltipContent side="right" className="bg-slate-800 text-slate-100 border-slate-700">
+          <TooltipContent side="right" className="bg-slate-800 text-white border-slate-700">
             {item.label}
           </TooltipContent>
         </Tooltip>
@@ -107,7 +102,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
         </div>
         {!isCollapsed && (
           <div>
-            <h1 className="font-serif font-bold text-slate-100 text-lg">AFIIIA</h1>
+            <h1 className="font-serif font-bold text-white text-lg">AFIIIA</h1>
             <p className="text-xs text-slate-500">Admin Panel</p>
           </div>
         )}
@@ -129,15 +124,13 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
         <div className={`flex items-center gap-3 p-2 rounded-lg bg-slate-700/30 ${isCollapsed ? "justify-center" : ""}`}>
           <Avatar className="w-8 h-8 shrink-0">
             <AvatarFallback className="bg-primary/20 text-primary text-sm">
-              {profile?.first_name?.[0] || 'A'}
+              A
             </AvatarFallback>
           </Avatar>
           {!isCollapsed && (
             <div className="min-w-0">
-              <p className="text-sm font-medium text-slate-100 truncate">
-                {profile?.first_name || 'Admin'}
-              </p>
-              <p className="text-xs text-slate-500 truncate">{profile?.email}</p>
+              <p className="text-sm font-medium text-white truncate">Admin</p>
+              <p className="text-xs text-slate-500 truncate">admin@afiiia.com</p>
             </div>
           )}
         </div>
@@ -168,7 +161,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
         {/* Collapse Toggle */}
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className="absolute top-20 -right-3 w-6 h-6 rounded-full bg-slate-700 border border-slate-600 flex items-center justify-center text-slate-400 hover:text-slate-100 transition-colors z-10"
+          className="absolute top-20 -right-3 w-6 h-6 rounded-full bg-slate-700 border border-slate-600 flex items-center justify-center text-slate-400 hover:text-white transition-colors z-10"
           style={{ left: collapsed ? 60 : 244 }}
         >
           {collapsed ? (
@@ -188,7 +181,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setMobileOpen(false)}
-              className="lg:hidden fixed inset-0 bg-slate-950/60 z-40"
+              className="lg:hidden fixed inset-0 bg-black/60 z-40"
             />
             <motion.aside
               initial={{ x: -280 }}
@@ -211,7 +204,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
             variant="ghost"
             size="icon"
             onClick={() => setMobileOpen(true)}
-            className="text-slate-400 hover:text-slate-100"
+            className="text-slate-400 hover:text-white"
           >
             <Menu className="w-6 h-6" />
           </Button>
@@ -219,7 +212,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
             <div className="w-8 h-8 rounded-lg bg-gradient-primary flex items-center justify-center">
               <Shield className="w-4 h-4 text-primary-foreground" />
             </div>
-            <span className="font-serif font-bold text-slate-100">Admin</span>
+            <span className="font-serif font-bold text-white">Admin</span>
           </div>
         </header>
 

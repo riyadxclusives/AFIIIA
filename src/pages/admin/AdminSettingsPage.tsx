@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import {
   Settings,
@@ -11,7 +11,6 @@ import {
   Info,
   Clock,
   Zap,
-  Loader2,
 } from "lucide-react";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -22,48 +21,16 @@ import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
-import { useAppSettings } from "@/hooks/useSupabase";
-import { useAdminUpdateSetting } from "@/hooks/useAdminData";
 
 const AdminSettingsPage = () => {
-  const { data: settings, isLoading } = useAppSettings();
-  const updateSetting = useAdminUpdateSetting();
-  
+  const [bytezApiKey, setBytezApiKey] = useState("");
+  const [retentionDays, setRetentionDays] = useState("365");
+  const [aiEnabled, setAiEnabled] = useState(true);
   const [maintenanceMode, setMaintenanceMode] = useState(false);
-  const [allowSignups, setAllowSignups] = useState(true);
-  const [appName, setAppName] = useState("AFIIIA");
-  const [supportEmail, setSupportEmail] = useState("support@afiiia.com");
 
-  useEffect(() => {
-    if (settings) {
-      const maintenanceSetting = settings.find(s => s.key === 'maintenance_mode');
-      const signupSetting = settings.find(s => s.key === 'allow_signups');
-      const nameSetting = settings.find(s => s.key === 'app_name');
-      const emailSetting = settings.find(s => s.key === 'support_email');
-      
-      if (maintenanceSetting) setMaintenanceMode(JSON.parse(String(maintenanceSetting.value)));
-      if (signupSetting) setAllowSignups(JSON.parse(String(signupSetting.value)));
-      if (nameSetting) setAppName(JSON.parse(String(nameSetting.value)));
-      if (emailSetting) setSupportEmail(JSON.parse(String(emailSetting.value)));
-    }
-  }, [settings]);
-
-  const handleSaveGeneral = async () => {
-    await updateSetting.mutateAsync({ key: 'maintenance_mode', value: maintenanceMode });
-    await updateSetting.mutateAsync({ key: 'allow_signups', value: allowSignups });
-    await updateSetting.mutateAsync({ key: 'app_name', value: appName });
-    await updateSetting.mutateAsync({ key: 'support_email', value: supportEmail });
+  const handleSave = () => {
+    toast.success("Settings saved successfully");
   };
-
-  if (isLoading) {
-    return (
-      <AdminLayout>
-        <div className="flex items-center justify-center h-64">
-          <Loader2 className="w-8 h-8 animate-spin text-primary" />
-        </div>
-      </AdminLayout>
-    );
-  }
 
   return (
     <AdminLayout>
@@ -74,7 +41,7 @@ const AdminSettingsPage = () => {
       >
         {/* Header */}
         <div>
-          <h1 className="text-2xl font-bold text-slate-100">Settings</h1>
+          <h1 className="text-2xl font-bold text-white">Settings</h1>
           <p className="text-slate-400 text-sm mt-1">
             System configuration and API settings
           </p>
@@ -100,7 +67,7 @@ const AdminSettingsPage = () => {
           <TabsContent value="general">
             <Card className="bg-slate-800/50 border-slate-700/50">
               <CardHeader>
-                <CardTitle className="text-slate-100">General Settings</CardTitle>
+                <CardTitle className="text-white">General Settings</CardTitle>
                 <CardDescription className="text-slate-400">
                   Configure system-wide settings
                 </CardDescription>
@@ -110,13 +77,13 @@ const AdminSettingsPage = () => {
                   <div className="flex items-center gap-3">
                     <Zap className="w-5 h-5 text-primary" />
                     <div>
-                      <p className="font-medium text-slate-100">Allow Signups</p>
-                      <p className="text-sm text-slate-400">Allow new users to register</p>
+                      <p className="font-medium text-white">AI Features</p>
+                      <p className="text-sm text-slate-400">Enable AI-powered features across the app</p>
                     </div>
                   </div>
                   <Switch
-                    checked={allowSignups}
-                    onCheckedChange={setAllowSignups}
+                    checked={aiEnabled}
+                    onCheckedChange={setAiEnabled}
                     className="data-[state=checked]:bg-green-500"
                   />
                 </div>
@@ -125,7 +92,7 @@ const AdminSettingsPage = () => {
                   <div className="flex items-center gap-3">
                     <Settings className="w-5 h-5 text-yellow-400" />
                     <div>
-                      <p className="font-medium text-slate-100">Maintenance Mode</p>
+                      <p className="font-medium text-white">Maintenance Mode</p>
                       <p className="text-sm text-slate-400">Show maintenance page to all users</p>
                     </div>
                   </div>
@@ -140,35 +107,27 @@ const AdminSettingsPage = () => {
 
                 <div className="space-y-4">
                   <div className="space-y-2">
-                    <Label className="text-slate-300">App Name</Label>
-                    <Input
-                      value={appName}
-                      onChange={(e) => setAppName(e.target.value)}
-                      className="bg-slate-700/50 border-slate-600 text-slate-100"
-                    />
+                    <Label className="text-slate-300">Default Timezone</Label>
+                    <select className="w-full h-10 px-3 rounded-md bg-slate-700/50 border border-slate-600 text-white">
+                      <option value="UTC">UTC</option>
+                      <option value="America/New_York">Eastern Time</option>
+                      <option value="America/Los_Angeles">Pacific Time</option>
+                      <option value="Europe/London">London</option>
+                    </select>
                   </div>
 
                   <div className="space-y-2">
-                    <Label className="text-slate-300">Support Email</Label>
+                    <Label className="text-slate-300">App Version</Label>
                     <Input
-                      type="email"
-                      value={supportEmail}
-                      onChange={(e) => setSupportEmail(e.target.value)}
-                      className="bg-slate-700/50 border-slate-600 text-slate-100"
+                      value="1.0.0"
+                      disabled
+                      className="bg-slate-700/50 border-slate-600 text-slate-400"
                     />
                   </div>
                 </div>
 
-                <Button 
-                  onClick={handleSaveGeneral} 
-                  className="bg-primary hover:bg-primary/90"
-                  disabled={updateSetting.isPending}
-                >
-                  {updateSetting.isPending ? (
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  ) : (
-                    <Save className="w-4 h-4 mr-2" />
-                  )}
+                <Button onClick={handleSave} className="bg-primary hover:bg-primary/90">
+                  <Save className="w-4 h-4 mr-2" />
                   Save Changes
                 </Button>
               </CardContent>
@@ -178,7 +137,7 @@ const AdminSettingsPage = () => {
           <TabsContent value="api">
             <Card className="bg-slate-800/50 border-slate-700/50">
               <CardHeader>
-                <CardTitle className="text-slate-100 flex items-center gap-2">
+                <CardTitle className="text-white flex items-center gap-2">
                   <Key className="w-5 h-5" />
                   API Configuration
                 </CardTitle>
@@ -191,21 +150,50 @@ const AdminSettingsPage = () => {
                   <div className="flex items-start gap-3">
                     <Info className="w-5 h-5 text-blue-400 shrink-0 mt-0.5" />
                     <p className="text-sm text-slate-300">
-                      API keys are stored securely as Supabase secrets. Use the Supabase dashboard to manage them.
+                      API keys are stored securely and encrypted. Never share these keys publicly.
                     </p>
                   </div>
                 </div>
 
                 <div className="space-y-4">
                   <div className="space-y-2">
-                    <Label className="text-slate-300">Supabase Project</Label>
+                    <Label className="text-slate-300">Bytez AI API Key</Label>
                     <Input
-                      value="Connected ✓"
+                      type="password"
+                      value={bytezApiKey}
+                      onChange={(e) => setBytezApiKey(e.target.value)}
+                      placeholder="Enter your Bytez API key"
+                      className="bg-slate-700/50 border-slate-600 text-white"
+                    />
+                    <p className="text-xs text-slate-500">Used for AI meal planning, workout generation, and insights</p>
+                  </div>
+
+                  <Separator className="bg-slate-700" />
+
+                  <div className="space-y-2">
+                    <Label className="text-slate-300">Supabase Project URL</Label>
+                    <Input
+                      value="https://project-ref.supabase.co"
                       disabled
-                      className="bg-slate-700/50 border-slate-600 text-green-400 font-mono text-sm"
+                      className="bg-slate-700/50 border-slate-600 text-slate-400 font-mono text-sm"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label className="text-slate-300">Supabase Anon Key</Label>
+                    <Input
+                      type="password"
+                      value="eyJhbG...configured"
+                      disabled
+                      className="bg-slate-700/50 border-slate-600 text-slate-400"
                     />
                   </div>
                 </div>
+
+                <Button onClick={handleSave} className="bg-primary hover:bg-primary/90">
+                  <Save className="w-4 h-4 mr-2" />
+                  Save API Keys
+                </Button>
               </CardContent>
             </Card>
           </TabsContent>
@@ -213,7 +201,7 @@ const AdminSettingsPage = () => {
           <TabsContent value="data">
             <Card className="bg-slate-800/50 border-slate-700/50">
               <CardHeader>
-                <CardTitle className="text-slate-100 flex items-center gap-2">
+                <CardTitle className="text-white flex items-center gap-2">
                   <Database className="w-5 h-5" />
                   Data & Privacy
                 </CardTitle>
@@ -222,27 +210,47 @@ const AdminSettingsPage = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="flex items-center justify-between p-4 rounded-lg bg-slate-700/30">
-                  <div className="flex items-center gap-3">
-                    <Clock className="w-5 h-5 text-slate-400" />
-                    <div>
-                      <p className="font-medium text-slate-100">Auto-purge AI Logs</p>
-                      <p className="text-sm text-slate-400">Delete AI interaction logs after 30 days</p>
-                    </div>
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <Label className="text-slate-300">Data Retention Period (days)</Label>
+                    <Input
+                      type="number"
+                      value={retentionDays}
+                      onChange={(e) => setRetentionDays(e.target.value)}
+                      className="bg-slate-700/50 border-slate-600 text-white"
+                    />
+                    <p className="text-xs text-slate-500">
+                      User data older than this will be automatically deleted (0 = never delete)
+                    </p>
                   </div>
-                  <Switch defaultChecked className="data-[state=checked]:bg-green-500" />
+
+                  <div className="flex items-center justify-between p-4 rounded-lg bg-slate-700/30">
+                    <div className="flex items-center gap-3">
+                      <Clock className="w-5 h-5 text-slate-400" />
+                      <div>
+                        <p className="font-medium text-white">Auto-purge AI Logs</p>
+                        <p className="text-sm text-slate-400">Delete AI interaction logs after 30 days</p>
+                      </div>
+                    </div>
+                    <Switch defaultChecked className="data-[state=checked]:bg-green-500" />
+                  </div>
+
+                  <div className="flex items-center justify-between p-4 rounded-lg bg-slate-700/30">
+                    <div className="flex items-center gap-3">
+                      <Shield className="w-5 h-5 text-slate-400" />
+                      <div>
+                        <p className="font-medium text-white">GDPR Compliance Mode</p>
+                        <p className="text-sm text-slate-400">Enforce strict data handling policies</p>
+                      </div>
+                    </div>
+                    <Switch defaultChecked className="data-[state=checked]:bg-green-500" />
+                  </div>
                 </div>
 
-                <div className="flex items-center justify-between p-4 rounded-lg bg-slate-700/30">
-                  <div className="flex items-center gap-3">
-                    <Shield className="w-5 h-5 text-slate-400" />
-                    <div>
-                      <p className="font-medium text-slate-100">GDPR Compliance Mode</p>
-                      <p className="text-sm text-slate-400">Enforce strict data handling policies</p>
-                    </div>
-                  </div>
-                  <Switch defaultChecked className="data-[state=checked]:bg-green-500" />
-                </div>
+                <Button onClick={handleSave} className="bg-primary hover:bg-primary/90">
+                  <Save className="w-4 h-4 mr-2" />
+                  Save Settings
+                </Button>
               </CardContent>
             </Card>
           </TabsContent>
@@ -271,13 +279,24 @@ const AdminSettingsPage = () => {
                 </div>
 
                 <div className="p-4 rounded-lg bg-red-500/10 border border-red-500/20">
-                  <h4 className="font-medium text-red-400 mb-2">Reset All Settings</h4>
+                  <h4 className="font-medium text-red-400 mb-2">Reset All Feature Flags</h4>
                   <p className="text-sm text-slate-400 mb-4">
-                    Reset all app settings to their default values.
+                    Reset all feature flags to their default values.
                   </p>
                   <Button variant="outline" className="border-red-500/50 text-red-400 hover:bg-red-500/20">
                     <Settings className="w-4 h-4 mr-2" />
-                    Reset Settings
+                    Reset Feature Flags
+                  </Button>
+                </div>
+
+                <div className="p-4 rounded-lg bg-red-500/10 border border-red-500/20">
+                  <h4 className="font-medium text-red-400 mb-2">Purge All User Data</h4>
+                  <p className="text-sm text-slate-400 mb-4">
+                    Delete ALL user data from the database. This action is irreversible.
+                  </p>
+                  <Button variant="destructive" className="bg-red-600 hover:bg-red-700">
+                    <Trash2 className="w-4 h-4 mr-2" />
+                    Purge All Data
                   </Button>
                 </div>
               </CardContent>

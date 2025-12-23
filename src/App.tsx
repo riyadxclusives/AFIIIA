@@ -3,8 +3,6 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { AuthProvider } from "@/contexts/AuthContext";
-import { ProtectedRoute } from "@/components/ProtectedRoute";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import LoginPage from "./pages/auth/LoginPage";
@@ -44,147 +42,61 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <AuthProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            {/* Marketing */}
-            <Route path="/" element={<Index />} />
-            
-            {/* Legal Pages */}
-            <Route path="/terms" element={<TermsPage />} />
-            <Route path="/privacy" element={<PrivacyPage />} />
-            <Route path="/refund" element={<RefundPage />} />
-            <Route path="/cookies" element={<CookiesPage />} />
-            <Route path="/contact" element={<ContactPage />} />
-            
-            {/* Auth */}
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/signup" element={<SignupPage />} />
-            
-            {/* Onboarding */}
-            <Route path="/onboarding" element={
-              <ProtectedRoute>
-                <OnboardingPage />
-              </ProtectedRoute>
-            } />
-            <Route path="/install" element={<InstallPage />} />
-            
-            {/* User App - Protected */}
-            <Route path="/home" element={
-              <ProtectedRoute requireOnboarding>
-                <HomePage />
-              </ProtectedRoute>
-            } />
-            <Route path="/home/subscribe" element={
-              <ProtectedRoute>
-                <SubscribePage />
-              </ProtectedRoute>
-            } />
-            <Route path="/home/cycle" element={
-              <ProtectedRoute requireOnboarding>
-                <CyclePage />
-              </ProtectedRoute>
-            } />
-            <Route path="/home/workout" element={
-              <ProtectedRoute requireOnboarding>
-                <WorkoutPage />
-              </ProtectedRoute>
-            } />
-            <Route path="/home/meal" element={
-              <ProtectedRoute requireOnboarding>
-                <MealPage />
-              </ProtectedRoute>
-            } />
-            <Route path="/home/mood" element={
-              <ProtectedRoute requireOnboarding>
-                <MoodPage />
-              </ProtectedRoute>
-            } />
-            <Route path="/home/mood/history" element={
-              <ProtectedRoute requireOnboarding>
-                <MoodHistoryPage />
-              </ProtectedRoute>
-            } />
-            <Route path="/home/profile" element={
-              <ProtectedRoute requireOnboarding>
-                <ProfilePage />
-              </ProtectedRoute>
-            } />
-            <Route path="/home/settings" element={
-              <ProtectedRoute requireOnboarding>
-                <SettingsPage />
-              </ProtectedRoute>
-            } />
-            <Route path="/home/challenges" element={
-              <ProtectedRoute requireOnboarding>
-                <BuddyChallengesPage />
-              </ProtectedRoute>
-            } />
-            <Route path="/home/challenges/:id" element={
-              <ProtectedRoute requireOnboarding>
-                <ChallengeDetailPage />
-              </ProtectedRoute>
-            } />
-            
-            {/* Admin - Protected with admin role */}
-            <Route path="/admin/login" element={<AdminLoginPage />} />
-            <Route path="/admin" element={
-              <ProtectedRoute requireAdmin>
-                <AdminDashboard />
-              </ProtectedRoute>
-            } />
-            <Route path="/admin/users" element={
-              <ProtectedRoute requireAdmin>
-                <AdminUsersPage />
-              </ProtectedRoute>
-            } />
-            <Route path="/admin/features" element={
-              <ProtectedRoute requireAdmin>
-                <AdminFeaturesPage />
-              </ProtectedRoute>
-            } />
-            <Route path="/admin/notifications" element={
-              <ProtectedRoute requireAdmin>
-                <AdminNotificationsPage />
-              </ProtectedRoute>
-            } />
-            <Route path="/admin/database" element={
-              <ProtectedRoute requireAdmin>
-                <AdminDatabasePage />
-              </ProtectedRoute>
-            } />
-            <Route path="/admin/analytics" element={
-              <ProtectedRoute requireAdmin>
-                <AdminAnalyticsPage />
-              </ProtectedRoute>
-            } />
-            <Route path="/admin/billing" element={
-              <ProtectedRoute requireAdmin>
-                <AdminBillingPage />
-              </ProtectedRoute>
-            } />
-            <Route path="/admin/content" element={
-              <ProtectedRoute requireAdmin>
-                <AdminContentPage />
-              </ProtectedRoute>
-            } />
-            <Route path="/admin/settings" element={
-              <ProtectedRoute requireAdmin>
-                <AdminSettingsPage />
-              </ProtectedRoute>
-            } />
-            
-            {/* Catch-all */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-          <CookieConsent />
-          <SplashScreen />
-        </BrowserRouter>
-      </TooltipProvider>
-    </AuthProvider>
+    <TooltipProvider>
+      <Toaster />
+      <Sonner />
+      <BrowserRouter>
+        <Routes>
+          {/* Marketing */}
+          <Route path="/" element={<Index />} />
+          
+          {/* Legal Pages */}
+          <Route path="/terms" element={<TermsPage />} />
+          <Route path="/privacy" element={<PrivacyPage />} />
+          <Route path="/refund" element={<RefundPage />} />
+          <Route path="/cookies" element={<CookiesPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          
+          {/* Auth */}
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
+          
+          {/* Onboarding */}
+          <Route path="/onboarding" element={<OnboardingPage />} />
+          <Route path="/install" element={<InstallPage />} />
+          
+          {/* User App */}
+          <Route path="/home" element={<HomePage />} />
+          <Route path="/home/subscribe" element={<SubscribePage />} />
+          <Route path="/home/cycle" element={<CyclePage />} />
+          <Route path="/home/workout" element={<WorkoutPage />} />
+          <Route path="/home/meal" element={<MealPage />} />
+          <Route path="/home/mood" element={<MoodPage />} />
+          <Route path="/home/mood/history" element={<MoodHistoryPage />} />
+          <Route path="/home/profile" element={<ProfilePage />} />
+          <Route path="/home/settings" element={<SettingsPage />} />
+          <Route path="/home/challenges" element={<BuddyChallengesPage />} />
+          <Route path="/home/challenges/:id" element={<ChallengeDetailPage />} />
+          
+          {/* Admin */}
+          <Route path="/admin/login" element={<AdminLoginPage />} />
+          <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/admin/users" element={<AdminUsersPage />} />
+          <Route path="/admin/features" element={<AdminFeaturesPage />} />
+          <Route path="/admin/notifications" element={<AdminNotificationsPage />} />
+          <Route path="/admin/database" element={<AdminDatabasePage />} />
+          <Route path="/admin/analytics" element={<AdminAnalyticsPage />} />
+          <Route path="/admin/billing" element={<AdminBillingPage />} />
+          <Route path="/admin/content" element={<AdminContentPage />} />
+          <Route path="/admin/settings" element={<AdminSettingsPage />} />
+          
+          {/* Catch-all */}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+        <CookieConsent />
+        <SplashScreen />
+      </BrowserRouter>
+    </TooltipProvider>
   </QueryClientProvider>
 );
 

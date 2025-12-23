@@ -15,21 +15,19 @@ import {
   Check, 
   X,
   Sparkles,
-  Crown,
-  Loader2
+  Crown
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { useAuth } from "@/contexts/AuthContext";
-import { useUpdateProfile } from "@/hooks/useSupabase";
-import { HealthMode } from "@/integrations/supabase";
 
-const healthModeLabels: Record<string, string> = {
+type HealthMode = "normal_cycle" | "fertility" | "pregnant";
+
+const healthModeLabels = {
   normal_cycle: "Normal Cycle",
   fertility: "Fertility Focus",
   pregnant: "Pregnancy",
 };
 
-const healthModeColors: Record<string, string> = {
+const healthModeColors = {
   normal_cycle: "lavender",
   fertility: "coral",
   pregnant: "teal",
@@ -37,37 +35,30 @@ const healthModeColors: Record<string, string> = {
 
 const ProfilePage = () => {
   const { toast } = useToast();
-  const { profile, refreshProfile } = useAuth();
-  const updateProfile = useUpdateProfile();
   const [isEditing, setIsEditing] = useState(false);
-  
-  const [editedProfile, setEditedProfile] = useState({
-    first_name: profile?.first_name || "",
-    health_mode: profile?.health_mode || "normal_cycle" as HealthMode,
+  const [profile, setProfile] = useState({
+    firstName: "Sarah",
+    email: "sarah@example.com",
+    age: 28,
+    height: 165,
+    weight: 62,
+    healthMode: "normal_cycle" as HealthMode,
+    goals: ["track_cycle", "eat_better", "manage_stress"],
   });
 
-  const handleStartEdit = () => {
-    setEditedProfile({
-      first_name: profile?.first_name || "",
-      health_mode: profile?.health_mode || "normal_cycle",
-    });
-    setIsEditing(true);
-  };
+  const [editedProfile, setEditedProfile] = useState(profile);
 
-  const handleSave = async () => {
-    await updateProfile.mutateAsync({
-      first_name: editedProfile.first_name,
-      health_mode: editedProfile.health_mode,
-    });
-    await refreshProfile();
+  const handleSave = () => {
+    setProfile(editedProfile);
     setIsEditing(false);
+    toast({
+      title: "Profile updated",
+      description: "Your changes have been saved successfully.",
+    });
   };
 
   const handleCancel = () => {
-    setEditedProfile({
-      first_name: profile?.first_name || "",
-      health_mode: profile?.health_mode || "normal_cycle",
-    });
+    setEditedProfile(profile);
     setIsEditing(false);
   };
 
@@ -82,16 +73,10 @@ const ProfilePage = () => {
     fertility: "Support fertility",
   };
 
-  const colorClasses: Record<string, string> = {
+  const colorClasses = {
     lavender: "bg-lavender-soft/50 text-lavender border-lavender/30",
     coral: "bg-coral-soft/50 text-coral border-coral/30",
     teal: "bg-teal-soft/50 text-teal border-teal/30",
-  };
-
-  const subscriptionLabels: Record<string, string> = {
-    free: "Free Plan",
-    bloom: "Bloom Plan",
-    radiance: "Radiance Plan",
   };
 
   return (
@@ -108,22 +93,18 @@ const ProfilePage = () => {
             </p>
           </div>
           {!isEditing ? (
-            <Button variant="glass" onClick={handleStartEdit}>
+            <Button variant="glass" onClick={() => setIsEditing(true)}>
               <Edit3 className="w-4 h-4 mr-2" />
               Edit
             </Button>
           ) : (
             <div className="flex gap-2">
-              <Button variant="ghost" onClick={handleCancel} disabled={updateProfile.isPending}>
+              <Button variant="ghost" onClick={handleCancel}>
                 <X className="w-4 h-4 mr-2" />
                 Cancel
               </Button>
-              <Button variant="hero" onClick={handleSave} disabled={updateProfile.isPending}>
-                {updateProfile.isPending ? (
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                ) : (
-                  <Check className="w-4 h-4 mr-2" />
-                )}
+              <Button variant="hero" onClick={handleSave}>
+                <Check className="w-4 h-4 mr-2" />
                 Save
               </Button>
             </div>
@@ -135,7 +116,7 @@ const ProfilePage = () => {
           <CardContent className="p-6">
             <div className="flex items-center gap-6">
               <div className="w-20 h-20 rounded-full bg-gradient-primary flex items-center justify-center text-primary-foreground text-2xl font-serif font-bold">
-                {profile?.first_name?.[0] || profile?.email?.[0]?.toUpperCase() || 'U'}
+                {profile.firstName[0]}
               </div>
               <div className="flex-1">
                 {isEditing ? (
@@ -144,20 +125,18 @@ const ProfilePage = () => {
                       <Label htmlFor="firstName">Name</Label>
                       <Input
                         id="firstName"
-                        value={editedProfile.first_name}
-                        onChange={(e) => setEditedProfile({ ...editedProfile, first_name: e.target.value })}
+                        value={editedProfile.firstName}
+                        onChange={(e) => setEditedProfile({ ...editedProfile, firstName: e.target.value })}
                         className="mt-1"
                       />
                     </div>
                   </div>
                 ) : (
                   <>
-                    <h2 className="font-serif text-2xl font-semibold">
-                      {profile?.first_name || 'Set your name'}
-                    </h2>
+                    <h2 className="font-serif text-2xl font-semibold">{profile.firstName}</h2>
                     <p className="text-muted-foreground flex items-center gap-2 mt-1">
                       <Mail className="w-4 h-4" />
-                      {profile?.email}
+                      {profile.email}
                     </p>
                   </>
                 )}
@@ -175,12 +154,8 @@ const ProfilePage = () => {
                   <Crown className="w-6 h-6" />
                 </div>
                 <div>
-                  <h3 className="font-semibold">
-                    {subscriptionLabels[profile?.subscription_plan || 'free']}
-                  </h3>
-                  <p className="text-sm text-primary-foreground/80">
-                    {profile?.subscription_plan === 'free' ? 'Upgrade for more features' : 'Active subscription'}
-                  </p>
+                  <h3 className="font-semibold">Radiance Plan</h3>
+                  <p className="text-sm text-primary-foreground/80">Trial ends in 12 days</p>
                 </div>
               </div>
               <Button variant="glass" size="sm">
@@ -202,12 +177,12 @@ const ProfilePage = () => {
             {isEditing ? (
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {(Object.keys(healthModeLabels) as HealthMode[]).map((mode) => {
-                  const isSelected = editedProfile.health_mode === mode;
+                  const isSelected = editedProfile.healthMode === mode;
                   const color = healthModeColors[mode];
                   return (
                     <button
                       key={mode}
-                      onClick={() => setEditedProfile({ ...editedProfile, health_mode: mode })}
+                      onClick={() => setEditedProfile({ ...editedProfile, healthMode: mode })}
                       className={`
                         p-4 rounded-xl border-2 text-center transition-all
                         ${isSelected 
@@ -222,10 +197,8 @@ const ProfilePage = () => {
                 })}
               </div>
             ) : (
-              <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl border ${profile?.health_mode ? colorClasses[healthModeColors[profile.health_mode]] : 'bg-secondary/50'}`}>
-                <span className="font-medium">
-                  {profile?.health_mode ? healthModeLabels[profile.health_mode] : 'Not set'}
-                </span>
+              <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl border ${colorClasses[healthModeColors[profile.healthMode]]}`}>
+                <span className="font-medium">{healthModeLabels[profile.healthMode]}</span>
               </div>
             )}
             <p className="text-xs text-muted-foreground mt-3">
@@ -234,41 +207,97 @@ const ProfilePage = () => {
           </CardContent>
         </Card>
 
-        {/* Account Info */}
+        {/* Body Metrics */}
         <Card className="glass-card animate-fade-in" style={{ animationDelay: "0.25s" }}>
           <CardHeader className="pb-3">
             <CardTitle className="text-lg flex items-center gap-2">
               <User className="w-5 h-5 text-coral" />
-              Account Info
+              Body Metrics
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-3">
-              <div className="flex justify-between items-center py-2 border-b border-border/50">
-                <span className="text-muted-foreground">Member since</span>
-                <span className="font-medium">
-                  {profile?.created_at 
-                    ? new Date(profile.created_at).toLocaleDateString('en-US', { 
-                        month: 'long', 
-                        year: 'numeric' 
-                      })
-                    : '-'
-                  }
-                </span>
+            <div className="grid grid-cols-3 gap-4">
+              {/* Age */}
+              <div className="text-center p-4 rounded-xl bg-secondary/50">
+                <Calendar className="w-5 h-5 mx-auto mb-2 text-lavender" />
+                {isEditing ? (
+                  <Input
+                    type="number"
+                    value={editedProfile.age}
+                    onChange={(e) => setEditedProfile({ ...editedProfile, age: parseInt(e.target.value) })}
+                    className="text-center h-8"
+                    min={13}
+                    max={100}
+                  />
+                ) : (
+                  <div className="text-2xl font-serif font-bold">{profile.age}</div>
+                )}
+                <div className="text-xs text-muted-foreground mt-1">Years</div>
               </div>
-              <div className="flex justify-between items-center py-2 border-b border-border/50">
-                <span className="text-muted-foreground">Onboarding</span>
-                <span className="font-medium">
-                  {profile?.onboarding_completed ? '✅ Completed' : '⏳ In progress'}
-                </span>
+
+              {/* Height */}
+              <div className="text-center p-4 rounded-xl bg-secondary/50">
+                <Ruler className="w-5 h-5 mx-auto mb-2 text-teal" />
+                {isEditing ? (
+                  <Input
+                    type="number"
+                    value={editedProfile.height}
+                    onChange={(e) => setEditedProfile({ ...editedProfile, height: parseInt(e.target.value) })}
+                    className="text-center h-8"
+                    min={100}
+                    max={250}
+                  />
+                ) : (
+                  <div className="text-2xl font-serif font-bold">{profile.height}</div>
+                )}
+                <div className="text-xs text-muted-foreground mt-1">cm</div>
               </div>
-              <div className="flex justify-between items-center py-2">
-                <span className="text-muted-foreground">Subscription</span>
-                <span className="font-medium capitalize">
-                  {profile?.subscription_plan || 'Free'}
-                </span>
+
+              {/* Weight */}
+              <div className="text-center p-4 rounded-xl bg-secondary/50">
+                <Weight className="w-5 h-5 mx-auto mb-2 text-coral" />
+                {isEditing ? (
+                  <Input
+                    type="number"
+                    value={editedProfile.weight}
+                    onChange={(e) => setEditedProfile({ ...editedProfile, weight: parseInt(e.target.value) })}
+                    className="text-center h-8"
+                    min={30}
+                    max={300}
+                  />
+                ) : (
+                  <div className="text-2xl font-serif font-bold">{profile.weight}</div>
+                )}
+                <div className="text-xs text-muted-foreground mt-1">kg</div>
               </div>
             </div>
+          </CardContent>
+        </Card>
+
+        {/* Goals */}
+        <Card className="glass-card animate-fade-in" style={{ animationDelay: "0.3s" }}>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-lg flex items-center gap-2">
+              <Target className="w-5 h-5 text-teal" />
+              My Goals
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-wrap gap-2">
+              {profile.goals.map((goal) => (
+                <span
+                  key={goal}
+                  className="px-3 py-1.5 rounded-full text-sm font-medium bg-teal-soft/50 text-teal border border-teal/20"
+                >
+                  {goalLabels[goal] || goal}
+                </span>
+              ))}
+            </div>
+            {isEditing && (
+              <Button variant="ghost" size="sm" className="mt-3">
+                Edit Goals
+              </Button>
+            )}
           </CardContent>
         </Card>
       </div>
