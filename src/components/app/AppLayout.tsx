@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { NavLink, useLocation } from "react-router-dom";
-import { Home, Calendar, Dumbbell, Utensils, Heart, User, Settings } from "lucide-react";
+import { Home, Calendar, Dumbbell, Utensils, Heart, User, Settings, Trophy } from "lucide-react";
 import logo from "@/assets/logo.jpg";
 
 interface AppLayoutProps {
@@ -12,7 +12,7 @@ const navItems = [
   { icon: Calendar, label: "Cycle", path: "/home/cycle" },
   { icon: Dumbbell, label: "Workout", path: "/home/workout" },
   { icon: Utensils, label: "Meal", path: "/home/meal" },
-  { icon: Heart, label: "Mood", path: "/home/mood" },
+  { icon: Trophy, label: "Challenges", path: "/home/challenges" },
 ];
 
 const AppLayout = ({ children }: AppLayoutProps) => {
