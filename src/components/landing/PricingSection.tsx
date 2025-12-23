@@ -49,7 +49,7 @@ const PricingSection = () => {
             <span className="text-gradient block">Pricing</span>
           </h2>
           <p className="text-sm sm:text-base md:text-lg text-muted-foreground">
-            Start with a 14-day free trial. No credit card required.
+            Start with a 14-day free trial. Cancel anytime.
           </p>
         </div>
 

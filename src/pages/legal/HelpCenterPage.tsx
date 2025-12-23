@@ -128,7 +128,7 @@ const categories = [
     color: "lavender",
     articles: [
       { title: "Available plans", content: "We offer Bloom ($10.99/month) for essential features and Radiance ($19.99/month) for full access including AI insights and buddy challenges." },
-      { title: "Free trial details", content: "All new users get a 14-day free trial with full access. No credit card required to start. You'll be notified before the trial ends." },
+      { title: "Free trial details", content: "All new users get a 14-day free trial with full access. Add your payment method to start, and cancel anytime before the trial ends. You'll be notified before any charges." },
       { title: "Changing your plan", content: "Upgrade or downgrade anytime from Settings > Subscription. Changes take effect at the start of your next billing cycle." },
       { title: "Requesting a refund", content: "Contact support within 7 days of purchase for a full refund. See our Refund Policy for details." },
     ],

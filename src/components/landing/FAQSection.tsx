@@ -28,7 +28,7 @@ const faqs = [
   },
   {
     question: "Is there a free trial available?",
-    answer: "Yes! We offer a 14-day free trial for all new users. You get full access to all features during the trial period, no credit card required. After the trial, you can choose the plan that best fits your needs.",
+    answer: "Yes! We offer a 14-day free trial for all new users. You get full access to all features during the trial period. Simply add your payment method to start, and you can cancel anytime before the trial ends.",
   },
   {
     question: "Can I use AFIIIA during pregnancy?",

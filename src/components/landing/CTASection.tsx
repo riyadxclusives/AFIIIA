@@ -45,7 +45,7 @@ const CTASection = () => {
           </div>
 
           <p className="text-xs sm:text-sm text-muted-foreground mt-5 sm:mt-6">
-            No credit card required • Cancel anytime
+            14-day free trial • Cancel anytime
           </p>
         </div>
       </div>
