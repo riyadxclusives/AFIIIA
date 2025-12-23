@@ -85,7 +85,7 @@ const TestimonialsSection = () => {
   const headerOpacity = useTransform(scrollYProgress, [0, 0.2], [0, 1]);
 
   return (
-    <section ref={sectionRef} className="py-16 sm:py-20 md:py-24 bg-gradient-hero relative overflow-hidden">
+    <section ref={sectionRef} id="testimonials" className="py-16 sm:py-20 md:py-24 bg-gradient-hero relative overflow-hidden">
       {/* Background decoration with parallax */}
       <motion.div 
         style={{ x: blob1X }}
