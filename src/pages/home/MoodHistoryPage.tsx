@@ -19,11 +19,14 @@ import {
   AlertCircle,
   Droplet,
   Zap,
-  Sun
+  Sun,
+  Download
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area, BarChart, Bar, Cell, PieChart, Pie } from "recharts";
 import { Progress } from "@/components/ui/progress";
+import { generateHealthReport } from "@/utils/generateHealthReport";
+import { toast } from "sonner";
 
 // Mock data for mood history
 const moodData = [
@@ -131,25 +134,75 @@ const MoodHistoryPage = () => {
     return "No change";
   };
 
+  const handleExportReport = () => {
+    try {
+      generateHealthReport({
+        generatedDate: new Date().toLocaleDateString('en-US', { 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric' 
+        }),
+        avgMood: parseFloat(avgMood),
+        avgSleep: parseFloat(avgSleep),
+        avgEnergy: parseFloat(avgEnergy),
+        moodTrend,
+        sleepTrend,
+        energyTrend,
+        recentCheckins: recentCheckins.map(c => ({
+          date: c.date,
+          time: c.time,
+          mood: c.mood,
+          moodLabel: c.moodLabel,
+          sleep: c.sleep,
+          energy: c.energy,
+          symptoms: c.symptoms
+        })),
+        topSymptoms: symptomFrequency.map(s => ({ name: s.name, count: s.count })),
+        symptomsByPhase: symptomsByPhase.map(p => ({
+          phase: p.phase,
+          days: p.days,
+          symptoms: p.symptoms,
+          avgMood: p.avgMood
+        })),
+        cycleLength: 28,
+        lastPeriodDate: "December 15, 2024"
+      });
+      toast.success("Health report downloaded!");
+    } catch (error) {
+      toast.error("Failed to generate report");
+    }
+  };
+
   return (
     <AppLayout>
       <div className="space-y-6">
         {/* Header */}
         <div className="animate-fade-in">
-          <div className="flex items-center gap-3 mb-2">
-            <Link to="/home/mood">
-              <Button variant="ghost" size="icon" className="rounded-full">
-                <ChevronLeft className="w-5 h-5" />
-              </Button>
-            </Link>
-            <div>
-              <h1 className="font-serif text-2xl sm:text-3xl font-semibold">
-                Mood History
-              </h1>
-              <p className="text-muted-foreground text-sm">
-                Track your wellness trends over time
-              </p>
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center gap-3">
+              <Link to="/home/mood">
+                <Button variant="ghost" size="icon" className="rounded-full">
+                  <ChevronLeft className="w-5 h-5" />
+                </Button>
+              </Link>
+              <div>
+                <h1 className="font-serif text-2xl sm:text-3xl font-semibold">
+                  Mood History
+                </h1>
+                <p className="text-muted-foreground text-sm">
+                  Track your wellness trends over time
+                </p>
+              </div>
             </div>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={handleExportReport}
+              className="gap-2"
+            >
+              <Download className="w-4 h-4" />
+              <span className="hidden sm:inline">Export PDF</span>
+            </Button>
           </div>
         </div>
 
