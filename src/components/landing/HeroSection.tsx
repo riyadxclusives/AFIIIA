@@ -60,11 +60,18 @@ const HeroSection = () => {
                 <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 transition-transform group-hover:translate-x-1" />
               </Button>
             </Link>
-            <Link to="/#how-it-works" className="w-full sm:w-auto">
+            <a 
+              href="#how-it-works" 
+              onClick={(e) => {
+                e.preventDefault();
+                document.getElementById("how-it-works")?.scrollIntoView({ behavior: "smooth" });
+              }}
+              className="w-full sm:w-auto"
+            >
               <Button variant="glass" size="lg" className="w-full sm:w-auto">
                 See How It Works
               </Button>
-            </Link>
+            </a>
           </div>
 
           {/* Social Proof */}

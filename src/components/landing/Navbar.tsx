@@ -1,17 +1,39 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import logo from "@/assets/logo.jpg";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const navLinks = [
-    { name: "Features", href: "/#features" },
-    { name: "How It Works", href: "/#how-it-works" },
-    { name: "Pricing", href: "/#pricing" },
+    { name: "Features", href: "#features" },
+    { name: "How It Works", href: "#how-it-works" },
+    { name: "Pricing", href: "#pricing" },
   ];
+
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    setIsMenuOpen(false);
+    
+    const targetId = href.replace("#", "");
+    
+    // If we're not on the home page, navigate there first
+    if (location.pathname !== "/") {
+      navigate("/");
+      // Wait for navigation then scroll
+      setTimeout(() => {
+        const element = document.getElementById(targetId);
+        element?.scrollIntoView({ behavior: "smooth" });
+      }, 100);
+    } else {
+      const element = document.getElementById(targetId);
+      element?.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border/50">
@@ -32,13 +54,14 @@ const Navbar = () => {
           {/* Desktop Navigation Links */}
           <div className="hidden md:flex items-center gap-6 lg:gap-8">
             {navLinks.map((link) => (
-              <Link 
+              <a 
                 key={link.name}
-                to={link.href} 
-                className="text-muted-foreground hover:text-foreground transition-colors text-sm font-medium"
+                href={link.href}
+                onClick={(e) => handleNavClick(e, link.href)}
+                className="text-muted-foreground hover:text-foreground transition-colors text-sm font-medium cursor-pointer"
               >
                 {link.name}
-              </Link>
+              </a>
             ))}
           </div>
 
@@ -71,14 +94,14 @@ const Navbar = () => {
           <div className="md:hidden py-4 border-t border-border/50 animate-fade-in">
             <div className="flex flex-col space-y-3">
               {navLinks.map((link) => (
-                <Link 
+                <a 
                   key={link.name}
-                  to={link.href} 
-                  className="text-foreground hover:text-primary transition-colors text-base font-medium py-2"
-                  onClick={() => setIsMenuOpen(false)}
+                  href={link.href}
+                  onClick={(e) => handleNavClick(e, link.href)}
+                  className="text-foreground hover:text-primary transition-colors text-base font-medium py-2 cursor-pointer"
                 >
                   {link.name}
-                </Link>
+                </a>
               ))}
               <div className="pt-4 flex flex-col gap-3 border-t border-border/50 mt-2">
                 <Link to="/login" onClick={() => setIsMenuOpen(false)}>
