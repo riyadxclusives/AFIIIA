@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Download, Share, Smartphone, Check, ArrowRight } from "lucide-react";
+import { Download, Share, Smartphone, Check, ArrowRight, Apple, Chrome, MoreVertical } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "react-router-dom";
@@ -15,6 +15,7 @@ const InstallPage = () => {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [isInstalled, setIsInstalled] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
+  const [isAndroid, setIsAndroid] = useState(false);
 
   useEffect(() => {
     // Check if already installed
@@ -22,9 +23,13 @@ const InstallPage = () => {
       setIsInstalled(true);
     }
 
-    // Check if iOS
-    const isIOSDevice = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    // Check device type
+    const userAgent = navigator.userAgent.toLowerCase();
+    const isIOSDevice = /iphone|ipad|ipod/.test(userAgent);
+    const isAndroidDevice = /android/.test(userAgent);
+    
     setIsIOS(isIOSDevice);
+    setIsAndroid(isAndroidDevice);
 
     // Listen for install prompt
     const handleBeforeInstall = (e: Event) => {
@@ -59,9 +64,10 @@ const InstallPage = () => {
 
   const features = [
     "Works offline - access your data anytime",
-    "Fast loading - no browser overhead", 
+    "Faster loading - no browser slowdown", 
     "Push notifications for reminders",
-    "Full-screen native experience",
+    "Full-screen app experience",
+    "Easy access from home screen",
   ];
 
   return (
@@ -106,7 +112,7 @@ const InstallPage = () => {
               Install AFIIIA
             </h1>
             <p className="text-muted-foreground">
-              Add to your home screen for the best experience
+              Get the full app experience on your phone!
             </p>
           </div>
 
@@ -125,45 +131,163 @@ const InstallPage = () => {
             </Card>
           )}
 
-          {/* Install button for Android/Desktop */}
+          {/* Install button for Android/Desktop with prompt available */}
           {!isInstalled && deferredPrompt && (
-            <Button 
-              onClick={handleInstall}
-              className="w-full bg-gradient-primary hover:opacity-90 h-12 text-lg"
-            >
-              <Download className="w-5 h-5 mr-2" />
-              Install App
-            </Button>
+            <Card className="glass-card border-primary/30">
+              <CardContent className="p-5 space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
+                    <Chrome className="w-5 h-5 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-foreground">One-Tap Install</h3>
+                    <p className="text-sm text-muted-foreground">Quick and easy!</p>
+                  </div>
+                </div>
+                <Button 
+                  onClick={handleInstall}
+                  className="w-full bg-gradient-primary hover:opacity-90 h-12 text-lg"
+                >
+                  <Download className="w-5 h-5 mr-2" />
+                  Install Now
+                </Button>
+              </CardContent>
+            </Card>
           )}
 
           {/* iOS instructions */}
           {!isInstalled && isIOS && (
-            <Card className="glass-card">
+            <Card className="glass-card border-primary/30">
               <CardContent className="p-5 space-y-4">
-                <h3 className="font-semibold text-foreground flex items-center gap-2">
-                  <Smartphone className="w-5 h-5" />
-                  Install on iPhone/iPad
-                </h3>
-                <ol className="space-y-3 text-sm">
-                  <li className="flex items-start gap-3">
-                    <span className="w-6 h-6 rounded-full bg-primary/20 text-primary flex items-center justify-center shrink-0 text-xs font-medium">1</span>
-                    <span className="text-muted-foreground">
-                      Tap the <Share className="w-4 h-4 inline mx-1" /> <strong>Share</strong> button in Safari
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <span className="w-6 h-6 rounded-full bg-primary/20 text-primary flex items-center justify-center shrink-0 text-xs font-medium">2</span>
-                    <span className="text-muted-foreground">
-                      Scroll down and tap <strong>"Add to Home Screen"</strong>
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <span className="w-6 h-6 rounded-full bg-primary/20 text-primary flex items-center justify-center shrink-0 text-xs font-medium">3</span>
-                    <span className="text-muted-foreground">
-                      Tap <strong>"Add"</strong> to install
-                    </span>
-                  </li>
-                </ol>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
+                    <Apple className="w-5 h-5 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-foreground">iPhone / iPad</h3>
+                    <p className="text-sm text-muted-foreground">Just 3 easy steps!</p>
+                  </div>
+                </div>
+                
+                <div className="bg-secondary/50 rounded-xl p-4 space-y-4">
+                  <div className="flex items-start gap-3">
+                    <span className="w-7 h-7 rounded-full bg-gradient-primary text-primary-foreground flex items-center justify-center shrink-0 text-sm font-bold">1</span>
+                    <div>
+                      <p className="font-medium text-foreground">Tap the Share button</p>
+                      <p className="text-sm text-muted-foreground mt-1">
+                        Look for <Share className="w-4 h-4 inline mx-1" /> at the bottom of Safari
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-start gap-3">
+                    <span className="w-7 h-7 rounded-full bg-gradient-primary text-primary-foreground flex items-center justify-center shrink-0 text-sm font-bold">2</span>
+                    <div>
+                      <p className="font-medium text-foreground">Scroll down in the menu</p>
+                      <p className="text-sm text-muted-foreground mt-1">
+                        Find and tap <strong>"Add to Home Screen"</strong>
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-start gap-3">
+                    <span className="w-7 h-7 rounded-full bg-gradient-primary text-primary-foreground flex items-center justify-center shrink-0 text-sm font-bold">3</span>
+                    <div>
+                      <p className="font-medium text-foreground">Tap "Add"</p>
+                      <p className="text-sm text-muted-foreground mt-1">
+                        AFIIIA will appear on your home screen!
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Android instructions (when no prompt available) */}
+          {!isInstalled && isAndroid && !deferredPrompt && (
+            <Card className="glass-card border-primary/30">
+              <CardContent className="p-5 space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
+                    <Smartphone className="w-5 h-5 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-foreground">Android Phone</h3>
+                    <p className="text-sm text-muted-foreground">Just 3 easy steps!</p>
+                  </div>
+                </div>
+                
+                <div className="bg-secondary/50 rounded-xl p-4 space-y-4">
+                  <div className="flex items-start gap-3">
+                    <span className="w-7 h-7 rounded-full bg-gradient-primary text-primary-foreground flex items-center justify-center shrink-0 text-sm font-bold">1</span>
+                    <div>
+                      <p className="font-medium text-foreground">Tap the menu button</p>
+                      <p className="text-sm text-muted-foreground mt-1">
+                        Look for <MoreVertical className="w-4 h-4 inline mx-1" /> in Chrome (top right)
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-start gap-3">
+                    <span className="w-7 h-7 rounded-full bg-gradient-primary text-primary-foreground flex items-center justify-center shrink-0 text-sm font-bold">2</span>
+                    <div>
+                      <p className="font-medium text-foreground">Find the install option</p>
+                      <p className="text-sm text-muted-foreground mt-1">
+                        Tap <strong>"Add to Home screen"</strong> or <strong>"Install app"</strong>
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-start gap-3">
+                    <span className="w-7 h-7 rounded-full bg-gradient-primary text-primary-foreground flex items-center justify-center shrink-0 text-sm font-bold">3</span>
+                    <div>
+                      <p className="font-medium text-foreground">Tap "Install" or "Add"</p>
+                      <p className="text-sm text-muted-foreground mt-1">
+                        AFIIIA will appear on your home screen!
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Desktop instructions */}
+          {!isInstalled && !isIOS && !isAndroid && !deferredPrompt && (
+            <Card className="glass-card border-primary/30">
+              <CardContent className="p-5 space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
+                    <Chrome className="w-5 h-5 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-foreground">Desktop Browser</h3>
+                    <p className="text-sm text-muted-foreground">Install from Chrome</p>
+                  </div>
+                </div>
+                
+                <div className="bg-secondary/50 rounded-xl p-4 space-y-4">
+                  <div className="flex items-start gap-3">
+                    <span className="w-7 h-7 rounded-full bg-gradient-primary text-primary-foreground flex items-center justify-center shrink-0 text-sm font-bold">1</span>
+                    <div>
+                      <p className="font-medium text-foreground">Look for install icon</p>
+                      <p className="text-sm text-muted-foreground mt-1">
+                        Check the address bar for <Download className="w-4 h-4 inline mx-1" /> icon
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-start gap-3">
+                    <span className="w-7 h-7 rounded-full bg-gradient-primary text-primary-foreground flex items-center justify-center shrink-0 text-sm font-bold">2</span>
+                    <div>
+                      <p className="font-medium text-foreground">Click "Install"</p>
+                      <p className="text-sm text-muted-foreground mt-1">
+                        A popup will ask to confirm installation
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           )}
@@ -171,7 +295,7 @@ const InstallPage = () => {
           {/* Features */}
           <Card className="glass-card">
             <CardContent className="p-5">
-              <h3 className="font-semibold text-foreground mb-4">Why install?</h3>
+              <h3 className="font-semibold text-foreground mb-4">Why install the app?</h3>
               <ul className="space-y-3">
                 {features.map((feature, i) => (
                   <motion.li

@@ -9,6 +9,7 @@ import FAQSection from "@/components/landing/FAQSection";
 import CTASection from "@/components/landing/CTASection";
 import Footer from "@/components/landing/Footer";
 import LandingPageSkeleton from "@/components/landing/LandingPageSkeleton";
+import ScrollToTop from "@/components/landing/ScrollToTop";
 
 const Index = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -39,6 +40,7 @@ const Index = () => {
         <CTASection />
       </main>
       <Footer />
+      <ScrollToTop />
     </div>
   );
 };
