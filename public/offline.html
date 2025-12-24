@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#9B6BA8">
+  <title>AFIIIA - Offline</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background: linear-gradient(135deg, #FAF8F6 0%, #F5F0F7 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      color: #1a1a1a;
+    }
+    
+    .container {
+      text-align: center;
+      max-width: 380px;
+      background: white;
+      border-radius: 24px;
+      padding: 40px 30px;
+      box-shadow: 0 20px 60px rgba(155, 107, 168, 0.15);
+    }
+    
+    .icon-container {
+      width: 100px;
+      height: 100px;
+      background: linear-gradient(135deg, #F5F0F7 0%, #EDE5F0 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+      position: relative;
+    }
+    
+    .icon-container::after {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      border: 2px solid rgba(155, 107, 168, 0.2);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 0.5; }
+      50% { transform: scale(1.1); opacity: 0.8; }
+    }
+    
+    .wifi-icon {
+      width: 48px;
+      height: 48px;
+      stroke: #9B6BA8;
+      stroke-width: 2;
+      fill: none;
+    }
+    
+    h1 {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: #1a1a1a;
+    }
+    
+    p {
+      color: #666;
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+    
+    .features {
+      background: #F9F7FA;
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 24px;
+      text-align: left;
+    }
+    
+    .features h3 {
+      font-size: 14px;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .features ul {
+      list-style: none;
+      font-size: 14px;
+      color: #666;
+    }
+    
+    .features li {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 0;
+    }
+    
+    .features li::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: #9B6BA8;
+      border-radius: 50%;
+    }
+    
+    .retry-btn {
+      width: 100%;
+      padding: 16px 24px;
+      background: linear-gradient(135deg, #9B6BA8 0%, #B88BC8 100%);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    
+    .retry-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(155, 107, 168, 0.3);
+    }
+    
+    .retry-btn:active {
+      transform: translateY(0);
+    }
+    
+    .hint {
+      font-size: 12px;
+      color: #999;
+      margin-top: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="icon-container">
+      <svg class="wifi-icon" viewBox="0 0 24 24">
+        <line x1="1" y1="1" x2="23" y2="23"></line>
+        <path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"></path>
+        <path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"></path>
+        <path d="M10.71 5.05A16 16 0 0 1 22.58 9"></path>
+        <path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"></path>
+        <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
+        <line x1="12" y1="20" x2="12.01" y2="20"></line>
+      </svg>
+    </div>
+    
+    <h1>You're Offline</h1>
+    <p>It looks like you've lost your internet connection. Don't worry, some features are still available!</p>
+    
+    <div class="features">
+      <h3>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9B6BA8" stroke-width="2">
+          <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+          <line x1="12" y1="18" x2="12.01" y2="18"></line>
+        </svg>
+        Available Offline
+      </h3>
+      <ul>
+        <li>View cached pages</li>
+        <li>Track mood locally</li>
+        <li>View cycle calendar</li>
+      </ul>
+    </div>
+    
+    <button class="retry-btn" onclick="window.location.reload()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="23 4 23 10 17 10"></polyline>
+        <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+      </svg>
+      Try Again
+    </button>
+    
+    <p class="hint">Your data will sync automatically when you're back online.</p>
+  </div>
+</body>
+</html>
