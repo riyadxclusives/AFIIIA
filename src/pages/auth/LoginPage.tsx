@@ -5,6 +5,8 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Eye, EyeOff, ArrowRight } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { toast } from "sonner";
 import logo from "@/assets/logo.jpg";
 
 const LoginPage = () => {
@@ -13,14 +15,22 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    // Simulate login
-    setTimeout(() => {
+    
+    const { success, error } = await login(email, password);
+    
+    if (success) {
+      toast.success("Welcome back!");
       navigate("/home");
-    }, 1000);
+    } else {
+      toast.error(error || "Login failed");
+    }
+    
+    setIsLoading(false);
   };
 
   return (
@@ -112,7 +122,7 @@ const LoginPage = () => {
           <div className="mt-6">
             <Link to="/">
               <Button variant="ghost" size="sm" className="w-full">
-                ← Back to home
+                ← Back to landing page
               </Button>
             </Link>
           </div>
