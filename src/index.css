@@ -128,6 +128,10 @@
     /* Removed scroll-behavior: smooth to allow instant scroll reset on navigation */
     scrollbar-width: none; /* Firefox */
     -ms-overflow-style: none; /* IE and Edge */
+    /* Prevent zoom on double-tap and pinch */
+    touch-action: manipulation;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
   }
 
   /* Apply smooth scrolling only for anchor links within a page */
@@ -143,6 +147,20 @@
     @apply bg-background text-foreground antialiased;
     font-family: 'DM Sans', system-ui, sans-serif;
     overflow-x: hidden;
+    /* PWA native-like behavior */
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    overscroll-behavior: none;
+    /* Prevent text selection on long press for app-like feel */
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  /* Allow text selection in input fields and text areas */
+  input, textarea, [contenteditable="true"] {
+    -webkit-user-select: text;
+    user-select: text;
   }
 
   h1, h2, h3, h4, h5, h6 {
