@@ -41,6 +41,7 @@ import InstallPage from "./pages/InstallPage";
 import CookieConsent from "./components/CookieConsent";
 import SplashScreen from "./components/SplashScreen";
 import PageTransition from "./components/PageTransition";
+import ScrollToTop from "./components/landing/ScrollToTop";
 
 const queryClient = new QueryClient();
 
@@ -111,6 +112,7 @@ const App = () => (
         <AnimatedRoutes />
         <CookieConsent />
         <SplashScreen />
+        <ScrollToTop />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
