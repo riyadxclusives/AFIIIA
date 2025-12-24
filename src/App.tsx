@@ -42,6 +42,7 @@ import CookieConsent from "./components/CookieConsent";
 import SplashScreen from "./components/SplashScreen";
 import PageTransition from "./components/PageTransition";
 import ScrollToTop from "./components/landing/ScrollToTop";
+import ScrollRestoration from "./components/ScrollRestoration";
 
 const queryClient = new QueryClient();
 
@@ -109,6 +110,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <ScrollRestoration />
         <AnimatedRoutes />
         <CookieConsent />
         <SplashScreen />
