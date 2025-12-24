@@ -1,12 +1,10 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { ArrowUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const ScrollToTop = () => {
   const [isVisible, setIsVisible] = useState(false);
-  const lastScrollY = useRef(0);
-  const ticking = useRef(false);
   const location = useLocation();
 
   // Only show on landing page
@@ -19,26 +17,14 @@ const ScrollToTop = () => {
     }
 
     const handleScroll = () => {
-      if (!ticking.current) {
-        window.requestAnimationFrame(() => {
-          const currentScrollY = window.scrollY;
-          const scrollingUp = currentScrollY < lastScrollY.current;
-          const notAtTop = currentScrollY > 100;
-          
-          if (scrollingUp && notAtTop) {
-            setIsVisible(true);
-          } else if (!scrollingUp || !notAtTop) {
-            setIsVisible(false);
-          }
-          
-          lastScrollY.current = currentScrollY;
-          ticking.current = false;
-        });
-        ticking.current = true;
-      }
+      // Show button when scrolled past 300px
+      setIsVisible(window.scrollY > 300);
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
+    // Check initial scroll position
+    handleScroll();
+    
     return () => window.removeEventListener("scroll", handleScroll);
   }, [isLandingPage]);
 
