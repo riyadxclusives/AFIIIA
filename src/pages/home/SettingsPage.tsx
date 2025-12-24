@@ -23,6 +23,7 @@ import {
   Info
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -47,6 +48,7 @@ interface NotificationSetting {
 const SettingsPage = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
+  const { logout } = useAuth();
   
   const [pushEnabled, setPushEnabled] = useState(true);
   const [notifications, setNotifications] = useState<NotificationSetting[]>([
@@ -69,6 +71,7 @@ const SettingsPage = () => {
   };
 
   const handleLogout = () => {
+    logout();
     toast({
       title: "Logged out",
       description: "You have been signed out successfully.",

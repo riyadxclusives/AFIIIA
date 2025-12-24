@@ -5,6 +5,8 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Eye, EyeOff, ArrowRight, Check } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { toast } from "sonner";
 import logo from "@/assets/logo.jpg";
 
 const SignupPage = () => {
@@ -14,15 +16,27 @@ const SignupPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const { signup } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (password !== confirmPassword) return;
+    if (password !== confirmPassword) {
+      toast.error("Passwords don't match");
+      return;
+    }
+    
     setIsLoading(true);
-    // Simulate signup
-    setTimeout(() => {
+    
+    const { success, error } = await signup(email, password);
+    
+    if (success) {
+      toast.success("Account created successfully!");
       navigate("/onboarding");
-    }, 1000);
+    } else {
+      toast.error(error || "Signup failed");
+    }
+    
+    setIsLoading(false);
   };
 
   const passwordRequirements = [
@@ -149,7 +163,7 @@ const SignupPage = () => {
           <div className="mt-6">
             <Link to="/">
               <Button variant="ghost" size="sm" className="w-full">
-                ← Back to home
+                ← Back to landing page
               </Button>
             </Link>
           </div>
