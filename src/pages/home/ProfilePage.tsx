@@ -81,29 +81,29 @@ const ProfilePage = () => {
 
   return (
     <AppLayout>
-      <div className="space-y-6 pb-8">
+      <div className="space-y-4 sm:space-y-6 pb-6 sm:pb-8">
         {/* Header */}
-        <div className="flex items-center justify-between animate-fade-in">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 animate-fade-in">
           <div>
-            <h1 className="font-serif text-2xl sm:text-3xl font-semibold mb-1">
+            <h1 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold mb-0.5 sm:mb-1">
               My Profile
             </h1>
-            <p className="text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               Manage your account and preferences
             </p>
           </div>
           {!isEditing ? (
-            <Button variant="glass" onClick={() => setIsEditing(true)}>
+            <Button variant="glass" size="sm" onClick={() => setIsEditing(true)} className="w-full sm:w-auto">
               <Edit3 className="w-4 h-4 mr-2" />
               Edit
             </Button>
           ) : (
-            <div className="flex gap-2">
-              <Button variant="ghost" onClick={handleCancel}>
+            <div className="flex gap-2 w-full sm:w-auto">
+              <Button variant="ghost" size="sm" onClick={handleCancel} className="flex-1 sm:flex-none">
                 <X className="w-4 h-4 mr-2" />
                 Cancel
               </Button>
-              <Button variant="hero" onClick={handleSave}>
+              <Button variant="hero" size="sm" onClick={handleSave} className="flex-1 sm:flex-none">
                 <Check className="w-4 h-4 mr-2" />
                 Save
               </Button>
@@ -113,14 +113,14 @@ const ProfilePage = () => {
 
         {/* Profile Picture & Basic Info */}
         <Card className="glass-card animate-fade-in" style={{ animationDelay: "0.1s" }}>
-          <CardContent className="p-6">
-            <div className="flex items-center gap-6">
-              <div className="w-20 h-20 rounded-full bg-gradient-primary flex items-center justify-center text-primary-foreground text-2xl font-serif font-bold">
+          <CardContent className="p-4 sm:p-6">
+            <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6">
+              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-primary flex items-center justify-center text-primary-foreground text-xl sm:text-2xl font-serif font-bold shrink-0">
                 {profile.firstName[0]}
               </div>
-              <div className="flex-1">
+              <div className="flex-1 text-center sm:text-left w-full">
                 {isEditing ? (
-                  <div className="space-y-3">
+                  <div className="space-y-3 max-w-xs mx-auto sm:mx-0">
                     <div>
                       <Label htmlFor="firstName">Name</Label>
                       <Input
@@ -133,8 +133,8 @@ const ProfilePage = () => {
                   </div>
                 ) : (
                   <>
-                    <h2 className="font-serif text-2xl font-semibold">{profile.firstName}</h2>
-                    <p className="text-muted-foreground flex items-center gap-2 mt-1">
+                    <h2 className="font-serif text-xl sm:text-2xl font-semibold">{profile.firstName}</h2>
+                    <p className="text-muted-foreground flex items-center justify-center sm:justify-start gap-2 mt-1 text-sm">
                       <Mail className="w-4 h-4" />
                       {profile.email}
                     </p>
@@ -215,60 +215,60 @@ const ProfilePage = () => {
               Body Metrics
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-3 gap-4">
+          <CardContent className="p-4 sm:p-6">
+            <div className="grid grid-cols-3 gap-2 sm:gap-4">
               {/* Age */}
-              <div className="text-center p-4 rounded-xl bg-secondary/50">
-                <Calendar className="w-5 h-5 mx-auto mb-2 text-lavender" />
+              <div className="text-center p-2 sm:p-4 rounded-lg sm:rounded-xl bg-secondary/50">
+                <Calendar className="w-4 h-4 sm:w-5 sm:h-5 mx-auto mb-1.5 sm:mb-2 text-lavender" />
                 {isEditing ? (
                   <Input
                     type="number"
                     value={editedProfile.age}
                     onChange={(e) => setEditedProfile({ ...editedProfile, age: parseInt(e.target.value) })}
-                    className="text-center h-8"
+                    className="text-center h-7 sm:h-8 text-sm"
                     min={13}
                     max={100}
                   />
                 ) : (
-                  <div className="text-2xl font-serif font-bold">{profile.age}</div>
+                  <div className="text-lg sm:text-2xl font-serif font-bold">{profile.age}</div>
                 )}
-                <div className="text-xs text-muted-foreground mt-1">Years</div>
+                <div className="text-[10px] sm:text-xs text-muted-foreground mt-0.5 sm:mt-1">Years</div>
               </div>
 
               {/* Height */}
-              <div className="text-center p-4 rounded-xl bg-secondary/50">
-                <Ruler className="w-5 h-5 mx-auto mb-2 text-teal" />
+              <div className="text-center p-2 sm:p-4 rounded-lg sm:rounded-xl bg-secondary/50">
+                <Ruler className="w-4 h-4 sm:w-5 sm:h-5 mx-auto mb-1.5 sm:mb-2 text-teal" />
                 {isEditing ? (
                   <Input
                     type="number"
                     value={editedProfile.height}
                     onChange={(e) => setEditedProfile({ ...editedProfile, height: parseInt(e.target.value) })}
-                    className="text-center h-8"
+                    className="text-center h-7 sm:h-8 text-sm"
                     min={100}
                     max={250}
                   />
                 ) : (
-                  <div className="text-2xl font-serif font-bold">{profile.height}</div>
+                  <div className="text-lg sm:text-2xl font-serif font-bold">{profile.height}</div>
                 )}
-                <div className="text-xs text-muted-foreground mt-1">cm</div>
+                <div className="text-[10px] sm:text-xs text-muted-foreground mt-0.5 sm:mt-1">cm</div>
               </div>
 
               {/* Weight */}
-              <div className="text-center p-4 rounded-xl bg-secondary/50">
-                <Weight className="w-5 h-5 mx-auto mb-2 text-coral" />
+              <div className="text-center p-2 sm:p-4 rounded-lg sm:rounded-xl bg-secondary/50">
+                <Weight className="w-4 h-4 sm:w-5 sm:h-5 mx-auto mb-1.5 sm:mb-2 text-coral" />
                 {isEditing ? (
                   <Input
                     type="number"
                     value={editedProfile.weight}
                     onChange={(e) => setEditedProfile({ ...editedProfile, weight: parseInt(e.target.value) })}
-                    className="text-center h-8"
+                    className="text-center h-7 sm:h-8 text-sm"
                     min={30}
                     max={300}
                   />
                 ) : (
-                  <div className="text-2xl font-serif font-bold">{profile.weight}</div>
+                  <div className="text-lg sm:text-2xl font-serif font-bold">{profile.weight}</div>
                 )}
-                <div className="text-xs text-muted-foreground mt-1">kg</div>
+                <div className="text-[10px] sm:text-xs text-muted-foreground mt-0.5 sm:mt-1">kg</div>
               </div>
             </div>
           </CardContent>
@@ -276,25 +276,25 @@ const ProfilePage = () => {
 
         {/* Goals */}
         <Card className="glass-card animate-fade-in" style={{ animationDelay: "0.3s" }}>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-lg flex items-center gap-2">
-              <Target className="w-5 h-5 text-teal" />
+          <CardHeader className="pb-2 sm:pb-3 px-4 sm:px-6 pt-4 sm:pt-6">
+            <CardTitle className="text-base sm:text-lg flex items-center gap-2">
+              <Target className="w-4 h-4 sm:w-5 sm:h-5 text-teal" />
               My Goals
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="flex flex-wrap gap-2">
+          <CardContent className="px-4 sm:px-6 pb-4 sm:pb-6">
+            <div className="flex flex-wrap gap-1.5 sm:gap-2">
               {profile.goals.map((goal) => (
                 <span
                   key={goal}
-                  className="px-3 py-1.5 rounded-full text-sm font-medium bg-teal-soft/50 text-teal border border-teal/20"
+                  className="px-2 sm:px-3 py-1 sm:py-1.5 rounded-full text-xs sm:text-sm font-medium bg-teal-soft/50 text-teal border border-teal/20"
                 >
                   {goalLabels[goal] || goal}
                 </span>
               ))}
             </div>
             {isEditing && (
-              <Button variant="ghost" size="sm" className="mt-3">
+              <Button variant="ghost" size="sm" className="mt-3 text-xs sm:text-sm">
                 Edit Goals
               </Button>
             )}
