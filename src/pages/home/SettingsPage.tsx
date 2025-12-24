@@ -161,26 +161,26 @@ const SettingsPage = () => {
         )}
 
         {/* Install PWA */}
-        <Card className="glass-card animate-fade-in" style={{ animationDelay: "0.2s" }}>
-          <CardContent className="p-5">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-lavender-soft/50 flex items-center justify-center">
-                  <Smartphone className="w-6 h-6 text-lavender" />
+        <Link to="/install">
+          <Card className="glass-card animate-fade-in cursor-pointer hover:bg-secondary/50 transition-colors" style={{ animationDelay: "0.2s" }}>
+            <CardContent className="p-5">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-2xl bg-lavender-soft/50 flex items-center justify-center">
+                    <Smartphone className="w-6 h-6 text-lavender" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold">Install AFIIIA</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Add to your home screen for quick access
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="font-semibold">Install AFIIIA</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Add to your home screen for quick access
-                  </p>
-                </div>
+                <ChevronRight className="w-5 h-5 text-muted-foreground" />
               </div>
-              <Button variant="lavender" size="sm">
-                Install
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </Link>
 
         {/* Privacy & Security */}
         <Card className="glass-card animate-fade-in" style={{ animationDelay: "0.25s" }}>
