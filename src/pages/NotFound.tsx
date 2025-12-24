@@ -69,7 +69,7 @@ const NotFound = () => {
           transition={{ delay: 0.4 }}
           className="flex flex-col sm:flex-row gap-3 justify-center"
         >
-          <Link to="/">
+          <Link to="/home">
             <Button variant="hero" size="lg" className="w-full sm:w-auto gap-2">
               <Home className="w-4 h-4" />
               Go to Home
@@ -94,7 +94,7 @@ const NotFound = () => {
           className="mt-8"
         >
           <Link 
-            to="/help" 
+            to="/help-center" 
             className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
           >
             <HelpCircle className="w-4 h-4" />
