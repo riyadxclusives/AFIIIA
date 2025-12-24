@@ -17,19 +17,21 @@ const ScrollToTop = () => {
       return;
     }
 
-    // Initialize lastScrollY
+    // Initialize lastScrollY with current position
     lastScrollY.current = window.scrollY;
 
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-      const scrollingUp = currentScrollY < lastScrollY.current;
+      const scrollDiff = lastScrollY.current - currentScrollY;
+      const isScrollingUp = scrollDiff > 5; // Need at least 5px scroll up to trigger
       const notAtTop = currentScrollY > 100;
       
-      // Show only when scrolling UP and not at top
-      // Hide immediately when scrolling DOWN
-      if (scrollingUp && notAtTop) {
+      console.log('Scroll Debug:', { currentScrollY, lastScrollY: lastScrollY.current, scrollDiff, isScrollingUp, notAtTop });
+      
+      if (isScrollingUp && notAtTop) {
         setIsVisible(true);
-      } else {
+      } else if (scrollDiff < -5) {
+        // Scrolling down - hide
         setIsVisible(false);
       }
       
@@ -54,7 +56,7 @@ const ScrollToTop = () => {
       variant="hero"
       size="icon"
       onClick={scrollToTop}
-      className="fixed bottom-6 right-6 z-[100] h-11 w-11 sm:h-12 sm:w-12 rounded-full shadow-elevated animate-fade-in"
+      className="fixed bottom-6 right-6 z-[9999] h-11 w-11 sm:h-12 sm:w-12 rounded-full shadow-elevated animate-fade-in"
       aria-label="Scroll to top"
     >
       <ArrowUp className="w-5 h-5" />
