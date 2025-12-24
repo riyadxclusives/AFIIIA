@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     
     <!-- App Info -->
     <title>AFIIIA - Women's Wellness</title>
@@ -12,22 +12,38 @@
     <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#9B6BA8" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="AFIIIA" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="msapplication-TileColor" content="#9B6BA8" />
     <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="HandheldFriendly" content="true" />
     
-    <!-- iOS Icons -->
+    <!-- Prevent zoom on double-tap -->
+    <meta name="touch-action" content="manipulation" />
+    
+    <!-- iOS Icons - All Required Sizes -->
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon.png" />
+    <link rel="apple-touch-icon" sizes="60x60" href="/apple-touch-icon.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon.png" />
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon.png" />
+    <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon.png" />
+    <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon.png" />
     <link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     
     <!-- iOS Splash Screens -->
-    <link rel="apple-touch-startup-image" href="/apple-touch-icon.png" />
+    <link rel="apple-touch-startup-image" href="/pwa-512x512.png" />
     
     <!-- Favicon -->
     <link rel="icon" type="image/png" sizes="32x32" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/apple-touch-icon.png" />
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.webmanifest" />
     
     <!-- Open Graph -->
     <meta property="og:title" content="AFIIIA - Women's Wellness" />
@@ -41,6 +57,10 @@
     <meta name="twitter:title" content="AFIIIA - Women's Wellness" />
     <meta name="twitter:description" content="Your AI-powered wellness companion designed for women" />
     <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+    
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   </head>
 
   <body>
