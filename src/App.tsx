@@ -9,6 +9,7 @@ import NotFound from "./pages/NotFound";
 import OfflinePage from "./pages/OfflinePage";
 import LoginPage from "./pages/auth/LoginPage";
 import SignupPage from "./pages/auth/SignupPage";
+import ForgotPasswordPage from "./pages/auth/ForgotPasswordPage";
 import OnboardingPage from "./pages/onboarding/OnboardingPage";
 import SubscribePage from "./pages/home/SubscribePage";
 import HomePage from "./pages/home/HomePage";
@@ -68,6 +69,7 @@ const AnimatedRoutes = () => {
         {/* Auth */}
         <Route path="/login" element={<PageTransition><LoginPage /></PageTransition>} />
         <Route path="/signup" element={<PageTransition><SignupPage /></PageTransition>} />
+        <Route path="/forgot-password" element={<PageTransition><ForgotPasswordPage /></PageTransition>} />
         
         {/* Onboarding */}
         <Route path="/onboarding" element={<PageTransition><OnboardingPage /></PageTransition>} />
