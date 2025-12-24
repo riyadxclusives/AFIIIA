@@ -54,7 +54,7 @@ const ScrollToTop = () => {
       variant="hero"
       size="icon"
       onClick={scrollToTop}
-      className="fixed bottom-6 right-6 z-50 h-11 w-11 sm:h-12 sm:w-12 rounded-full shadow-elevated animate-fade-in"
+      className="fixed bottom-6 right-6 z-[100] h-11 w-11 sm:h-12 sm:w-12 rounded-full shadow-elevated animate-fade-in"
       aria-label="Scroll to top"
     >
       <ArrowUp className="w-5 h-5" />
