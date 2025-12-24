@@ -90,6 +90,10 @@ export default defineConfig(({ mode }) => ({
         skipWaiting: true,
         navigateFallback: "/index.html",
         navigateFallbackDenylist: [/^\/api/],
+        offlineGoogleAnalytics: false,
+        additionalManifestEntries: [
+          { url: '/offline.html', revision: Date.now().toString() }
+        ],
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,

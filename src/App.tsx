@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
+import OfflinePage from "./pages/OfflinePage";
 import LoginPage from "./pages/auth/LoginPage";
 import SignupPage from "./pages/auth/SignupPage";
 import OnboardingPage from "./pages/onboarding/OnboardingPage";
@@ -43,6 +44,7 @@ import SplashScreen from "./components/SplashScreen";
 import PageTransition from "./components/PageTransition";
 import ScrollToTop from "./components/landing/ScrollToTop";
 import ScrollRestoration from "./components/ScrollRestoration";
+import OfflineStatusBanner from "./components/OfflineStatusBanner";
 
 const queryClient = new QueryClient();
 
@@ -70,6 +72,7 @@ const AnimatedRoutes = () => {
         {/* Onboarding */}
         <Route path="/onboarding" element={<PageTransition><OnboardingPage /></PageTransition>} />
         <Route path="/install" element={<PageTransition><InstallPage /></PageTransition>} />
+        <Route path="/offline" element={<PageTransition><OfflinePage /></PageTransition>} />
         
         {/* User App */}
         <Route path="/home" element={<PageTransition><HomePage /></PageTransition>} />
@@ -110,6 +113,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <OfflineStatusBanner />
         <ScrollRestoration />
         <AnimatedRoutes />
         <CookieConsent />
