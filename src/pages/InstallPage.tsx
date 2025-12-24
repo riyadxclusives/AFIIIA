@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Download, Share, Smartphone, Check, ArrowRight, Apple, Chrome, MoreVertical } from "lucide-react";
+import { Download, Share, Smartphone, Check, ArrowRight, Apple, MoreVertical, Plus, ExternalLink, ArrowUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import logo from "@/assets/logo.jpg";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -16,6 +17,7 @@ const InstallPage = () => {
   const [isInstalled, setIsInstalled] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
   const [isAndroid, setIsAndroid] = useState(false);
+  const [activeTab, setActiveTab] = useState("ios");
 
   useEffect(() => {
     // Check if already installed
@@ -30,6 +32,11 @@ const InstallPage = () => {
     
     setIsIOS(isIOSDevice);
     setIsAndroid(isAndroidDevice);
+    
+    // Set default tab based on device
+    if (isAndroidDevice) {
+      setActiveTab("android");
+    }
 
     // Listen for install prompt
     const handleBeforeInstall = (e: Event) => {
@@ -63,11 +70,11 @@ const InstallPage = () => {
   };
 
   const features = [
-    "Works offline - access your data anytime",
-    "Faster loading - no browser slowdown", 
-    "Push notifications for reminders",
-    "Full-screen app experience",
-    "Easy access from home screen",
+    { icon: "📱", text: "Works offline - access your data anytime" },
+    { icon: "⚡", text: "Fast loading - no browser slowdown" },
+    { icon: "🔔", text: "Push notifications for reminders" },
+    { icon: "✨", text: "Full-screen native app experience" },
+    { icon: "🏠", text: "Easy access from your home screen" },
   ];
 
   return (
@@ -87,7 +94,7 @@ const InstallPage = () => {
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8 max-w-lg">
+      <main className="container mx-auto px-4 py-6 max-w-lg">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -99,32 +106,32 @@ const InstallPage = () => {
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ type: "spring", stiffness: 200, damping: 20 }}
-              className="w-24 h-24 mx-auto rounded-3xl bg-gradient-primary p-0.5"
+              className="w-20 h-20 mx-auto rounded-2xl bg-gradient-primary p-0.5 shadow-elevated"
             >
               <img 
                 src={logo} 
                 alt="AFIIIA" 
-                className="w-full h-full rounded-3xl object-cover"
+                className="w-full h-full rounded-2xl object-cover"
               />
             </motion.div>
             
             <h1 className="font-serif text-2xl font-bold text-gradient">
               Install AFIIIA
             </h1>
-            <p className="text-muted-foreground">
-              Get the full app experience on your phone!
+            <p className="text-muted-foreground text-sm">
+              Add to your home screen for the best experience
             </p>
           </div>
 
           {/* Already installed */}
           {isInstalled && (
-            <Card className="bg-accent/50 border-accent">
+            <Card className="bg-teal-soft/50 border-teal/30">
               <CardContent className="p-4 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-accent flex items-center justify-center">
-                  <Check className="w-5 h-5 text-accent-foreground" />
+                <div className="w-12 h-12 rounded-full bg-teal/20 flex items-center justify-center">
+                  <Check className="w-6 h-6 text-teal" />
                 </div>
                 <div>
-                  <p className="font-medium text-foreground">Already Installed!</p>
+                  <p className="font-semibold text-foreground">Already Installed!</p>
                   <p className="text-sm text-muted-foreground">Open AFIIIA from your home screen</p>
                 </div>
               </CardContent>
@@ -136,179 +143,273 @@ const InstallPage = () => {
             <Card className="glass-card border-primary/30">
               <CardContent className="p-5 space-y-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
-                    <Chrome className="w-5 h-5 text-primary" />
+                  <div className="w-12 h-12 rounded-full bg-gradient-primary flex items-center justify-center">
+                    <Download className="w-6 h-6 text-primary-foreground" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-foreground">One-Tap Install</h3>
-                    <p className="text-sm text-muted-foreground">Quick and easy!</p>
+                    <h3 className="font-semibold text-foreground">Quick Install Available!</h3>
+                    <p className="text-sm text-muted-foreground">Tap the button below</p>
                   </div>
                 </div>
                 <Button 
                   onClick={handleInstall}
-                  className="w-full bg-gradient-primary hover:opacity-90 h-12 text-lg"
+                  className="w-full bg-gradient-primary hover:opacity-90 h-12 text-lg font-semibold"
                 >
                   <Download className="w-5 h-5 mr-2" />
-                  Install Now
+                  Install AFIIIA Now
                 </Button>
               </CardContent>
             </Card>
           )}
 
-          {/* iOS instructions */}
-          {!isInstalled && isIOS && (
-            <Card className="glass-card border-primary/30">
-              <CardContent className="p-5 space-y-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
-                    <Apple className="w-5 h-5 text-primary" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-foreground">iPhone / iPad</h3>
-                    <p className="text-sm text-muted-foreground">Just 3 easy steps!</p>
-                  </div>
-                </div>
-                
-                <div className="bg-secondary/50 rounded-xl p-4 space-y-4">
-                  <div className="flex items-start gap-3">
-                    <span className="w-7 h-7 rounded-full bg-gradient-primary text-primary-foreground flex items-center justify-center shrink-0 text-sm font-bold">1</span>
-                    <div>
-                      <p className="font-medium text-foreground">Tap the Share button</p>
-                      <p className="text-sm text-muted-foreground mt-1">
-                        Look for <Share className="w-4 h-4 inline mx-1" /> at the bottom of Safari
-                      </p>
+          {/* Step-by-step Instructions with Tabs */}
+          {!isInstalled && !deferredPrompt && (
+            <Card className="glass-card overflow-hidden">
+              <CardContent className="p-0">
+                <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+                  <TabsList className="w-full grid grid-cols-2 rounded-none h-14 bg-secondary/50">
+                    <TabsTrigger 
+                      value="ios" 
+                      className="h-full rounded-none data-[state=active]:bg-background data-[state=active]:shadow-sm flex items-center gap-2"
+                    >
+                      <Apple className="w-5 h-5" />
+                      iPhone / iPad
+                    </TabsTrigger>
+                    <TabsTrigger 
+                      value="android"
+                      className="h-full rounded-none data-[state=active]:bg-background data-[state=active]:shadow-sm flex items-center gap-2"
+                    >
+                      <Smartphone className="w-5 h-5" />
+                      Android
+                    </TabsTrigger>
+                  </TabsList>
+
+                  {/* iOS Instructions */}
+                  <TabsContent value="ios" className="p-5 space-y-5 mt-0">
+                    <div className="text-center pb-2">
+                      <h3 className="font-semibold text-foreground">How to Install on iPhone/iPad</h3>
+                      <p className="text-sm text-muted-foreground">Follow these 3 easy steps in Safari</p>
                     </div>
-                  </div>
-                  
-                  <div className="flex items-start gap-3">
-                    <span className="w-7 h-7 rounded-full bg-gradient-primary text-primary-foreground flex items-center justify-center shrink-0 text-sm font-bold">2</span>
-                    <div>
-                      <p className="font-medium text-foreground">Scroll down in the menu</p>
-                      <p className="text-sm text-muted-foreground mt-1">
-                        Find and tap <strong>"Add to Home Screen"</strong>
-                      </p>
+
+                    {/* Step 1 */}
+                    <motion.div 
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.1 }}
+                      className="flex gap-4"
+                    >
+                      <div className="shrink-0">
+                        <div className="w-10 h-10 rounded-full bg-gradient-primary text-primary-foreground flex items-center justify-center font-bold text-lg">
+                          1
+                        </div>
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="font-semibold text-foreground mb-2">Tap the Share Button</h4>
+                        <div className="bg-secondary/70 rounded-xl p-4 space-y-3">
+                          <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                            <div className="w-10 h-10 rounded-lg bg-background flex items-center justify-center border border-border">
+                              <Share className="w-5 h-5 text-primary" />
+                            </div>
+                            <span>Look for this icon at the bottom of Safari</span>
+                          </div>
+                          <p className="text-xs text-muted-foreground/80">
+                            If using Chrome, tap the 3 dots menu ••• instead
+                          </p>
+                        </div>
+                      </div>
+                    </motion.div>
+
+                    {/* Step 2 */}
+                    <motion.div 
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.2 }}
+                      className="flex gap-4"
+                    >
+                      <div className="shrink-0">
+                        <div className="w-10 h-10 rounded-full bg-gradient-primary text-primary-foreground flex items-center justify-center font-bold text-lg">
+                          2
+                        </div>
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="font-semibold text-foreground mb-2">Find "Add to Home Screen"</h4>
+                        <div className="bg-secondary/70 rounded-xl p-4 space-y-3">
+                          <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                            <div className="w-10 h-10 rounded-lg bg-background flex items-center justify-center border border-border">
+                              <Plus className="w-5 h-5 text-foreground" />
+                            </div>
+                            <span>Scroll down and tap <strong className="text-foreground">"Add to Home Screen"</strong></span>
+                          </div>
+                          <p className="text-xs text-muted-foreground/80">
+                            You may need to scroll down in the share menu to see it
+                          </p>
+                        </div>
+                      </div>
+                    </motion.div>
+
+                    {/* Step 3 */}
+                    <motion.div 
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.3 }}
+                      className="flex gap-4"
+                    >
+                      <div className="shrink-0">
+                        <div className="w-10 h-10 rounded-full bg-gradient-primary text-primary-foreground flex items-center justify-center font-bold text-lg">
+                          3
+                        </div>
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="font-semibold text-foreground mb-2">Tap "Add" to Confirm</h4>
+                        <div className="bg-secondary/70 rounded-xl p-4">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                              <img src={logo} alt="AFIIIA" className="w-10 h-10 rounded-lg object-cover" />
+                              <span className="text-sm font-medium text-foreground">AFIIIA</span>
+                            </div>
+                            <div className="px-3 py-1.5 rounded-lg bg-primary text-primary-foreground text-sm font-medium">
+                              Add
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </motion.div>
+
+                    {/* Success */}
+                    <motion.div 
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.4 }}
+                      className="text-center pt-2"
+                    >
+                      <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-teal-soft/50 text-teal text-sm font-medium">
+                        <Check className="w-4 h-4" />
+                        Done! Find AFIIIA on your home screen
+                      </div>
+                    </motion.div>
+                  </TabsContent>
+
+                  {/* Android Instructions */}
+                  <TabsContent value="android" className="p-5 space-y-5 mt-0">
+                    <div className="text-center pb-2">
+                      <h3 className="font-semibold text-foreground">How to Install on Android</h3>
+                      <p className="text-sm text-muted-foreground">Follow these 3 easy steps in Chrome</p>
                     </div>
-                  </div>
-                  
-                  <div className="flex items-start gap-3">
-                    <span className="w-7 h-7 rounded-full bg-gradient-primary text-primary-foreground flex items-center justify-center shrink-0 text-sm font-bold">3</span>
-                    <div>
-                      <p className="font-medium text-foreground">Tap "Add"</p>
-                      <p className="text-sm text-muted-foreground mt-1">
-                        AFIIIA will appear on your home screen!
-                      </p>
-                    </div>
-                  </div>
-                </div>
+
+                    {/* Step 1 */}
+                    <motion.div 
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.1 }}
+                      className="flex gap-4"
+                    >
+                      <div className="shrink-0">
+                        <div className="w-10 h-10 rounded-full bg-gradient-primary text-primary-foreground flex items-center justify-center font-bold text-lg">
+                          1
+                        </div>
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="font-semibold text-foreground mb-2">Tap the Menu Button</h4>
+                        <div className="bg-secondary/70 rounded-xl p-4 space-y-3">
+                          <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                            <div className="w-10 h-10 rounded-lg bg-background flex items-center justify-center border border-border">
+                              <MoreVertical className="w-5 h-5 text-foreground" />
+                            </div>
+                            <span>Look for the 3 dots in the <strong className="text-foreground">top right</strong> of Chrome</span>
+                          </div>
+                        </div>
+                      </div>
+                    </motion.div>
+
+                    {/* Step 2 */}
+                    <motion.div 
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.2 }}
+                      className="flex gap-4"
+                    >
+                      <div className="shrink-0">
+                        <div className="w-10 h-10 rounded-full bg-gradient-primary text-primary-foreground flex items-center justify-center font-bold text-lg">
+                          2
+                        </div>
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="font-semibold text-foreground mb-2">Find the Install Option</h4>
+                        <div className="bg-secondary/70 rounded-xl p-4 space-y-3">
+                          <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                            <div className="w-10 h-10 rounded-lg bg-background flex items-center justify-center border border-border">
+                              <Download className="w-5 h-5 text-primary" />
+                            </div>
+                            <span>Tap <strong className="text-foreground">"Install app"</strong> or <strong className="text-foreground">"Add to Home screen"</strong></span>
+                          </div>
+                          <p className="text-xs text-muted-foreground/80">
+                            The option name may vary slightly on different phones
+                          </p>
+                        </div>
+                      </div>
+                    </motion.div>
+
+                    {/* Step 3 */}
+                    <motion.div 
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.3 }}
+                      className="flex gap-4"
+                    >
+                      <div className="shrink-0">
+                        <div className="w-10 h-10 rounded-full bg-gradient-primary text-primary-foreground flex items-center justify-center font-bold text-lg">
+                          3
+                        </div>
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="font-semibold text-foreground mb-2">Tap "Install" to Confirm</h4>
+                        <div className="bg-secondary/70 rounded-xl p-4">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                              <img src={logo} alt="AFIIIA" className="w-10 h-10 rounded-lg object-cover" />
+                              <span className="text-sm font-medium text-foreground">AFIIIA</span>
+                            </div>
+                            <div className="px-3 py-1.5 rounded-lg bg-primary text-primary-foreground text-sm font-medium">
+                              Install
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </motion.div>
+
+                    {/* Success */}
+                    <motion.div 
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.4 }}
+                      className="text-center pt-2"
+                    >
+                      <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-teal-soft/50 text-teal text-sm font-medium">
+                        <Check className="w-4 h-4" />
+                        Done! Find AFIIIA on your home screen
+                      </div>
+                    </motion.div>
+                  </TabsContent>
+                </Tabs>
               </CardContent>
             </Card>
           )}
 
-          {/* Android instructions (when no prompt available) */}
-          {!isInstalled && isAndroid && !deferredPrompt && (
-            <Card className="glass-card border-primary/30">
-              <CardContent className="p-5 space-y-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
-                    <Smartphone className="w-5 h-5 text-primary" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-foreground">Android Phone</h3>
-                    <p className="text-sm text-muted-foreground">Just 3 easy steps!</p>
-                  </div>
-                </div>
-                
-                <div className="bg-secondary/50 rounded-xl p-4 space-y-4">
-                  <div className="flex items-start gap-3">
-                    <span className="w-7 h-7 rounded-full bg-gradient-primary text-primary-foreground flex items-center justify-center shrink-0 text-sm font-bold">1</span>
-                    <div>
-                      <p className="font-medium text-foreground">Tap the menu button</p>
-                      <p className="text-sm text-muted-foreground mt-1">
-                        Look for <MoreVertical className="w-4 h-4 inline mx-1" /> in Chrome (top right)
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-start gap-3">
-                    <span className="w-7 h-7 rounded-full bg-gradient-primary text-primary-foreground flex items-center justify-center shrink-0 text-sm font-bold">2</span>
-                    <div>
-                      <p className="font-medium text-foreground">Find the install option</p>
-                      <p className="text-sm text-muted-foreground mt-1">
-                        Tap <strong>"Add to Home screen"</strong> or <strong>"Install app"</strong>
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-start gap-3">
-                    <span className="w-7 h-7 rounded-full bg-gradient-primary text-primary-foreground flex items-center justify-center shrink-0 text-sm font-bold">3</span>
-                    <div>
-                      <p className="font-medium text-foreground">Tap "Install" or "Add"</p>
-                      <p className="text-sm text-muted-foreground mt-1">
-                        AFIIIA will appear on your home screen!
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          )}
-
-          {/* Desktop instructions */}
-          {!isInstalled && !isIOS && !isAndroid && !deferredPrompt && (
-            <Card className="glass-card border-primary/30">
-              <CardContent className="p-5 space-y-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
-                    <Chrome className="w-5 h-5 text-primary" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-foreground">Desktop Browser</h3>
-                    <p className="text-sm text-muted-foreground">Install from Chrome</p>
-                  </div>
-                </div>
-                
-                <div className="bg-secondary/50 rounded-xl p-4 space-y-4">
-                  <div className="flex items-start gap-3">
-                    <span className="w-7 h-7 rounded-full bg-gradient-primary text-primary-foreground flex items-center justify-center shrink-0 text-sm font-bold">1</span>
-                    <div>
-                      <p className="font-medium text-foreground">Look for install icon</p>
-                      <p className="text-sm text-muted-foreground mt-1">
-                        Check the address bar for <Download className="w-4 h-4 inline mx-1" /> icon
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-start gap-3">
-                    <span className="w-7 h-7 rounded-full bg-gradient-primary text-primary-foreground flex items-center justify-center shrink-0 text-sm font-bold">2</span>
-                    <div>
-                      <p className="font-medium text-foreground">Click "Install"</p>
-                      <p className="text-sm text-muted-foreground mt-1">
-                        A popup will ask to confirm installation
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          )}
-
-          {/* Features */}
+          {/* Why Install Features */}
           <Card className="glass-card">
             <CardContent className="p-5">
               <h3 className="font-semibold text-foreground mb-4">Why install the app?</h3>
               <ul className="space-y-3">
                 {features.map((feature, i) => (
                   <motion.li
-                    key={feature}
+                    key={feature.text}
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.1 * i }}
                     className="flex items-center gap-3 text-sm text-muted-foreground"
                   >
-                    <div className="w-5 h-5 rounded-full bg-gradient-primary flex items-center justify-center shrink-0">
-                      <Check className="w-3 h-3 text-primary-foreground" />
-                    </div>
-                    {feature}
+                    <span className="text-lg">{feature.icon}</span>
+                    {feature.text}
                   </motion.li>
                 ))}
               </ul>
@@ -316,11 +417,11 @@ const InstallPage = () => {
           </Card>
 
           {/* Continue to app */}
-          <div className="text-center pt-4">
+          <div className="pt-2 pb-4">
             <Link to="/home">
-              <Button variant="outline" className="w-full">
+              <Button variant="hero" className="w-full h-12">
                 Continue to App
-                <ArrowRight className="w-4 h-4 ml-2" />
+                <ArrowRight className="w-5 h-5 ml-2" />
               </Button>
             </Link>
           </div>
