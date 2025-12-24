@@ -125,9 +125,14 @@
   }
 
   html {
-    scroll-behavior: smooth;
+    /* Removed scroll-behavior: smooth to allow instant scroll reset on navigation */
     scrollbar-width: none; /* Firefox */
     -ms-overflow-style: none; /* IE and Edge */
+  }
+
+  /* Apply smooth scrolling only for anchor links within a page */
+  html:focus-within {
+    scroll-behavior: smooth;
   }
 
   html::-webkit-scrollbar {
