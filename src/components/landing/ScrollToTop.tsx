@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 const ScrollToTop = () => {
   const [isVisible, setIsVisible] = useState(false);
   const lastScrollY = useRef(0);
-  const hideTimeout = useRef<NodeJS.Timeout | null>(null);
   const location = useLocation();
 
   // Only show on landing page
@@ -18,41 +17,27 @@ const ScrollToTop = () => {
       return;
     }
 
+    // Initialize lastScrollY
+    lastScrollY.current = window.scrollY;
+
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       const scrollingUp = currentScrollY < lastScrollY.current;
       const notAtTop = currentScrollY > 100;
       
+      // Show only when scrolling UP and not at top
+      // Hide immediately when scrolling DOWN
       if (scrollingUp && notAtTop) {
-        // Clear any pending hide timeout
-        if (hideTimeout.current) {
-          clearTimeout(hideTimeout.current);
-          hideTimeout.current = null;
-        }
         setIsVisible(true);
-      } else if (!notAtTop) {
-        // Hide immediately when at top
-        setIsVisible(false);
       } else {
-        // When scrolling down, hide after a delay
-        if (hideTimeout.current) {
-          clearTimeout(hideTimeout.current);
-        }
-        hideTimeout.current = setTimeout(() => {
-          setIsVisible(false);
-        }, 1500);
+        setIsVisible(false);
       }
       
       lastScrollY.current = currentScrollY;
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      if (hideTimeout.current) {
-        clearTimeout(hideTimeout.current);
-      }
-    };
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [isLandingPage]);
 
   const scrollToTop = () => {
