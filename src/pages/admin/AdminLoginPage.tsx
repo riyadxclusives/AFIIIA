@@ -1,38 +1,69 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Shield, Eye, EyeOff, Lock, Mail, AlertCircle } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Shield, Eye, EyeOff, Lock, Mail, AlertCircle, Info } from "lucide-react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import logo from "@/assets/logo.jpg";
+
+// Demo credentials - In production, use proper server-side authentication
+const DEMO_ADMIN_EMAIL = "admin@afiiia.com";
+const DEMO_ADMIN_PASSWORD = "admin123";
+
+interface LocationState {
+  from?: string;
+}
 
 const AdminLoginPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
+  const state = location.state as LocationState | null;
+  const redirectTo = state?.from || "/admin";
+
+  // Check if already logged in
+  useEffect(() => {
+    const adminSession = sessionStorage.getItem("admin_session");
+    if (adminSession) {
+      try {
+        const session = JSON.parse(adminSession);
+        const sessionAge = Date.now() - session.timestamp;
+        const maxAge = 24 * 60 * 60 * 1000;
+        if (sessionAge < maxAge) {
+          navigate(redirectTo, { replace: true });
+        }
+      } catch (e) {
+        sessionStorage.removeItem("admin_session");
+      }
+    }
+  }, [navigate, redirectTo]);
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setIsLoading(true);
 
-    // Simulate admin authentication check
-    // In production, this would verify against a secure admin auth system
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    // Simulate network delay
+    await new Promise(resolve => setTimeout(resolve, 800));
 
-    // For demo purposes - in production, use proper server-side validation
-    if (email && password) {
-      // Store admin session indicator (temporary for UI demo)
-      sessionStorage.setItem("admin_demo_session", "true");
-      navigate("/admin");
+    // Validate credentials (demo only - use server-side validation in production)
+    if (email.toLowerCase() === DEMO_ADMIN_EMAIL && password === DEMO_ADMIN_PASSWORD) {
+      // Store admin session with timestamp
+      const session = {
+        email: email.toLowerCase(),
+        timestamp: Date.now(),
+      };
+      sessionStorage.setItem("admin_session", JSON.stringify(session));
+      navigate(redirectTo, { replace: true });
     } else {
-      setError("Incorrect email or password");
+      setError("Invalid email or password. Please try again.");
     }
     
     setIsLoading(false);
@@ -71,6 +102,14 @@ const AdminLoginPage = () => {
           </CardHeader>
 
           <CardContent className="space-y-6">
+            {/* Demo credentials notice */}
+            <Alert className="bg-blue-500/10 border-blue-500/20">
+              <Info className="h-4 w-4 text-blue-400" />
+              <AlertDescription className="text-slate-300 text-sm">
+                <strong>Demo:</strong> admin@afiiia.com / admin123
+              </AlertDescription>
+            </Alert>
+
             {error && (
               <Alert variant="destructive" className="bg-red-900/20 border-red-800/50">
                 <AlertCircle className="h-4 w-4" />

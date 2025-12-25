@@ -11,6 +11,7 @@ import {
   Info,
   Clock,
   Zap,
+  Loader2,
 } from "lucide-react";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -20,17 +21,82 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
+
+type DangerAction = "clear_logs" | "reset_flags" | "purge_data" | null;
 
 const AdminSettingsPage = () => {
   const [bytezApiKey, setBytezApiKey] = useState("");
   const [retentionDays, setRetentionDays] = useState("365");
   const [aiEnabled, setAiEnabled] = useState(true);
   const [maintenanceMode, setMaintenanceMode] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [dangerDialog, setDangerDialog] = useState<{ open: boolean; action: DangerAction }>({ open: false, action: null });
+  const [isExecutingDanger, setIsExecutingDanger] = useState(false);
 
-  const handleSave = () => {
+  const handleSave = async () => {
+    setIsSaving(true);
+    await new Promise(resolve => setTimeout(resolve, 800));
+    setIsSaving(false);
     toast.success("Settings saved successfully");
   };
+
+  const getDangerDialogContent = () => {
+    switch (dangerDialog.action) {
+      case "clear_logs":
+        return {
+          title: "Clear All AI Logs",
+          description: "This will permanently delete all AI interaction logs. This action cannot be undone.",
+          confirmText: "Clear Logs",
+        };
+      case "reset_flags":
+        return {
+          title: "Reset All Feature Flags",
+          description: "This will reset all feature flags to their default values. Some features may become unavailable.",
+          confirmText: "Reset Flags",
+        };
+      case "purge_data":
+        return {
+          title: "Purge All User Data",
+          description: "This will permanently delete ALL user data from the database. This action is irreversible and will affect all users.",
+          confirmText: "Purge Data",
+        };
+      default:
+        return { title: "", description: "", confirmText: "" };
+    }
+  };
+
+  const executeDangerAction = async () => {
+    setIsExecutingDanger(true);
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    setIsExecutingDanger(false);
+    
+    switch (dangerDialog.action) {
+      case "clear_logs":
+        toast.success("AI logs cleared successfully");
+        break;
+      case "reset_flags":
+        toast.success("Feature flags reset to defaults");
+        break;
+      case "purge_data":
+        toast.success("All user data has been purged");
+        break;
+    }
+    
+    setDangerDialog({ open: false, action: null });
+  };
+
+  const dialogContent = getDangerDialogContent();
 
   return (
     <AdminLayout>
@@ -126,9 +192,18 @@ const AdminSettingsPage = () => {
                   </div>
                 </div>
 
-                <Button onClick={handleSave} className="bg-primary hover:bg-primary/90">
-                  <Save className="w-4 h-4 mr-2" />
-                  Save Changes
+                <Button onClick={handleSave} disabled={isSaving} className="bg-primary hover:bg-primary/90">
+                  {isSaving ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Saving...
+                    </>
+                  ) : (
+                    <>
+                      <Save className="w-4 h-4 mr-2" />
+                      Save Changes
+                    </>
+                  )}
                 </Button>
               </CardContent>
             </Card>
@@ -190,9 +265,18 @@ const AdminSettingsPage = () => {
                   </div>
                 </div>
 
-                <Button onClick={handleSave} className="bg-primary hover:bg-primary/90">
-                  <Save className="w-4 h-4 mr-2" />
-                  Save API Keys
+                <Button onClick={handleSave} disabled={isSaving} className="bg-primary hover:bg-primary/90">
+                  {isSaving ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Saving...
+                    </>
+                  ) : (
+                    <>
+                      <Save className="w-4 h-4 mr-2" />
+                      Save API Keys
+                    </>
+                  )}
                 </Button>
               </CardContent>
             </Card>
@@ -247,9 +331,18 @@ const AdminSettingsPage = () => {
                   </div>
                 </div>
 
-                <Button onClick={handleSave} className="bg-primary hover:bg-primary/90">
-                  <Save className="w-4 h-4 mr-2" />
-                  Save Settings
+                <Button onClick={handleSave} disabled={isSaving} className="bg-primary hover:bg-primary/90">
+                  {isSaving ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Saving...
+                    </>
+                  ) : (
+                    <>
+                      <Save className="w-4 h-4 mr-2" />
+                      Save Settings
+                    </>
+                  )}
                 </Button>
               </CardContent>
             </Card>
@@ -272,7 +365,11 @@ const AdminSettingsPage = () => {
                   <p className="text-sm text-slate-400 mb-4">
                     Permanently delete all AI interaction logs. This cannot be undone.
                   </p>
-                  <Button variant="outline" className="border-red-500/50 text-red-400 hover:bg-red-500/20">
+                  <Button 
+                    variant="outline" 
+                    className="border-red-500/50 text-red-400 hover:bg-red-500/20"
+                    onClick={() => setDangerDialog({ open: true, action: "clear_logs" })}
+                  >
                     <Trash2 className="w-4 h-4 mr-2" />
                     Clear AI Logs
                   </Button>
@@ -283,7 +380,11 @@ const AdminSettingsPage = () => {
                   <p className="text-sm text-slate-400 mb-4">
                     Reset all feature flags to their default values.
                   </p>
-                  <Button variant="outline" className="border-red-500/50 text-red-400 hover:bg-red-500/20">
+                  <Button 
+                    variant="outline" 
+                    className="border-red-500/50 text-red-400 hover:bg-red-500/20"
+                    onClick={() => setDangerDialog({ open: true, action: "reset_flags" })}
+                  >
                     <Settings className="w-4 h-4 mr-2" />
                     Reset Feature Flags
                   </Button>
@@ -294,7 +395,11 @@ const AdminSettingsPage = () => {
                   <p className="text-sm text-slate-400 mb-4">
                     Delete ALL user data from the database. This action is irreversible.
                   </p>
-                  <Button variant="destructive" className="bg-red-600 hover:bg-red-700">
+                  <Button 
+                    variant="destructive" 
+                    className="bg-red-600 hover:bg-red-700"
+                    onClick={() => setDangerDialog({ open: true, action: "purge_data" })}
+                  >
                     <Trash2 className="w-4 h-4 mr-2" />
                     Purge All Data
                   </Button>
@@ -304,6 +409,43 @@ const AdminSettingsPage = () => {
           </TabsContent>
         </Tabs>
       </motion.div>
+
+      {/* Danger Action Confirmation Dialog */}
+      <AlertDialog open={dangerDialog.open} onOpenChange={(open) => setDangerDialog({ open, action: dangerDialog.action })}>
+        <AlertDialogContent className="bg-slate-800 border-slate-700">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-white flex items-center gap-2">
+              <AlertTriangle className="w-5 h-5 text-red-400" />
+              {dialogContent.title}
+            </AlertDialogTitle>
+            <AlertDialogDescription className="text-slate-400">
+              {dialogContent.description}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel 
+              className="bg-slate-700 border-slate-600 text-white hover:bg-slate-600"
+              disabled={isExecutingDanger}
+            >
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={executeDangerAction}
+              disabled={isExecutingDanger}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              {isExecutingDanger ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  Processing...
+                </>
+              ) : (
+                dialogContent.confirmText
+              )}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </AdminLayout>
   );
 };
