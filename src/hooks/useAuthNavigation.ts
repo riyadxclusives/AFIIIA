@@ -1,5 +1,4 @@
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
 
 interface LocationState {
   from?: string;
@@ -8,26 +7,23 @@ interface LocationState {
 export function useAuthNavigation() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { isAuthenticated } = useAuth();
 
   const getHomeRoute = () => {
-    // Priority 1: If we have origin in location state, use it to determine back route
     const state = location.state as LocationState | null;
-    if (state?.from) {
-      // If came from app routes (/home/*), go back to /home
-      // If came from landing page routes, go back to /
-      return state.from.startsWith('/home') ? '/home' : '/';
-    }
-    // Priority 2: Fall back to auth-based navigation for direct URL access
-    return isAuthenticated ? '/home' : '/';
+    // Return exact origin path, or fallback to landing page
+    return state?.from || '/';
   };
 
   const getBackLabel = () => {
     const state = location.state as LocationState | null;
     if (state?.from) {
-      return state.from.startsWith('/home') ? 'Back to Home' : 'Back';
+      if (state.from === '/') return 'Back';
+      if (state.from === '/home/settings') return 'Back to Settings';
+      if (state.from === '/home/profile') return 'Back to Profile';
+      if (state.from.startsWith('/home')) return 'Back to Home';
+      return 'Back';
     }
-    return isAuthenticated ? 'Back to Home' : 'Back';
+    return 'Back';
   };
 
   const navigateToHome = () => {
@@ -38,6 +34,5 @@ export function useAuthNavigation() {
     navigateToHome,
     getHomeRoute,
     getBackLabel,
-    isAuthenticated,
   };
 }
