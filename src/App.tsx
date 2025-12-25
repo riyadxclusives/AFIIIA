@@ -36,6 +36,7 @@ import AdminBillingPage from "./pages/admin/AdminBillingPage";
 import AdminContentPage from "./pages/admin/AdminContentPage";
 import AdminSettingsPage from "./pages/admin/AdminSettingsPage";
 import AdminGuard from "./components/admin/AdminGuard";
+import AuthGuard from "./components/auth/AuthGuard";
 import TermsPage from "./pages/legal/TermsPage";
 import PrivacyPage from "./pages/legal/PrivacyPage";
 import RefundPage from "./pages/legal/RefundPage";
@@ -80,19 +81,19 @@ const AnimatedRoutes = () => {
         <Route path="/install" element={<PageTransition><InstallPage /></PageTransition>} />
         <Route path="/offline" element={<PageTransition><OfflinePage /></PageTransition>} />
         
-        {/* User App */}
-        <Route path="/home" element={<PageTransition><HomePage /></PageTransition>} />
-        <Route path="/home/subscribe" element={<PageTransition><SubscribePage /></PageTransition>} />
-        <Route path="/home/cycle" element={<PageTransition><CyclePage /></PageTransition>} />
-        <Route path="/home/period-calendar" element={<PageTransition><PeriodCalendarPage /></PageTransition>} />
-        <Route path="/home/workout" element={<PageTransition><WorkoutPage /></PageTransition>} />
-        <Route path="/home/meal" element={<PageTransition><MealPage /></PageTransition>} />
-        <Route path="/home/mood" element={<PageTransition><MoodPage /></PageTransition>} />
-        <Route path="/home/mood/history" element={<PageTransition><MoodHistoryPage /></PageTransition>} />
-        <Route path="/home/profile" element={<PageTransition><ProfilePage /></PageTransition>} />
-        <Route path="/home/settings" element={<PageTransition><SettingsPage /></PageTransition>} />
-        <Route path="/home/challenges" element={<PageTransition><BuddyChallengesPage /></PageTransition>} />
-        <Route path="/home/challenges/:id" element={<PageTransition><ChallengeDetailPage /></PageTransition>} />
+        {/* User App - Protected Routes */}
+        <Route path="/home" element={<AuthGuard><PageTransition><HomePage /></PageTransition></AuthGuard>} />
+        <Route path="/home/subscribe" element={<AuthGuard><PageTransition><SubscribePage /></PageTransition></AuthGuard>} />
+        <Route path="/home/cycle" element={<AuthGuard><PageTransition><CyclePage /></PageTransition></AuthGuard>} />
+        <Route path="/home/period-calendar" element={<AuthGuard><PageTransition><PeriodCalendarPage /></PageTransition></AuthGuard>} />
+        <Route path="/home/workout" element={<AuthGuard><PageTransition><WorkoutPage /></PageTransition></AuthGuard>} />
+        <Route path="/home/meal" element={<AuthGuard><PageTransition><MealPage /></PageTransition></AuthGuard>} />
+        <Route path="/home/mood" element={<AuthGuard><PageTransition><MoodPage /></PageTransition></AuthGuard>} />
+        <Route path="/home/mood/history" element={<AuthGuard><PageTransition><MoodHistoryPage /></PageTransition></AuthGuard>} />
+        <Route path="/home/profile" element={<AuthGuard><PageTransition><ProfilePage /></PageTransition></AuthGuard>} />
+        <Route path="/home/settings" element={<AuthGuard><PageTransition><SettingsPage /></PageTransition></AuthGuard>} />
+        <Route path="/home/challenges" element={<AuthGuard><PageTransition><BuddyChallengesPage /></PageTransition></AuthGuard>} />
+        <Route path="/home/challenges/:id" element={<AuthGuard><PageTransition><ChallengeDetailPage /></PageTransition></AuthGuard>} />
         
         {/* Admin */}
         <Route path="/admin/login" element={<PageTransition><AdminLoginPage /></PageTransition>} />

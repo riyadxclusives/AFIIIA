@@ -49,7 +49,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
   const location = useLocation();
 
   const handleLogout = () => {
-    sessionStorage.removeItem("admin_demo_session");
+    sessionStorage.removeItem("admin_session");
     navigate("/admin/login");
   };
 

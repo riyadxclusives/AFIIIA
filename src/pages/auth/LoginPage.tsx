@@ -34,7 +34,9 @@ const LoginPage = () => {
     
     if (success) {
       toast.success("Welcome back!");
-      navigate("/home");
+      // Redirect to original destination or home
+      const redirectTo = state?.from || "/home";
+      navigate(redirectTo);
     } else {
       toast.error(error || "Login failed");
     }
