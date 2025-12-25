@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -8,10 +8,20 @@ import { ArrowLeft, Mail, CheckCircle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import logo from "@/assets/logo.jpg";
 
+interface LocationState {
+  from?: string;
+}
+
 const ForgotPasswordPage = () => {
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const location = useLocation();
+  
+  const state = location.state as LocationState | null;
+  const cameFromApp = state?.from?.startsWith('/home');
+  const backRoute = cameFromApp ? '/home' : '/login';
+  const backLabel = cameFromApp ? 'Back to Home' : 'Back to Sign In';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -127,10 +137,10 @@ const ForgotPasswordPage = () => {
           </AnimatePresence>
 
           <div className="mt-6">
-            <Link to="/login">
+            <Link to={backRoute}>
               <Button variant="ghost" size="sm" className="w-full">
                 <ArrowLeft className="w-4 h-4 mr-2" />
-                Back to Sign In
+                {backLabel}
               </Button>
             </Link>
           </div>

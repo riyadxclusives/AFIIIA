@@ -3,9 +3,13 @@ import { motion } from "framer-motion";
 import { Download, Share, Smartphone, Check, ArrowRight, Apple, MoreVertical, Plus, ExternalLink, ArrowUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import logo from "@/assets/logo.jpg";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+interface LocationState {
+  from?: string;
+}
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -18,6 +22,12 @@ const InstallPage = () => {
   const [isIOS, setIsIOS] = useState(false);
   const [isAndroid, setIsAndroid] = useState(false);
   const [activeTab, setActiveTab] = useState("ios");
+  const location = useLocation();
+  
+  const state = location.state as LocationState | null;
+  const cameFromApp = state?.from?.startsWith('/home');
+  const backRoute = cameFromApp ? '/home' : '/';
+  const backLabel = cameFromApp ? 'Back to Home' : 'Skip';
 
   useEffect(() => {
     // Check if already installed
@@ -86,9 +96,9 @@ const InstallPage = () => {
             <img src={logo} alt="AFIIIA" className="h-8 w-8 rounded-lg object-cover" />
             <span className="font-serif text-lg font-semibold text-gradient">AFIIIA</span>
           </Link>
-          <Link to="/home">
+          <Link to={backRoute}>
             <Button variant="ghost" size="sm">
-              Skip <ArrowRight className="w-4 h-4 ml-1" />
+              {backLabel} <ArrowRight className="w-4 h-4 ml-1" />
             </Button>
           </Link>
         </div>
