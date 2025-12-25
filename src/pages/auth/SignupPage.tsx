@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -9,6 +9,10 @@ import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 import logo from "@/assets/logo.jpg";
 
+interface LocationState {
+  from?: string;
+}
+
 const SignupPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -16,7 +20,13 @@ const SignupPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const { signup } = useAuth();
+  
+  const state = location.state as LocationState | null;
+  const cameFromApp = state?.from?.startsWith('/home');
+  const backRoute = cameFromApp ? '/home' : '/';
+  const backLabel = cameFromApp ? '← Back to Home' : '← Back to landing page';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -146,9 +156,9 @@ const SignupPage = () => {
 
           <p className="mt-4 text-xs text-center text-muted-foreground">
             By signing up, you agree to our{" "}
-            <Link to="/terms" className="text-primary hover:underline">Terms</Link>
+            <Link to="/terms" state={{ from: location.pathname }} className="text-primary hover:underline">Terms</Link>
             {" "}and{" "}
-            <Link to="/privacy" className="text-primary hover:underline">Privacy Policy</Link>
+            <Link to="/privacy" state={{ from: location.pathname }} className="text-primary hover:underline">Privacy Policy</Link>
           </p>
 
           <div className="mt-6 text-center">
@@ -161,9 +171,9 @@ const SignupPage = () => {
           </div>
 
           <div className="mt-6">
-            <Link to="/">
+            <Link to={backRoute}>
               <Button variant="ghost" size="sm" className="w-full">
-                ← Back to landing page
+                {backLabel}
               </Button>
             </Link>
           </div>

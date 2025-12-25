@@ -69,12 +69,12 @@ const Navbar = () => {
 
           {/* Desktop Auth Buttons */}
           <div className="hidden md:flex items-center gap-3">
-            <Link to="/login">
+            <Link to="/login" state={{ from: location.pathname }}>
               <Button variant="ghost" size="sm">
                 Sign In
               </Button>
             </Link>
-            <Link to="/home">
+            <Link to="/home" state={{ from: location.pathname }}>
               <Button variant="hero" size="sm">
                 Get Started
               </Button>
@@ -106,12 +106,12 @@ const Navbar = () => {
                 </a>
               ))}
               <div className="pt-4 flex flex-col gap-3 border-t border-border/50 mt-2">
-                <Link to="/login" onClick={() => setIsMenuOpen(false)}>
+                <Link to="/login" state={{ from: location.pathname }} onClick={() => setIsMenuOpen(false)}>
                   <Button variant="outline" size="lg" className="w-full">
                     Sign In
                   </Button>
                 </Link>
-                <Link to="/home" onClick={() => setIsMenuOpen(false)}>
+                <Link to="/home" state={{ from: location.pathname }} onClick={() => setIsMenuOpen(false)}>
                   <Button variant="hero" size="lg" className="w-full">
                     Get Started
                   </Button>
