@@ -3,11 +3,10 @@ import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { Home, ArrowLeft, Search, HelpCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuthNavigation } from "@/hooks/useAuthNavigation";
 
 const NotFound = () => {
-  const { isAuthenticated } = useAuth();
-  const homeRoute = isAuthenticated ? "/home" : "/";
+  const { getHomeRoute, getBackLabel } = useAuthNavigation();
 
   useEffect(() => {
     console.error("404 Error: User attempted to access non-existent route:", window.location.pathname);
@@ -71,10 +70,10 @@ const NotFound = () => {
           transition={{ delay: 0.4 }}
           className="flex flex-col sm:flex-row gap-3 justify-center"
         >
-          <Link to={homeRoute}>
+          <Link to={getHomeRoute()}>
             <Button variant="hero" size="lg" className="w-full sm:w-auto gap-2">
               <Home className="w-4 h-4" />
-              Go to Home
+              {getBackLabel() === 'Back' ? 'Go to Landing' : 'Go to Home'}
             </Button>
           </Link>
           <Button 

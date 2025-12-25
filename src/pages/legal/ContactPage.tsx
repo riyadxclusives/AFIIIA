@@ -15,7 +15,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
-import { useAuth } from "@/contexts/AuthContext";
 import { useAuthNavigation } from "@/hooks/useAuthNavigation";
 
 const ContactPage = () => {
@@ -26,8 +25,7 @@ const ContactPage = () => {
     subject: "",
     message: "",
   });
-  const { isAuthenticated } = useAuth();
-  const { getHomeRoute } = useAuthNavigation();
+  const { getHomeRoute, getBackLabel } = useAuthNavigation();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -76,7 +74,7 @@ const ContactPage = () => {
           >
             <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
             <span className="text-sm sm:text-base">
-              {isAuthenticated ? "Back to Home" : "Back to Landing"}
+              {getBackLabel()}
             </span>
           </Link>
         </div>

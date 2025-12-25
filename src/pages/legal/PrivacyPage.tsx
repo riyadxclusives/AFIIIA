@@ -1,12 +1,10 @@
 import { motion } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useAuth } from "@/contexts/AuthContext";
 import { useAuthNavigation } from "@/hooks/useAuthNavigation";
 
 const PrivacyPage = () => {
-  const { isAuthenticated } = useAuth();
-  const { getHomeRoute } = useAuthNavigation();
+  const { getHomeRoute, getBackLabel } = useAuthNavigation();
 
   return (
     <div className="min-h-screen bg-background">
@@ -19,7 +17,7 @@ const PrivacyPage = () => {
           >
             <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
             <span className="text-sm sm:text-base">
-              {isAuthenticated ? "Back to Home" : "Back to Landing"}
+              {getBackLabel()}
             </span>
           </Link>
         </div>
