@@ -76,7 +76,7 @@ const SettingsPage = () => {
       title: "Logged out",
       description: "You have been signed out successfully.",
     });
-    navigate("/");
+    navigate("/login");
   };
 
   const colorClasses: Record<string, string> = {
@@ -178,7 +178,7 @@ const SettingsPage = () => {
                   </p>
                 </div>
               </div>
-              <Link to="/install">
+              <Link to="/install" state={{ from: "/home/settings" }}>
                 <Button variant="hero" size="sm" className="rounded-full px-5">
                   Install
                 </Button>

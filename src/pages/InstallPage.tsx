@@ -26,8 +26,7 @@ const InstallPage = () => {
   
   const state = location.state as LocationState | null;
   const cameFromApp = state?.from?.startsWith('/home');
-  const backRoute = cameFromApp ? '/home' : '/';
-  const backLabel = cameFromApp ? 'Back to Home' : 'Skip';
+  const backRoute = state?.from || '/home';
 
   useEffect(() => {
     // Check if already installed
@@ -92,14 +91,9 @@ const InstallPage = () => {
       {/* Header */}
       <header className="sticky top-0 z-40 bg-background/80 backdrop-blur-lg border-b border-border/50">
         <div className="container mx-auto px-4 h-14 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2">
+          <Link to={cameFromApp ? '/home' : '/'} className="flex items-center gap-2">
             <img src={logo} alt="AFIIIA" className="h-8 w-8 rounded-lg object-cover" />
             <span className="font-serif text-lg font-semibold text-gradient">AFIIIA</span>
-          </Link>
-          <Link to={backRoute}>
-            <Button variant="ghost" size="sm">
-              {backLabel} <ArrowRight className="w-4 h-4 ml-1" />
-            </Button>
           </Link>
         </div>
       </header>
