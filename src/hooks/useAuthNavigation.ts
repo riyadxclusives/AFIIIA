@@ -10,19 +10,26 @@ export function useAuthNavigation() {
 
   const getHomeRoute = () => {
     const state = location.state as LocationState | null;
-    // Return exact origin path, or fallback to landing page
+    console.log('Navigation state:', state);
+    console.log('From:', state?.from);
     return state?.from || '/';
   };
 
   const getBackLabel = () => {
     const state = location.state as LocationState | null;
-    if (state?.from) {
-      if (state.from === '/') return 'Back';
-      if (state.from === '/home/settings') return 'Back to Settings';
-      if (state.from === '/home/profile') return 'Back to Profile';
-      if (state.from.startsWith('/home')) return 'Back to Home';
-      return 'Back';
-    }
+    const from = state?.from;
+    
+    if (!from || from === '/') return 'Back';
+    
+    if (from === '/home/settings') return 'Back to Settings';
+    if (from === '/home/profile') return 'Back to Profile';
+    if (from === '/home/cycle') return 'Back to Cycle';
+    if (from === '/home/mood') return 'Back to Mood';
+    if (from === '/home/workout') return 'Back to Workout';
+    if (from === '/home/meal') return 'Back to Meals';
+    if (from === '/home') return 'Back to Home';
+    if (from.startsWith('/home/')) return 'Back to Home';
+    
     return 'Back';
   };
 
