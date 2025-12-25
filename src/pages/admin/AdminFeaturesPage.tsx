@@ -1,13 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
   ToggleLeft,
-  ToggleRight,
   Search,
   Info,
   History,
   AlertTriangle,
   Check,
+  RotateCcw,
 } from "lucide-react";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -21,6 +21,16 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
 
 interface FeatureFlag {
@@ -33,7 +43,7 @@ interface FeatureFlag {
   modifiedBy: string;
 }
 
-const initialFeatures: FeatureFlag[] = [
+const defaultFeatures: FeatureFlag[] = [
   {
     id: "buddy_challenges",
     name: "Buddy Challenges",
@@ -126,6 +136,8 @@ const initialFeatures: FeatureFlag[] = [
   },
 ];
 
+const STORAGE_KEY = "afiiia_feature_flags";
+
 const categoryColors = {
   core: "bg-blue-500/20 text-blue-400 border-blue-500/30",
   ai: "bg-purple-500/20 text-purple-400 border-purple-500/30",
@@ -134,9 +146,31 @@ const categoryColors = {
 };
 
 const AdminFeaturesPage = () => {
-  const [features, setFeatures] = useState<FeatureFlag[]>(initialFeatures);
+  const [features, setFeatures] = useState<FeatureFlag[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
+  const [resetDialog, setResetDialog] = useState(false);
+
+  // Load from localStorage on mount
+  useEffect(() => {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      try {
+        setFeatures(JSON.parse(stored));
+      } catch (e) {
+        setFeatures(defaultFeatures);
+      }
+    } else {
+      setFeatures(defaultFeatures);
+    }
+  }, []);
+
+  // Save to localStorage on change
+  useEffect(() => {
+    if (features.length > 0) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(features));
+    }
+  }, [features]);
 
   const filteredFeatures = features.filter(feature => {
     const matchesSearch = feature.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -169,6 +203,13 @@ const AdminFeaturesPage = () => {
     }));
   };
 
+  const resetToDefaults = () => {
+    setFeatures(defaultFeatures);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultFeatures));
+    toast.success("Feature flags reset to defaults");
+    setResetDialog(false);
+  };
+
   const enabledCount = features.filter(f => f.enabled).length;
   const disabledCount = features.filter(f => !f.enabled).length;
 
@@ -187,7 +228,7 @@ const AdminFeaturesPage = () => {
               Toggle features on or off across the platform
             </p>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 flex-wrap">
             <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-green-500/10 border border-green-500/20">
               <Check className="w-4 h-4 text-green-400" />
               <span className="text-sm text-green-400">{enabledCount} Enabled</span>
@@ -196,6 +237,15 @@ const AdminFeaturesPage = () => {
               <ToggleLeft className="w-4 h-4 text-slate-400" />
               <span className="text-sm text-slate-400">{disabledCount} Disabled</span>
             </div>
+            <Button 
+              variant="outline" 
+              size="sm"
+              className="bg-slate-700/50 border-slate-600 text-slate-300 hover:bg-slate-700"
+              onClick={() => setResetDialog(true)}
+            >
+              <RotateCcw className="w-4 h-4 mr-2" />
+              Reset to Defaults
+            </Button>
           </div>
         </div>
 
@@ -318,7 +368,7 @@ const AdminFeaturesPage = () => {
               <Info className="w-5 h-5 text-blue-400 shrink-0 mt-0.5" />
               <div>
                 <p className="text-sm text-slate-300">
-                  <strong>Note:</strong> Feature flag changes take effect immediately across all users. 
+                  <strong>Note:</strong> Feature flag changes take effect immediately across all users and are persisted locally. 
                   Some features may require users to refresh their browser to see the changes.
                 </p>
               </div>
@@ -326,6 +376,29 @@ const AdminFeaturesPage = () => {
           </CardContent>
         </Card>
       </motion.div>
+
+      {/* Reset Confirmation Dialog */}
+      <AlertDialog open={resetDialog} onOpenChange={setResetDialog}>
+        <AlertDialogContent className="bg-slate-800 border-slate-700">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-white">Reset Feature Flags</AlertDialogTitle>
+            <AlertDialogDescription className="text-slate-400">
+              Are you sure you want to reset all feature flags to their default values? This will undo any custom changes you've made.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel className="bg-slate-700 border-slate-600 text-white hover:bg-slate-600">
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={resetToDefaults}
+              className="bg-primary hover:bg-primary/90"
+            >
+              Reset to Defaults
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </AdminLayout>
   );
 };

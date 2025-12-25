@@ -35,6 +35,7 @@ import AdminAnalyticsPage from "./pages/admin/AdminAnalyticsPage";
 import AdminBillingPage from "./pages/admin/AdminBillingPage";
 import AdminContentPage from "./pages/admin/AdminContentPage";
 import AdminSettingsPage from "./pages/admin/AdminSettingsPage";
+import AdminGuard from "./components/admin/AdminGuard";
 import TermsPage from "./pages/legal/TermsPage";
 import PrivacyPage from "./pages/legal/PrivacyPage";
 import RefundPage from "./pages/legal/RefundPage";
@@ -95,15 +96,15 @@ const AnimatedRoutes = () => {
         
         {/* Admin */}
         <Route path="/admin/login" element={<PageTransition><AdminLoginPage /></PageTransition>} />
-        <Route path="/admin" element={<PageTransition><AdminDashboard /></PageTransition>} />
-        <Route path="/admin/users" element={<PageTransition><AdminUsersPage /></PageTransition>} />
-        <Route path="/admin/features" element={<PageTransition><AdminFeaturesPage /></PageTransition>} />
-        <Route path="/admin/notifications" element={<PageTransition><AdminNotificationsPage /></PageTransition>} />
-        <Route path="/admin/database" element={<PageTransition><AdminDatabasePage /></PageTransition>} />
-        <Route path="/admin/analytics" element={<PageTransition><AdminAnalyticsPage /></PageTransition>} />
-        <Route path="/admin/billing" element={<PageTransition><AdminBillingPage /></PageTransition>} />
-        <Route path="/admin/content" element={<PageTransition><AdminContentPage /></PageTransition>} />
-        <Route path="/admin/settings" element={<PageTransition><AdminSettingsPage /></PageTransition>} />
+        <Route path="/admin" element={<AdminGuard><PageTransition><AdminDashboard /></PageTransition></AdminGuard>} />
+        <Route path="/admin/users" element={<AdminGuard><PageTransition><AdminUsersPage /></PageTransition></AdminGuard>} />
+        <Route path="/admin/features" element={<AdminGuard><PageTransition><AdminFeaturesPage /></PageTransition></AdminGuard>} />
+        <Route path="/admin/notifications" element={<AdminGuard><PageTransition><AdminNotificationsPage /></PageTransition></AdminGuard>} />
+        <Route path="/admin/database" element={<AdminGuard><PageTransition><AdminDatabasePage /></PageTransition></AdminGuard>} />
+        <Route path="/admin/analytics" element={<AdminGuard><PageTransition><AdminAnalyticsPage /></PageTransition></AdminGuard>} />
+        <Route path="/admin/billing" element={<AdminGuard><PageTransition><AdminBillingPage /></PageTransition></AdminGuard>} />
+        <Route path="/admin/content" element={<AdminGuard><PageTransition><AdminContentPage /></PageTransition></AdminGuard>} />
+        <Route path="/admin/settings" element={<AdminGuard><PageTransition><AdminSettingsPage /></PageTransition></AdminGuard>} />
         
         {/* Catch-all */}
         <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />

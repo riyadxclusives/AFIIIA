@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import {
   Users,
   TrendingUp,
@@ -8,6 +9,7 @@ import {
   ArrowDownRight,
   MoreHorizontal,
   Calendar,
+  Bell,
 } from "lucide-react";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -67,6 +69,8 @@ const recentActivity = [
 ];
 
 const AdminDashboard = () => {
+  const navigate = useNavigate();
+
   return (
     <AdminLayout>
       <motion.div
@@ -140,7 +144,12 @@ const AdminDashboard = () => {
                   New users in the last 24 hours
                 </CardDescription>
               </div>
-              <Button variant="ghost" size="icon" className="text-slate-400 hover:text-white">
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="text-slate-400 hover:text-white"
+                onClick={() => navigate("/admin/users")}
+              >
                 <MoreHorizontal className="w-5 h-5" />
               </Button>
             </CardHeader>
@@ -187,7 +196,12 @@ const AdminDashboard = () => {
                   Latest system events
                 </CardDescription>
               </div>
-              <Button variant="ghost" size="icon" className="text-slate-400 hover:text-white">
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="text-slate-400 hover:text-white"
+                onClick={() => navigate("/admin/analytics")}
+              >
                 <MoreHorizontal className="w-5 h-5" />
               </Button>
             </CardHeader>
@@ -226,13 +240,15 @@ const AdminDashboard = () => {
               <Button 
                 variant="outline" 
                 className="h-auto py-4 flex flex-col gap-2 bg-slate-700/30 border-slate-600 text-white hover:bg-slate-700 hover:text-white"
+                onClick={() => navigate("/admin/users")}
               >
                 <Users className="w-5 h-5 text-blue-400" />
-                <span className="text-sm">Add User</span>
+                <span className="text-sm">Manage Users</span>
               </Button>
               <Button 
                 variant="outline" 
                 className="h-auto py-4 flex flex-col gap-2 bg-slate-700/30 border-slate-600 text-white hover:bg-slate-700 hover:text-white"
+                onClick={() => navigate("/admin/billing")}
               >
                 <CreditCard className="w-5 h-5 text-green-400" />
                 <span className="text-sm">View Billing</span>
@@ -240,13 +256,15 @@ const AdminDashboard = () => {
               <Button 
                 variant="outline" 
                 className="h-auto py-4 flex flex-col gap-2 bg-slate-700/30 border-slate-600 text-white hover:bg-slate-700 hover:text-white"
+                onClick={() => navigate("/admin/notifications")}
               >
-                <Activity className="w-5 h-5 text-purple-400" />
+                <Bell className="w-5 h-5 text-purple-400" />
                 <span className="text-sm">Send Notification</span>
               </Button>
               <Button 
                 variant="outline" 
                 className="h-auto py-4 flex flex-col gap-2 bg-slate-700/30 border-slate-600 text-white hover:bg-slate-700 hover:text-white"
+                onClick={() => navigate("/admin/analytics")}
               >
                 <TrendingUp className="w-5 h-5 text-coral" />
                 <span className="text-sm">View Reports</span>
