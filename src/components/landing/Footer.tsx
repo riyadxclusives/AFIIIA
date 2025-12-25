@@ -90,6 +90,7 @@ const Footer = () => {
                 <li key={link.name}>
                   <Link 
                     to={link.href}
+                    state={{ from: location.pathname }}
                     className="text-muted-foreground hover:text-foreground transition-colors text-xs sm:text-sm"
                   >
                     {link.name}
@@ -107,6 +108,7 @@ const Footer = () => {
                 <li key={link.name}>
                   <Link 
                     to={link.href}
+                    state={{ from: location.pathname }}
                     className="text-muted-foreground hover:text-foreground transition-colors text-xs sm:text-sm"
                   >
                     {link.name}

@@ -196,11 +196,11 @@ const SettingsPage = () => {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-1">
-            <Link to="/privacy" className="flex items-center justify-between p-3 rounded-xl hover:bg-secondary/50 transition-colors">
+            <Link to="/privacy" state={{ from: "/home/settings" }} className="flex items-center justify-between p-3 rounded-xl hover:bg-secondary/50 transition-colors">
               <span className="font-medium">Privacy Policy</span>
               <ChevronRight className="w-5 h-5 text-muted-foreground" />
             </Link>
-            <Link to="/terms" className="flex items-center justify-between p-3 rounded-xl hover:bg-secondary/50 transition-colors">
+            <Link to="/terms" state={{ from: "/home/settings" }} className="flex items-center justify-between p-3 rounded-xl hover:bg-secondary/50 transition-colors">
               <span className="font-medium">Terms of Service</span>
               <ChevronRight className="w-5 h-5 text-muted-foreground" />
             </Link>

@@ -27,7 +27,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuthNavigation } from "@/hooks/useAuthNavigation";
 
 const categories = [
   {
@@ -222,8 +222,7 @@ const HelpCenterPage = () => {
     ? categories.find((c) => c.id === selectedCategory)
     : null;
 
-  const { isAuthenticated } = useAuth();
-  const homeRoute = isAuthenticated ? "/home" : "/";
+  const { getHomeRoute, getBackLabel } = useAuthNavigation();
 
   return (
     <div className="min-h-screen bg-background">
@@ -231,10 +230,10 @@ const HelpCenterPage = () => {
       <header className="bg-gradient-hero border-b border-border/50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
           <div className="flex items-center gap-4 mb-6">
-            <Link to={homeRoute}>
+            <Link to={getHomeRoute()}>
               <Button variant="ghost" size="sm" className="gap-2">
                 <ArrowLeft className="w-4 h-4" />
-                <span className="hidden sm:inline">Back to Home</span>
+                <span className="hidden sm:inline">{getBackLabel()}</span>
               </Button>
             </Link>
           </div>
