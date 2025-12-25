@@ -24,9 +24,8 @@ const SignupPage = () => {
   const { signup } = useAuth();
   
   const state = location.state as LocationState | null;
-  const cameFromApp = state?.from?.startsWith('/home');
-  const backRoute = cameFromApp ? '/home' : '/';
-  const backLabel = cameFromApp ? '← Back to Home' : '← Back to landing page';
+  const backRoute = state?.from || '/';
+  const backLabel = state?.from?.startsWith('/home') ? '← Back to Home' : '← Back to landing page';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
