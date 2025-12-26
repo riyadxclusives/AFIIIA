@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useParams, useNavigate } from "react-router-dom";
 import { 
@@ -19,6 +19,8 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Leaderboard from "@/components/challenges/Leaderboard";
+import CelebrationOverlay from "@/components/animations/CelebrationOverlay";
+import useHapticFeedback from "@/hooks/useHapticFeedback";
 import { toast } from "sonner";
 
 // Mock data for a specific challenge
@@ -63,13 +65,33 @@ const ChallengeDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [checkedInToday, setCheckedInToday] = useState(mockChallengeDetail.checkedInToday);
+  const [showCelebration, setShowCelebration] = useState(false);
+  const haptic = useHapticFeedback();
 
   const config = typeConfig[mockChallengeDetail.type];
   const progress = (mockChallengeDetail.daysCompleted / mockChallengeDetail.duration) * 100;
+  const isCompleted = mockChallengeDetail.daysCompleted >= mockChallengeDetail.duration;
+
+  // Check if challenge just completed
+  useEffect(() => {
+    if (isCompleted) {
+      const celebratedKey = `challenge_${id}_celebrated`;
+      if (!localStorage.getItem(celebratedKey)) {
+        setShowCelebration(true);
+        localStorage.setItem(celebratedKey, "true");
+      }
+    }
+  }, [isCompleted, id]);
 
   const handleCheckIn = () => {
     setCheckedInToday(true);
+    haptic.success();
     toast.success("Checked in! 🎉 Day " + (mockChallengeDetail.daysCompleted + 1) + " complete!");
+    
+    // If this check-in completes the challenge
+    if (mockChallengeDetail.daysCompleted + 1 >= mockChallengeDetail.duration) {
+      setTimeout(() => setShowCelebration(true), 500);
+    }
   };
 
   const handleShare = () => {
@@ -79,6 +101,13 @@ const ChallengeDetailPage = () => {
 
   return (
     <AppLayout>
+      <CelebrationOverlay
+        isOpen={showCelebration}
+        onClose={() => setShowCelebration(false)}
+        title="Challenge Complete!"
+        subtitle={`Amazing! You completed ${mockChallengeDetail.title} with a ${mockChallengeDetail.myStreak} day streak!`}
+        icon={<Trophy className="w-12 h-12 text-primary-foreground" />}
+      />
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

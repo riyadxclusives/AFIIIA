@@ -1,8 +1,11 @@
+import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles, Check } from "lucide-react";
 import { OnboardingData } from "@/pages/onboarding/OnboardingPage";
 import { motion } from "framer-motion";
+import Confetti from "@/components/animations/Confetti";
+import useHapticFeedback from "@/hooks/useHapticFeedback";
 
 interface CongratulationsStepProps {
   data: OnboardingData;
@@ -10,6 +13,8 @@ interface CongratulationsStepProps {
 }
 
 const CongratulationsStep = ({ data, onContinue }: CongratulationsStepProps) => {
+  const [showConfetti, setShowConfetti] = useState(false);
+  const haptic = useHapticFeedback();
   const benefits = [
     "Personalized meal plans based on your cycle",
     "Phase-optimized workout recommendations",
@@ -18,15 +23,26 @@ const CongratulationsStep = ({ data, onContinue }: CongratulationsStepProps) => 
     "Hydration & habit streaks",
   ];
 
+  useEffect(() => {
+    // Trigger confetti and haptic on mount
+    const timer = setTimeout(() => {
+      setShowConfetti(true);
+      haptic.success();
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [haptic]);
+
   return (
-    <Card className="glass-card overflow-hidden">
+    <Card className="glass-card overflow-hidden relative">
+      <Confetti trigger={showConfetti} particleCount={50} duration={4000} />
+      
       <CardContent className="p-8 text-center">
         {/* Animated confetti/sparkles */}
         <motion.div
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
+          initial={{ scale: 0, rotate: -180 }}
+          animate={{ scale: 1, rotate: 0 }}
           transition={{ type: "spring", stiffness: 200, damping: 15 }}
-          className="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-primary flex items-center justify-center shadow-glow-lavender"
+          className="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-primary flex items-center justify-center shadow-glow-lavender animate-celebration-glow"
         >
           <Sparkles className="w-12 h-12 text-primary-foreground" />
         </motion.div>

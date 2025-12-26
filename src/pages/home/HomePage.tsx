@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import AppLayout from "@/components/app/AppLayout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -12,6 +13,8 @@ import {
   Flame
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import CelebrationOverlay from "@/components/animations/CelebrationOverlay";
+import useHapticFeedback from "@/hooks/useHapticFeedback";
 
 const dashboardCards = [
   {
@@ -48,9 +51,44 @@ const dashboardCards = [
   },
 ];
 
+// Streak milestones to celebrate
+const STREAK_MILESTONES = [7, 14, 30, 60, 90, 100];
+
 const HomePage = () => {
+  const [showStreakCelebration, setShowStreakCelebration] = useState(false);
+  const [celebrationMilestone, setCelebrationMilestone] = useState(0);
+  const haptic = useHapticFeedback();
+  
+  // Mock streak value - in real app this would come from state/API
+  const currentStreak = 12;
+
+  useEffect(() => {
+    // Check if we should celebrate a milestone
+    const lastCelebrated = localStorage.getItem("last_streak_milestone");
+    const lastMilestone = lastCelebrated ? parseInt(lastCelebrated, 10) : 0;
+
+    // Find the highest milestone the user has reached but not celebrated
+    const unCelebratedMilestone = STREAK_MILESTONES.find(
+      (milestone) => currentStreak >= milestone && milestone > lastMilestone
+    );
+
+    if (unCelebratedMilestone) {
+      setCelebrationMilestone(unCelebratedMilestone);
+      setShowStreakCelebration(true);
+      haptic.success();
+      localStorage.setItem("last_streak_milestone", unCelebratedMilestone.toString());
+    }
+  }, [currentStreak, haptic]);
+
   return (
     <AppLayout>
+      <CelebrationOverlay
+        isOpen={showStreakCelebration}
+        onClose={() => setShowStreakCelebration(false)}
+        title={`${celebrationMilestone} Day Streak!`}
+        subtitle="You're on fire! Keep up the amazing work!"
+        emoji="🔥"
+      />
       <div className="space-y-4 sm:space-y-6">
         {/* Greeting */}
         <div className="animate-fade-in">
