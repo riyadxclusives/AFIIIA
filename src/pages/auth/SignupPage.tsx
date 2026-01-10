@@ -55,12 +55,13 @@ const SignupPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-hero flex items-center justify-center p-4">
-      {/* Background blobs */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-96 h-96 bg-teal-soft/30 blob float" />
-        <div className="absolute top-1/3 -left-32 w-80 h-80 bg-coral-soft/30 blob float" style={{ animationDelay: "2s" }} />
-        <div className="absolute bottom-20 right-1/4 w-72 h-72 bg-lavender-soft/30 blob float" style={{ animationDelay: "4s" }} />
+    <div className="min-h-screen bg-gradient-hero flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Glassmorphism background blobs */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-10 -right-32 w-96 h-96 bg-teal/40 rounded-full blur-3xl animate-blob" />
+        <div className="absolute top-1/3 -left-40 w-80 h-80 bg-coral/35 rounded-full blur-3xl animate-blob animation-delay-2000" />
+        <div className="absolute bottom-10 right-1/4 w-72 h-72 bg-lavender/30 rounded-full blur-3xl animate-blob animation-delay-4000" />
+        <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-peach/30 rounded-full blur-3xl animate-blob animation-delay-6000" />
       </div>
 
       <Card variant="glass-strong" className="w-full max-w-md relative z-10 animate-scale-in">

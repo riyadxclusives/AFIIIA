@@ -46,7 +46,14 @@ const AppLayout = ({ children, onRefresh }: AppLayoutProps) => {
     haptic.light();
   };
   return (
-    <div className="min-h-screen bg-gradient-hero pb-[calc(5rem+env(safe-area-inset-bottom,0px))]">
+    <div className="min-h-screen bg-gradient-hero pb-[calc(5rem+env(safe-area-inset-bottom,0px))] relative overflow-hidden">
+      {/* Glassmorphism background blobs */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10">
+        <div className="absolute top-20 -left-32 w-96 h-96 bg-coral/30 rounded-full blur-3xl animate-blob" />
+        <div className="absolute top-40 -right-32 w-80 h-80 bg-lavender/25 rounded-full blur-3xl animate-blob animation-delay-2000" />
+        <div className="absolute bottom-32 left-1/4 w-72 h-72 bg-teal/20 rounded-full blur-3xl animate-blob animation-delay-4000" />
+        <div className="absolute -bottom-20 right-1/4 w-64 h-64 bg-peach/25 rounded-full blur-3xl animate-blob" />
+      </div>
       {/* Top header */}
       <header className="sticky top-0 z-40 glass-header safe-top">
         <div className="mobile-container h-14 flex items-center justify-between">

@@ -120,6 +120,12 @@ export default {
           "0%, 100%": { transform: "translateY(0px)" },
           "50%": { transform: "translateY(-20px)" },
         },
+        blob: {
+          "0%": { transform: "translate(0px, 0px) scale(1)" },
+          "33%": { transform: "translate(30px, -50px) scale(1.1)" },
+          "66%": { transform: "translate(-20px, 20px) scale(0.9)" },
+          "100%": { transform: "translate(0px, 0px) scale(1)" },
+        },
         "blob-morph": {
           "0%, 100%": { borderRadius: "60% 40% 30% 70% / 60% 30% 70% 40%" },
           "25%": { borderRadius: "30% 60% 70% 40% / 50% 60% 30% 60%" },
@@ -163,6 +169,7 @@ export default {
         "slide-up": "slide-up 0.6s ease-out forwards",
         "slide-in-right": "slide-in-right 0.3s ease-out",
         float: "float 6s ease-in-out infinite",
+        blob: "blob 7s infinite ease-in-out",
         "blob-morph": "blob-morph 8s ease-in-out infinite",
         shimmer: "shimmer 2s linear infinite",
         "confetti-fall": "confetti-fall 3s ease-out forwards",
