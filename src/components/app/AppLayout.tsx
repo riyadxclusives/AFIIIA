@@ -48,7 +48,7 @@ const AppLayout = ({ children, onRefresh }: AppLayoutProps) => {
   return (
     <div className="min-h-screen bg-gradient-hero pb-[calc(5rem+env(safe-area-inset-bottom,0px))]">
       {/* Top header */}
-      <header className="sticky top-0 z-40 bg-background/80 backdrop-blur-lg border-b border-border/50 safe-top">
+      <header className="sticky top-0 z-40 glass-header safe-top">
         <div className="mobile-container h-14 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <img 
