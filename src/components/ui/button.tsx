@@ -24,7 +24,11 @@ const buttonVariants = cva(
         coral: "bg-coral text-primary-foreground hover:bg-coral/90 shadow-soft hover:shadow-glow-coral hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98]",
         lavender: "bg-lavender text-primary-foreground hover:bg-lavender/90 shadow-soft hover:shadow-glow-lavender hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98]",
         teal: "bg-teal text-primary-foreground hover:bg-teal/90 shadow-soft hover:shadow-glow-teal hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98]",
-        glass: "bg-card/80 backdrop-blur-lg border border-border/50 text-foreground hover:bg-card hover:border-border shadow-soft hover:shadow-elevated hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98]",
+        // Glassmorphism variants
+        glass: "glass-button text-foreground hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98]",
+        "glass-primary": "glass-button text-foreground border-primary/30 hover:border-primary/50 hover:bg-primary/10 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98]",
+        "glass-coral": "glass-button text-coral border-coral/30 hover:border-coral/50 hover:bg-coral/10 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98]",
+        "glass-teal": "glass-button text-teal border-teal/30 hover:border-teal/50 hover:bg-teal/10 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98]",
         soft: "bg-secondary/60 text-secondary-foreground hover:bg-secondary shadow-sm hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98]",
       },
       size: {

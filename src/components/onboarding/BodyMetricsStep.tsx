@@ -16,7 +16,7 @@ const BodyMetricsStep = ({ data, updateData, onNext, onBack }: BodyMetricsStepPr
   const isValid = data.age && data.height && data.weight;
 
   return (
-    <Card className="glass-card">
+    <Card variant="glass-strong">
       <CardContent className="p-8">
         <h2 className="font-serif text-2xl sm:text-3xl font-semibold mb-2 text-center">
           Tell us about yourself

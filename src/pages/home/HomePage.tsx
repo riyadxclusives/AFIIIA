@@ -102,6 +102,7 @@ const HomePage = () => {
 
         {/* AI Daily Insight */}
         <Card 
+          variant="glass"
           className="bg-gradient-primary text-primary-foreground border-none overflow-hidden animate-fade-in"
           style={{ animationDelay: "0.1s" }}
         >
@@ -124,21 +125,21 @@ const HomePage = () => {
         {/* Quick Stats Row */}
         <div className="grid grid-cols-3 gap-2 sm:gap-3 animate-fade-in" style={{ animationDelay: "0.15s" }}>
           {/* Hydration */}
-          <Card className="glass-card p-3 sm:p-4 text-center">
+          <Card variant="glass" className="p-3 sm:p-4 text-center">
             <Droplets className="w-5 h-5 sm:w-6 sm:h-6 mx-auto mb-1.5 sm:mb-2 text-teal" />
             <div className="text-lg sm:text-2xl font-serif font-bold">4/8</div>
             <div className="text-[10px] sm:text-xs text-muted-foreground">Glasses</div>
           </Card>
           
           {/* Streak */}
-          <Card className="glass-card p-3 sm:p-4 text-center">
+          <Card variant="glass" className="p-3 sm:p-4 text-center">
             <Flame className="w-5 h-5 sm:w-6 sm:h-6 mx-auto mb-1.5 sm:mb-2 text-coral" />
             <div className="text-lg sm:text-2xl font-serif font-bold">12</div>
             <div className="text-[10px] sm:text-xs text-muted-foreground">Day Streak</div>
           </Card>
           
           {/* Mood */}
-          <Card className="glass-card p-3 sm:p-4 text-center">
+          <Card variant="glass" className="p-3 sm:p-4 text-center">
             <Heart className="w-5 h-5 sm:w-6 sm:h-6 mx-auto mb-1.5 sm:mb-2 text-lavender" />
             <div className="text-lg sm:text-2xl font-serif font-bold">Good</div>
             <div className="text-[10px] sm:text-xs text-muted-foreground">Mood</div>
@@ -167,7 +168,7 @@ const HomePage = () => {
                 className="animate-fade-in"
                 style={{ animationDelay: `${0.2 + index * 0.05}s` }}
               >
-                <Card className={`feature-card ${colorClasses[card.color as keyof typeof colorClasses]} group cursor-pointer`}>
+                <Card variant="glass" interactive className={`feature-card ${colorClasses[card.color as keyof typeof colorClasses]} group`}>
                   <CardContent className="p-4 sm:p-5">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3 sm:gap-4">
@@ -194,7 +195,8 @@ const HomePage = () => {
 
         {/* Hydration Quick Log */}
         <Card 
-          className="glass-card overflow-hidden animate-fade-in"
+          variant="glass"
+          className="overflow-hidden animate-fade-in"
           style={{ animationDelay: "0.4s" }}
         >
           <CardContent className="p-4 sm:p-5">

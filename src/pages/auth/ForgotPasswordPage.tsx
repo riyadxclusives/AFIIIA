@@ -42,7 +42,7 @@ const ForgotPasswordPage = () => {
         <div className="absolute bottom-20 right-1/4 w-72 h-72 bg-teal-soft/30 blob float" style={{ animationDelay: "4s" }} />
       </div>
 
-      <Card className="w-full max-w-md glass-card relative z-10 animate-scale-in">
+      <Card variant="glass-strong" className="w-full max-w-md relative z-10 animate-scale-in">
         <CardHeader className="text-center pb-4">
           <div className="flex justify-center mb-4">
             <img src={logo} alt="AFIIIA" className="h-16 w-16 rounded-2xl object-cover" />
