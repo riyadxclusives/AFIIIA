@@ -17,7 +17,7 @@ const FertilityModeStep = ({ data, updateData, onNext, onBack }: FertilityModeSt
   const isValid = data.averageCycleLength && data.lastPeriodDate;
 
   return (
-    <Card variant="glass-strong">
+    <Card className="glass-card">
       <CardContent className="p-8">
         <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-coral-soft flex items-center justify-center">
           <Heart className="w-8 h-8 text-coral" />

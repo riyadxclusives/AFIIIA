@@ -130,8 +130,7 @@ const FeaturesSection = () => {
                 }}
               >
                 <Card 
-                  variant="glass"
-                  className={`feature-card border ${colors.border} h-full`}
+                  className={`feature-card border ${colors.border} ${colors.bg} h-full`}
                 >
                   <CardContent className="p-4 sm:p-5 md:pt-6">
                     <motion.div 

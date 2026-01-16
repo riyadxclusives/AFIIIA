@@ -17,7 +17,7 @@ const PregnancyModeStep = ({ data, updateData, onNext, onBack }: PregnancyModeSt
   const isValid = (data.lmpDate || data.dueDate) && data.doctorConfirmed;
 
   return (
-    <Card variant="glass-strong">
+    <Card className="glass-card">
       <CardContent className="p-8">
         <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-teal-soft flex items-center justify-center">
           <Baby className="w-8 h-8 text-teal" />

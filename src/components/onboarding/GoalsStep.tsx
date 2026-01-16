@@ -47,7 +47,7 @@ const GoalsStep = ({ data, updateData, onNext, onBack }: GoalsStepProps) => {
   };
 
   return (
-    <Card variant="glass-strong">
+    <Card className="glass-card">
       <CardContent className="p-8">
         <h2 className="font-serif text-2xl sm:text-3xl font-semibold mb-2 text-center">
           What are your goals?

@@ -16,7 +16,7 @@ const CycleModeStep = ({ data, updateData, onNext, onBack }: CycleModeStepProps)
   const isValid = data.averageCycleLength && data.lastPeriodDate;
 
   return (
-    <Card variant="glass-strong">
+    <Card className="glass-card">
       <CardContent className="p-8">
         <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-lavender-soft flex items-center justify-center">
           <Calendar className="w-8 h-8 text-lavender" />

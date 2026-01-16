@@ -15,7 +15,7 @@ const WelcomeStep = ({ data, updateData, onNext }: WelcomeStepProps) => {
   const isValid = data.firstName.trim().length > 0;
 
   return (
-    <Card variant="glass-strong">
+    <Card className="glass-card">
       <CardContent className="p-8 text-center">
         <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-primary flex items-center justify-center">
           <Sparkles className="w-10 h-10 text-primary-foreground" />

@@ -99,7 +99,7 @@ const SettingsPage = () => {
         </div>
 
         {/* Push Notifications Master Toggle */}
-        <Card variant="glass" className="animate-fade-in" style={{ animationDelay: "0.1s" }}>
+        <Card className="glass-card animate-fade-in" style={{ animationDelay: "0.1s" }}>
           <CardContent className="p-5">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
@@ -127,7 +127,7 @@ const SettingsPage = () => {
 
         {/* Notification Categories */}
         {pushEnabled && (
-          <Card variant="glass" className="animate-fade-in" style={{ animationDelay: "0.15s" }}>
+          <Card className="glass-card animate-fade-in" style={{ animationDelay: "0.15s" }}>
             <CardHeader className="pb-3">
               <CardTitle className="text-lg">Notification Types</CardTitle>
             </CardHeader>
@@ -164,7 +164,7 @@ const SettingsPage = () => {
         )}
 
         {/* Install PWA */}
-        <Card variant="glass" className="animate-fade-in" style={{ animationDelay: "0.2s" }}>
+        <Card className="glass-card animate-fade-in" style={{ animationDelay: "0.2s" }}>
           <CardContent className="p-5">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
@@ -188,7 +188,7 @@ const SettingsPage = () => {
         </Card>
 
         {/* Privacy & Security */}
-        <Card variant="glass" className="animate-fade-in" style={{ animationDelay: "0.25s" }}>
+        <Card className="glass-card animate-fade-in" style={{ animationDelay: "0.25s" }}>
           <CardHeader className="pb-3">
             <CardTitle className="text-lg flex items-center gap-2">
               <Shield className="w-5 h-5 text-teal" />
@@ -212,7 +212,7 @@ const SettingsPage = () => {
         </Card>
 
         {/* About */}
-        <Card variant="glass" className="animate-fade-in" style={{ animationDelay: "0.3s" }}>
+        <Card className="glass-card animate-fade-in" style={{ animationDelay: "0.3s" }}>
           <CardHeader className="pb-3">
             <CardTitle className="text-lg flex items-center gap-2">
               <Info className="w-5 h-5 text-lavender" />
@@ -232,7 +232,7 @@ const SettingsPage = () => {
         </Card>
 
         {/* Account Actions */}
-        <Card variant="glass" className="animate-fade-in" style={{ animationDelay: "0.35s" }}>
+        <Card className="glass-card animate-fade-in" style={{ animationDelay: "0.35s" }}>
           <CardHeader className="pb-3">
             <CardTitle className="text-lg text-destructive">Account</CardTitle>
           </CardHeader>

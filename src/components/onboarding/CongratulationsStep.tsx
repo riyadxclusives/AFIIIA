@@ -33,7 +33,7 @@ const CongratulationsStep = ({ data, onContinue }: CongratulationsStepProps) => 
   }, [haptic]);
 
   return (
-    <Card variant="glass-strong" className="overflow-hidden relative">
+    <Card className="glass-card overflow-hidden relative">
       <Confetti trigger={showConfetti} particleCount={50} duration={4000} />
       
       <CardContent className="p-8 text-center">

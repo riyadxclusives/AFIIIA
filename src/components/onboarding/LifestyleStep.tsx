@@ -69,7 +69,7 @@ const LifestyleStep = ({ data, updateData, onNext, onBack }: LifestyleStepProps)
   );
 
   return (
-    <Card variant="glass-strong">
+    <Card className="glass-card">
       <CardContent className="p-8">
         <h2 className="font-serif text-2xl sm:text-3xl font-semibold mb-2 text-center">
           Your Lifestyle
