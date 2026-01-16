@@ -13,21 +13,6 @@ import {
 
 const plans = [
   {
-    name: "Bloom",
-    price: "10.99",
-    description: "Perfect for getting started with your wellness journey",
-    features: [
-      "Cycle & period tracking",
-      "Basic meal suggestions",
-      "Workout recommendations",
-      "Mood logging",
-      "Hydration tracking",
-      "Daily AI insights",
-    ],
-    color: "lavender" as const,
-    popular: false,
-  },
-  {
     name: "Radiance",
     price: "19.99",
     description: "Full access to all AFIIIA features and AI capabilities",
@@ -43,6 +28,21 @@ const plans = [
     ],
     color: "coral" as const,
     popular: true,
+  },
+  {
+    name: "Bloom",
+    price: "10.99",
+    description: "Perfect for getting started with your wellness journey",
+    features: [
+      "Cycle & period tracking",
+      "Basic meal suggestions",
+      "Workout recommendations",
+      "Mood logging",
+      "Hydration tracking",
+      "Daily AI insights",
+    ],
+    color: "lavender" as const,
+    popular: false,
   },
 ];
 

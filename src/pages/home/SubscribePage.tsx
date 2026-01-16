@@ -14,22 +14,6 @@ import logo from "@/assets/logo.jpg";
 
 const plans = [
   {
-    id: "bloom",
-    name: "Bloom",
-    price: "10.99",
-    description: "Perfect for getting started",
-    features: [
-      "Cycle & period tracking",
-      "Basic meal suggestions",
-      "Workout recommendations",
-      "Mood logging",
-      "Hydration tracking",
-      "Daily AI insights",
-    ],
-    color: "lavender" as const,
-    popular: false,
-  },
-  {
     id: "radiance",
     name: "Radiance",
     price: "19.99",
@@ -46,6 +30,22 @@ const plans = [
     ],
     color: "coral" as const,
     popular: true,
+  },
+  {
+    id: "bloom",
+    name: "Bloom",
+    price: "10.99",
+    description: "Perfect for getting started",
+    features: [
+      "Cycle & period tracking",
+      "Basic meal suggestions",
+      "Workout recommendations",
+      "Mood logging",
+      "Hydration tracking",
+      "Daily AI insights",
+    ],
+    color: "lavender" as const,
+    popular: false,
   },
 ];
 
