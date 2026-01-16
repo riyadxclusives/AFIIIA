@@ -3,6 +3,13 @@ import { useNavigate, Link } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Check, Sparkles, ArrowLeft } from "lucide-react";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 import logo from "@/assets/logo.jpg";
 
 const plans = [
@@ -90,71 +97,86 @@ const SubscribePage = () => {
           </p>
         </div>
 
-        {/* Plan Cards */}
-        <div className="grid md:grid-cols-2 gap-6 mb-8">
-          {plans.map((plan) => {
-            const isSelected = selectedPlan === plan.id;
-            const isPopular = plan.popular;
+        {/* Plan Cards Carousel */}
+        <div className="max-w-lg mx-auto mb-8">
+          <Carousel
+            opts={{
+              align: "center",
+              loop: true,
+            }}
+            className="w-full"
+          >
+            <CarouselContent className="-ml-2">
+              {plans.map((plan) => {
+                const isSelected = selectedPlan === plan.id;
+                const isPopular = plan.popular;
 
-            return (
-              <Card
-                key={plan.id}
-                onClick={() => setSelectedPlan(plan.id)}
-                className={`
-                  relative cursor-pointer transition-all duration-300
-                  ${isSelected 
-                    ? plan.color === "coral" 
-                      ? "ring-2 ring-coral shadow-glow-coral" 
-                      : "ring-2 ring-lavender shadow-glow-lavender"
-                    : "hover:shadow-elevated"
-                  }
-                `}
-              >
-                {isPopular && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-coral text-primary-foreground px-4 py-1 text-sm font-medium rounded-full flex items-center gap-1">
-                    <Sparkles className="w-3 h-3" />
-                    Most Popular
-                  </div>
-                )}
-
-                <CardHeader className="pt-8">
-                  <div className="flex items-center justify-between">
-                    <CardTitle className="font-serif text-2xl">{plan.name}</CardTitle>
-                    <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${
-                      isSelected 
-                        ? plan.color === "coral" ? "border-coral bg-coral" : "border-lavender bg-lavender"
-                        : "border-border"
-                    }`}>
-                      {isSelected && <Check className="w-4 h-4 text-primary-foreground" />}
-                    </div>
-                  </div>
-                  <p className="text-muted-foreground text-sm">{plan.description}</p>
-                </CardHeader>
-
-                <CardContent>
-                  <div className="mb-6">
-                    <span className="text-4xl font-serif font-bold">${plan.price}</span>
-                    <span className="text-muted-foreground">/month</span>
-                  </div>
-
-                  <ul className="space-y-3">
-                    {plan.features.map((feature) => (
-                      <li key={feature} className="flex items-center gap-3">
-                        <div className={`w-5 h-5 rounded-full flex items-center justify-center ${
-                          plan.color === "coral" ? "bg-coral-soft" : "bg-lavender-soft"
-                        }`}>
-                          <Check className={`w-3 h-3 ${
-                            plan.color === "coral" ? "text-coral" : "text-lavender"
-                          }`} />
+                return (
+                  <CarouselItem key={plan.id} className="pl-2 basis-[85%] sm:basis-full">
+                    <Card
+                      onClick={() => setSelectedPlan(plan.id)}
+                      className={`
+                        relative cursor-pointer transition-all duration-300 h-full
+                        ${isSelected 
+                          ? plan.color === "coral" 
+                            ? "ring-2 ring-coral shadow-glow-coral" 
+                            : "ring-2 ring-lavender shadow-glow-lavender"
+                          : "hover:shadow-elevated"
+                        }
+                      `}
+                    >
+                      {isPopular && (
+                        <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-coral text-primary-foreground px-4 py-1 text-sm font-medium rounded-full flex items-center gap-1 z-10">
+                          <Sparkles className="w-3 h-3" />
+                          Most Popular
                         </div>
-                        <span className="text-sm">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
-              </Card>
-            );
-          })}
+                      )}
+
+                      <CardHeader className="pt-8">
+                        <div className="flex items-center justify-between">
+                          <CardTitle className="font-serif text-2xl">{plan.name}</CardTitle>
+                          <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${
+                            isSelected 
+                              ? plan.color === "coral" ? "border-coral bg-coral" : "border-lavender bg-lavender"
+                              : "border-border"
+                          }`}>
+                            {isSelected && <Check className="w-4 h-4 text-primary-foreground" />}
+                          </div>
+                        </div>
+                        <p className="text-muted-foreground text-sm">{plan.description}</p>
+                      </CardHeader>
+
+                      <CardContent>
+                        <div className="mb-6">
+                          <span className="text-4xl font-serif font-bold">${plan.price}</span>
+                          <span className="text-muted-foreground">/month</span>
+                        </div>
+
+                        <ul className="space-y-3">
+                          {plan.features.map((feature) => (
+                            <li key={feature} className="flex items-center gap-3">
+                              <div className={`w-5 h-5 rounded-full flex items-center justify-center ${
+                                plan.color === "coral" ? "bg-coral-soft" : "bg-lavender-soft"
+                              }`}>
+                                <Check className={`w-3 h-3 ${
+                                  plan.color === "coral" ? "text-coral" : "text-lavender"
+                                }`} />
+                              </div>
+                              <span className="text-sm">{feature}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </CardContent>
+                    </Card>
+                  </CarouselItem>
+                );
+              })}
+            </CarouselContent>
+            <div className="flex items-center justify-center gap-4 mt-6">
+              <CarouselPrevious className="static translate-y-0 h-10 w-10 border-border hover:bg-secondary" />
+              <CarouselNext className="static translate-y-0 h-10 w-10 border-border hover:bg-secondary" />
+            </div>
+          </Carousel>
         </div>
 
         {/* Subscribe Button */}
